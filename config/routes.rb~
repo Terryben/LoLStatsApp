@@ -1,0 +1,12 @@
+Rails.application.routes.draw do
+  get 'welcome_page/index'
+
+  resources :stats
+  resources :matches do
+	  collection do
+  		post 'matches/read_json_file' => 'matches#read_json_file'
+	  end
+  end
+  root 'welcome_page#index'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+end

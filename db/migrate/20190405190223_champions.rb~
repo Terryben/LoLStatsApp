@@ -1,0 +1,18 @@
+class Champions < ActiveRecord::Migration[5.2]
+  def self.up
+	  create_table :champions do |t|
+		  t.column :name, :string, :limit => 20, :null => false
+		  t.column :price_be, :integer
+		  t.column :price_ip, :integer
+		  t.column :title, :string, :limit => 50
+		  t.column :winrate, :float
+		 end
+  end
+
+  def self.down
+	  drop_table :champions
+  end
+  
+  def change
+  end
+end

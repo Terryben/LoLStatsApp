@@ -1,0 +1,69 @@
+<h1>New Match</h1>
+
+<%= form_with scope: :match, url: matches_path, local: true do |form| %>
+	<p>
+	<%= form.label :created_at %><br>
+	<%= form.date_field :created_at %>
+	</p>
+
+	<p>
+	<%= form.label :updated_at %><br>
+	<%= form.date_field :updated_at %>
+	</p>
+
+	<p>
+	<%= form.label :season_id %><br>
+	<%= form.number_field :season_id %>
+	</p>
+
+	<p>
+        <%= form.label :queue_id %><br>
+        <%= form.number_field :queue_id %>
+	</p>
+
+	<p>
+        <%= form.label :game_version %><br>
+        <%= form.text_field :game_version %>
+	</p>
+
+	<p>
+        <%= form.label :platform_id %><br>
+        <%= form.text_field :platform_id %>
+	</p>
+
+	<p>
+        <%= form.label :game_mode %><br>
+        <%= form.text_field :game_mode %>
+	</p>
+
+	<p>
+        <%= form.label :map_id %><br>
+        <%= form.number_field :map_id %>
+	</p>
+
+	<p>
+        <%= form.label :game_type %><br>
+        <%= form.text_field :game_type %>
+	</p>
+
+	<p>
+        <%= form.label :game_duration %><br>
+        <%= form.number_field :game_duration %>
+	</p>
+
+	<p>
+        <%= form.label :game_creation %><br>
+        <%= form.number_field :game_creation %>
+        </p>
+
+	<p>
+	 <%= form.submit %>
+	</p>
+
+	<br>
+
+
+<% end %>
+
+
+

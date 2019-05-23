@@ -1,0 +1,10 @@
+class Champions < ActiveRecord::Migration[5.2]
+  def change
+	  add_column :name, :string
+	  add_column :price_be, :integer
+	  add_column :price_ip, :integer
+	  add_column :title, :string, :limit => 50
+	  add_column :winrate, :float
+	  add_column :pickrate, :float
+  end
+end

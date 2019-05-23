@@ -1,0 +1,2 @@
+class ParticipantTimelineDto < ApplicationRecord
+end

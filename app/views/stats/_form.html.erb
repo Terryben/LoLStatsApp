@@ -1,0 +1,28 @@
+<%= form_with model: @stat, local: true do |form| %>
+	<% if @stat.errors.any? %>
+		<div id="error_explanation">
+			<h2>
+				<%= pluralize(@stat.errors.count, "error") %> prohibited this stat from being saved:
+			</h2>
+			<ul>
+				<% @stat.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+	<p>
+	<%= form.label :name %><br>
+	<%= form.text_field :name %>
+	</p>
+
+	<p>
+	<%= form.label :percentage %><br>
+	<%= form.text_area :percentage %>
+	</p>
+
+	<p>
+	<%= form.submit %>
+	</p>
+<% end %>

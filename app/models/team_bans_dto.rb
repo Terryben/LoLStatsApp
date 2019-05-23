@@ -1,0 +1,2 @@
+class TeamBansDto < ApplicationRecord
+end

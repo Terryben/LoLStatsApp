@@ -1,0 +1,39 @@
+<h1>Listing Matches</h1>
+
+<%= button_to "Read JSON File", matches_read_json_file_path, method: :post %>
+
+<table>
+	<tr>
+		<th>Created At</th>
+		<th>Updated At</th>
+		<th>Season Id</th>
+		<th>Queue Id</th>
+		<th>Game Version</th>
+		<th>Platform Id</th>
+		<th>Game Mode</th>
+		<th>Map Id</th>
+		<th>Game Type</th>
+		<th>Game Duration</th>
+		<th>Game Creation</th>
+		<th></th>
+	</tr>
+
+	<% @matches.each do |match| %>
+		<tr>
+			<td><%= match.created_at %></td>
+			<td><%= match.updated_at %></td>
+			<td><%= match.season_id %></td>
+			<td><%= match.queue_id %></td>
+			<td><%= match.game_version %></td>
+			<td><%= match.platform_id %></td>
+			<td><%= match.game_mode %></td>
+			<td><%= match.map_id %></td>
+			<td><%= match.game_type %></td>
+			<td><%= match.game_duration %></td>
+			<td><%= match.game_creation %></td>
+			<td><%= link_to 'Show', match_path(match) %></td>
+		</tr>
+	<% end %>
+</table>
+
+

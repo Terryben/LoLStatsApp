@@ -1,0 +1,19 @@
+class Summoners < ActiveRecord::Migration[5.2]
+	def self.up
+		create_table :summoners do |t|
+			t.column :name, :string
+		end
+
+		Summoner.create :name => "Chubbles"	
+		Summoner.create :name => "dudoie"
+		Summoner.create :name => "Benis"
+		Summoner.create :name => "Guerilla Bood"
+		Summoner.create :name => "meat"
+	end
+
+	def self.down
+		drop_table :summoners
+	end
+  	def change
+  	end
+end

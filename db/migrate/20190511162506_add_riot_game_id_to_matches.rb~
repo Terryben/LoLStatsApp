@@ -1,0 +1,5 @@
+class AddRiotGameIdToMatches < ActiveRecord::Migration[5.2]
+  def change
+	  add_column :matches, :riot_game_id, :long
+  end
+end

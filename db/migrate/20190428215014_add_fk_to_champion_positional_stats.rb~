@@ -1,0 +1,6 @@
+class AddFkToChampionPositionalStats < ActiveRecord::Migration[5.2]
+  def change
+	  remove_column :champion_positional_stats, :champions_id
+	  add_foreign_key :champion_positional_stats, :champions
+  end
+end

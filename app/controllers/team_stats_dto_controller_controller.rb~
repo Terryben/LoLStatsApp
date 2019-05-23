@@ -1,0 +1,2 @@
+class TeamStatsDtoControllerController < ApplicationController
+end

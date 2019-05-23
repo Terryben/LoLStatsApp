@@ -1,0 +1,2 @@
+class TeamStatsDto < ApplicationRecord
+end

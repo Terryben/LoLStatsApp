@@ -1,0 +1,2 @@
+class ParticipantDto < ApplicationRecord
+end

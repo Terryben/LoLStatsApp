@@ -1,0 +1,14 @@
+class AddPkToMatches < ActiveRecord::Migration[5.2]
+  def change
+	  remove_column :participant_dtos, :matches_id
+	  remove_column :team_stats_dtos, :match_id
+	  remove_column :player_dtos, :match_id
+	  remove_column :matches, :id
+
+	  add_column :matches, :id, :primary_key
+
+	  add_foreign_key :participant_dtos, :matches
+	  add_foreign_key :team_stats_dtos, :matches
+	  add_foreign_key :player_dtos, :matches
+  end
+end

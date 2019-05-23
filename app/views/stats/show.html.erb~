@@ -1,0 +1,12 @@
+<p>
+	<strong>Name</p>
+	<%= @stat.name %>
+	</p>
+
+
+<p>
+	<strong>Percentage</p>
+	<%= @stat.percentage %>
+	</p>
+
+	<%= link_to 'Back', stats_path %>

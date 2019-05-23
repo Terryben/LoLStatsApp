@@ -1,0 +1,10 @@
+class Summoners < ActiveRecord::Migration[5.2]
+  def change
+	  add_column :summoners, :name, :string
+	  Summoner.create :name => "Chubbles"
+	  Summoner.create :name => "dudoie"
+	  Summoner.create :name => "Benis"
+	  Summoner.create :name => "meat"
+	  Summoner.create :name => "Guerilla Bood"
+  end
+end

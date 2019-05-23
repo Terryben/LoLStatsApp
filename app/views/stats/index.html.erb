@@ -1,0 +1,21 @@
+<h1> Listing Stats </h1>
+<%= link_to 'New Stats', new_stat_path %>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Percentage</th>
+		<th></th>
+	</tr>
+
+	<% @stats.each do |stat| %>
+		<tr>
+			<td><%= stat.name %></td>
+			<td><%= stat.percentage %></td>
+			<td><%= link_to 'Show', stat_path(stat) %></td>
+			<td><%= link_to 'Edit', edit_stat_path(stat) %></td>
+			<td><%= link_to 'Destroy', stat_path(stat),
+				method: :delete,
+				data: { confirm: 'Are you sure?' } %></td>
+		</tr>
+	<% end %>
+</table>
