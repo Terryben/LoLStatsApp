@@ -69,24 +69,24 @@ class MatchesController < ApplicationController
 									     spell_1_id: parti["spell1Id"], spell_2_id: parti["spell2Id"], highest_achieved_season_tier: parti["highestAchievedSeasonTier"])										
 					@participant_dto.save
 
-					@participant_stats_dto = ParticipantStatsDto.new(first_blood_assist: parti["stats"]["firstBloodAssist"], \
-											vision_score: parti["stats"]["visionScore"], \
-										 	magic_damage_dealt_to_champions: parti["stats"]["magicDamageDealtToChampions"], \
-									       		damage_dealt_to_objectives: parti["stats"]["damageDealtToObjectives"], \
-											total_time_crowd_control_dealt: parti["stats"]["totalTimeCrowdControlDealt"], \
-											longest_time_spent_living: parti["stats"]["longestTimeSpentLiving"], \
-											triple_kills: parti["stats"]["tripleKills"], \
-											node_neutralize_assist: parti["stats"]["nodeNeutralizeAssist"], \
-											perk_1_var_1: parti["stats"]["perk1Var1"], \
-											perk_1_var_3: parti["stats"]["perk1Var3"], \
-											perk_1_var_2: parti["stats"]["perk1Var2"], \
-											perk_3_var_3: parti["stats"]["perk3Var3"], \
-											perk_3_var_2: parti["stats"]["perk3Var2"], \
-											player_score_9: parti["stats"]["playerScore9"], \
-											player_score_8: parti["stats"]["playerScore8"], \
-											kills: parti["stats"]["kills"], \
-											player_score_1: parti["stats"]["playerScore1"], \
-											player_score_0: parti["stats"]["playerScore0"], \
+					@participant_stats_dto = ParticipantStatsDto.new(first_blood_assist: is_nil_ret_bool(parti.dig("stats", "firstBloodAssist")), \
+											vision_score: is_nil_ret_int(parti.dig("stats", "visionScore")), \
+										 	magic_damage_dealt_to_champions: is_nil_ret_int(parti.dig("stats", "magicDamageDealtToChampions")), \
+									       		damage_dealt_to_objectives: is_nil_ret_int(parti.dig("stats", "damageDealtToObjectives")), \
+											total_time_crowd_control_dealt: is_nil_ret_int(parti.dig("stats", "totalTimeCrowdControlDealt")), \
+											longest_time_spent_living: is_nil_ret_int(parti.dig("stats", "longestTimeSpentLiving")), \
+											triple_kills: is_nil_ret_int(parti.dig("stats", "tripleKills")), \
+											node_neutralize_assist: is_nil_ret_int(parti.dig("stats", "nodeNeutralizeAssist")), \
+											perk_1_var_1: is_nil_ret_int(parti.dig("stats", "perk1Var1")), \
+											perk_1_var_3: is_nil_ret_int(parti.dig("stats", "perk1Var3")), \
+											perk_1_var_2: is_nil_ret_int(parti.dig("stats", "perk1Var2")), \
+											perk_3_var_3: is_nil_ret_int(parti.dig("stats", "perk3Var3")), \
+											perk_3_var_2: is_nil_ret_int(parti.dig("stats", "perk3Var2")), \
+											player_score_9: is_nil_ret_int(parti.dig("stats", "playerScore9")), \
+											player_score_8: is_nil_ret_int(parti.dig("stats", "playerScore8")), \
+											kills: is_nil_ret_int(parti.dig("stats", "kills")), \
+											player_score_1: is_nil_ret_int(parti.dig("stats", "playerScore1")), \
+											player_score_0: is_nil_ret_int(parti.dig("stats", "playerScore0")), \
 											player_score_3: parti["stats"]["playerScore3"], \
 											player_score_2: parti["stats"]["playerScore2"], \
 											player_score_5: parti["stats"]["playerScore5"], \
@@ -176,18 +176,82 @@ class MatchesController < ApplicationController
 										        total_heal: parti["stats"]["totalHeal"], \
 											time_ccing_others: parti["stats"]["timeCCingOthers"])
 					@participant_stats_dto.save
+#=begin
 
-				#	@participant_timeline_dto = ParticipantTimelineDto.new(lane: parti["stats"]["lane"], \
-				#						       	       participant_dto_id: parti["stats"]["participantId"], \
-				#							       role: parti["stats"]["role"], \
-					puts "Does this pull the 10-20 stats?"
-					pp parti["timeline"]["csDiffPerMinDeltas"]							       	       
+					@participant_timeline_dto = ParticipantTimelineDto.new(lane: is_nil_ret_char(parti.dig("timeline", "lane")), \
+											       participant_dto_id: is_nil_ret_int(parti.dig("timeline", "participantId")), \
+												role: is_nil_ret_char(parti["timeline"]["role"]), \
+												creeps_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "0-10")), \
+												creeps_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "10-20")), \
+												creeps_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "20-30")), \
+											       creeps_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "30-end")), \
+											       xp_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "0-10")), \
+											       xp_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "10-20")), \
+											       xp_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "20-30")), \
+											       xp_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "30-end")), \
+											       gold_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "0-10")), \
+											       gold_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "10-20")), \
+											       gold_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "20-30")), \
+											       gold_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "30-end")), \
+											       damage_taken_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "0-10")), \
+											       damage_taken_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "10-20")), \
+											       damage_taken_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "20-30")), \
+											       damage_taken_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "30-end")), \
+											       damage_taken_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "0-10")), \
+											       damage_taken_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "10-20")), \
+											       damage_taken_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "20-30")), \
+											       damage_taken_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "30-end")), \
+											       cs_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "0-10")), \
+											       cs_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "10-20")), \
+											       cs_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "20-30")), \
+											       cs_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "30-end")), \
+											       xp_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "0-10")), \
+											       xp_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "10-20")), \
+											       xp_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "20-30")), \
+											       xp_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "30-end"))
+											      )
 
-					#puts parti["stats"]["firstBloodAssist"]
+					
+					@participant_timeline_dto.save
+					
+					
+					#=end
+					#puts "Does this pull the 10-20 stats?"
+					#puts is_nil_ret_int(parti["timeline"]["csDiffPerMinDeltas"])
+				#	unless parti["timeline"]["csDiffPerMinDeltas"].nil?
+				#		puts parti["timeline"]["csDiffPerMinDeltas"]
+				#		puts parti["timeline"]["csDiffPerMinDeltas"].class
+				#		puts parti["timeline"]["csDiffPerMinDeltas"]["0-10"]
+				#	puts parti["stats"]["firstBloodAssist"]
+				#	end
 
 				end
 
 	
+                        end
+                end
+
+	def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
+		if input.nil?
+                                return 0
+                        else
+                                return input
+                     
+		end
+	end
+		def is_nil_ret_char (input)
+                        if input.nil?
+                                return "0"
+                        else
+                                return input
+                        end
+                end
+
+		def is_nil_ret_bool (input)
+                        if input.nil?
+                                return false
+                        else
+                                return input
                         end
                 end
 

@@ -176,18 +176,74 @@ class MatchesController < ApplicationController
 										        total_heal: parti["stats"]["totalHeal"], \
 											time_ccing_others: parti["stats"]["timeCCingOthers"])
 					@participant_stats_dto.save
+#=begin
 
-				#	@participant_timeline_dto = ParticipantTimelineDto.new(lane: parti["stats"]["lane"], \
-				#						       	       participant_dto_id: parti["stats"]["participantId"], \
-				#							       role: parti["stats"]["role"], \
-					puts "Does this pull the 10-20 stats?"
-					pp parti["timeline"]["csDiffPerMinDeltas"][0]							       	       
+					@participant_timeline_dto = ParticipantTimelineDto.new(lane: is_nil_ret_char(parti.dig("timeline", "lane")), \
+											       participant_dto_id: is_nil_ret_int(parti.dig("timeline", "participantId")), \
+												role: is_nil_ret_char(parti["timeline"]["role"]), \
+												creeps_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "0-10")), \
+												creeps_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "10-20")), \
+												creeps_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "20-30")), \
+											       creeps_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "30-end")), \
+											       xp_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "0-10")), \
+											       xp_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "10-20")), \
+											       xp_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "20-30")), \
+											       xp_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "30-end")), \
+											       gold_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "0-10")), \
+											       gold_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "10-20")), \
+											       gold_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "20-30")), \
+											       gold_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "30-end")), \
+											       damage_taken_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "0-10")), \
+											       damage_taken_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "10-20")), \
+											       damage_taken_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "20-30")), \
+											       damage_taken_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "30-end")), \
+											       damage_taken_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "0-10")), \
+											       damage_taken_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "10-20")), \
+											       damage_taken_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "20-30")), \
+											       damage_taken_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "30-end")), \
+											       cs_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "0-10")), \
+											       cs_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "10-20")), \
+											       cs_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "20-30")), \
+											       cs_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "30-end")), \
+											       xp_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "0-10")), \
+											       xp_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "10-20")), \
+											       xp_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "20-30")), \
+											       xp_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "30-end"))
+											      )
 
-					#puts parti["stats"]["firstBloodAssist"]
+					
+					@participant_timeline_dto.save
+					
+					
+					#=end
+					#puts "Does this pull the 10-20 stats?"
+					#puts is_nil_ret_int(parti["timeline"]["csDiffPerMinDeltas"])
+				#	unless parti["timeline"]["csDiffPerMinDeltas"].nil?
+				#		puts parti["timeline"]["csDiffPerMinDeltas"]
+				#		puts parti["timeline"]["csDiffPerMinDeltas"].class
+				#		puts parti["timeline"]["csDiffPerMinDeltas"]["0-10"]
+				#	puts parti["stats"]["firstBloodAssist"]
+				#	end
 
 				end
 
 	
+                        end
+                end
+
+	def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
+		if input.nil?
+                                return 0
+                        else
+                                return input
+                     
+		end
+	end
+		def is_nil_ret_char (input)
+                        if input.nil?
+                                return "0"
+                        else
+                                return input
                         end
                 end
 

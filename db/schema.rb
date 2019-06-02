@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_22_033303) do
+ActiveRecord::Schema.define(version: 2019_06_02_152948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -188,7 +188,6 @@ ActiveRecord::Schema.define(version: 2019_05_22_033303) do
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "participant_dto_id"
     t.decimal "creeps_pmd_0_10"
     t.decimal "creeps_pmd_10_20"
     t.decimal "creeps_pmd_20_30"
@@ -209,6 +208,15 @@ ActiveRecord::Schema.define(version: 2019_05_22_033303) do
     t.decimal "damage_taken_diff_pmd_10_20"
     t.decimal "damage_taken_diff_pmd_20_30"
     t.decimal "damage_taken_diff_pmd_30_end"
+    t.integer "participant_dto_id"
+    t.decimal "cs_diff_pmd_0_10"
+    t.decimal "cs_diff_pmd_10_20"
+    t.decimal "cs_diff_pmd_20_30"
+    t.decimal "cs_diff_pmd_30_end"
+    t.decimal "xp_diff_pmd_30_end"
+    t.decimal "xp_diff_pmd_20_30"
+    t.decimal "xp_diff_pmd_10_20"
+    t.decimal "xp_diff_pmd_0_10"
   end
 
   create_table "player_dtos", force: :cascade do |t|
@@ -281,7 +289,6 @@ ActiveRecord::Schema.define(version: 2019_05_22_033303) do
   add_foreign_key "participant_dtos", "matches", column: "matches_id"
   add_foreign_key "participant_stats_dtos", "participant_dtos", column: "participant_dtos_id"
   add_foreign_key "participant_stats_dtos", "participant_stats_dtos", column: "participant_stats_dtos_id"
-  add_foreign_key "participant_timeline_dtos", "participant_dtos"
   add_foreign_key "player_dtos", "matches", column: "matches_id"
   add_foreign_key "team_bans_dtos", "team_stats_dtos", column: "team_stats_dtos_id"
   add_foreign_key "team_stats_dtos", "matches", column: "matches_id"
