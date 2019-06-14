@@ -39,16 +39,28 @@ class MatchesController < ApplicationController
                                 @match.save
 			#	Save the team stats dto		
 				jm["teams"].each do |team|
-					@team_stats_dto = TeamStatsDto.new(team_id: team["teamId"], first_dragon: team["firstDragon"], first_inhibitor: team["firstInhibitor"], \
-									     baron_kills: team["baronKills"], first_rift_herald: team["firstRiftHerald"], first_baron: team["firstBaron"], \
-									     rift_herald_kills: team["riftHeraldKills"], first_blood: team["firstBlood"], first_tower: team["firstTower"], \
-									     vilemaw_kills: team["vilemawKills"], inhibitor_kills: team["inhibitorKills"], tower_kills: team["tower_kills"], \
-									     dominion_victory_score: team["dominionVictoryScore"], win: team["win"], dragon_kills: team["dragonKills"], \
-									     matches_id: @match.id)
+					@team_stats_dto = TeamStatsDto.new(team_id: is_nil_ret_bool(team.dig("teamId")), \
+									   first_dragon: is_nil_ret_bool(team.dig("firstDragon")), \
+									   first_inhibitor: is_nil_ret_bool(team.dig("firstInhibitor")), \
+									   baron_kills: is_nil_ret_int(team.dig("baronKills")), \
+									   first_rift_herald: is_nil_ret_bool(team.dig("firstRiftHerald")), \
+									   first_baron: is_nil_ret_bool(team.dig("firstBaron")), \
+									   rift_herald_kills: is_nil_ret_int(team.dig("riftHeraldKills")), \
+									   first_blood: is_nil_ret_bool(team.dig("firstBlood")), \
+									   first_tower: is_nil_ret_bool(team.dig("firstTower")), \
+									   vilemaw_kills: is_nil_ret_int(team.dig("vilemawKills")), \
+									   inhibitor_kills: is_nil_ret_int(team.dig("inhibitorKills")), \
+									   tower_kills: is_nil_ret_int(team.dig("tower_kills")), \
+									   dominion_victory_score: is_nil_ret_int(team.dig("dominionVictoryScore")), \
+									   win: is_nil_ret_char(team.dig("win")), \
+									   dragon_kills: is_nil_ret_bool(team.dig("dragonKills")), \
+									   matches_id: @match.id)
 					@team_stats_dto.save
 					#team bans
 					team["bans"].each do |ban|
-						@team_bans_dto = TeamBansDto.new(pick_turn: ban["pickTurn"], champion_id: ban["championId"], team_stats_dtos_id: @team_stats_dto.id)
+						@team_bans_dto = TeamBansDto.new(pick_turn: is_nil_ret_int(ban.dig("pickTurn")), \
+										 champion_id: is_nil_ret_int(ban.dig("championId")), \
+										 team_stats_dtos_id: @team_stats_dto.id)
 						@team_bans_dto.save
 					end
 				end
@@ -56,17 +68,26 @@ class MatchesController < ApplicationController
 				jm["participantIdentities"].each do |pi|
 				#		puts pi["player"]["summonerName"]
 				#		pp pi
-						@player_dto = PlayerDto.new(platform_id: pi["player"]["platformId"], current_account_id: pi["player"]["currentAccountId"], \
-									    summoner_name: pi["player"]["summonerName"], summoner_id: pi["player"]["summonerId"], \
-									    current_platform_id: pi["player"]["currentPlatformId"], account_id: pi["player"]["accountId"], \
-									    match_history_uri: pi["player"]["matchHistoryUri"], profile_icon: pi["player"]["profileIcon"], \
-									    participant_dto_id: pi["participantId"])    
+						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
+									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
+									    summoner_name: is_nil_ret_char(pi.dig("player", "summonerName")), \
+									    summoner_id: is_nil_ret_int(pi.dig("player", "summonerId")), \
+									    current_platform_id: is_nil_ret_char(pi.dig("player", "currentPlatformId")), \
+									    account_id: is_nil_ret_int(pi.dig("player", "accountId")), \
+									    match_history_uri: is_nil_ret_char(pi.dig("player", "matchHistoryUri")), \
+									    profile_icon: is_nil_ret_int(pi.dig("player", "profileIcon")), \
+									    participant_dto_id: is_nil_ret_int(pi.dig("participantId")))    
 						@player_dto.save
 				end
 				
 				jm["participants"].each do |parti|
-					@participant_dto = ParticipantDto.new(participant_id: parti["participantId"], team_id: parti["teamId"], matches_id: @match.id, champion_id: parti["championId"], \
-									     spell_1_id: parti["spell1Id"], spell_2_id: parti["spell2Id"], highest_achieved_season_tier: parti["highestAchievedSeasonTier"])										
+					@participant_dto = ParticipantDto.new(participant_id: is_nil_ret_int(parti.dig("participantId")), \
+									      team_id: is_nil_ret_int(parti.dig("teamId")), \
+									      matches_id: @match.id, \
+									      champion_id: is_nil_ret_int(parti.dig("championId")), \
+	 								      spell_1_id: is_nil_ret_int(parti.dig("spell1Id")), \
+	 								      spell_2_id: is_nil_ret_int(parti.dig("spell2Id")), \
+									      highest_achieved_season_tier: is_nil_ret_char(parti.dig("highestAchievedSeasonTier")))										
 					@participant_dto.save
 
 					@participant_stats_dto = ParticipantStatsDto.new(first_blood_assist: is_nil_ret_bool(parti.dig("stats", "firstBloodAssist")), \
@@ -233,6 +254,7 @@ class MatchesController < ApplicationController
 
 	def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
 		if input.nil?
+				puts "Could not read value. Int 0 returned instead."
                                 return 0
                         else
                                 return input
@@ -241,6 +263,7 @@ class MatchesController < ApplicationController
 	end
 		def is_nil_ret_char (input)
                         if input.nil?
+				puts "Could not read value. Char 0 returned instead."
                                 return "0"
                         else
                                 return input
@@ -249,6 +272,7 @@ class MatchesController < ApplicationController
 
 		def is_nil_ret_bool (input)
                         if input.nil?
+				puts "Could not read value. False returned instead."
                                 return false
                         else
                                 return input

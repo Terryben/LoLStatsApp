@@ -48,7 +48,9 @@ class MatchesController < ApplicationController
 					@team_stats_dto.save
 					#team bans
 					team["bans"].each do |ban|
-						@team_bans_dto = TeamBansDto.new(pick_turn: ban["pickTurn"], champion_id: ban["championId"], team_stats_dtos_id: @team_stats_dto.id)
+						@team_bans_dto = TeamBansDto.new(pick_turn: is_nil_ret_int(ban.dig("pickTurn")), \
+										 champion_id: is_nil_ret_int(ban.dig("championId")), \
+										 team_stats_dtos_id: @team_stats_dto.id)
 						@team_bans_dto.save
 					end
 				end
@@ -56,17 +58,26 @@ class MatchesController < ApplicationController
 				jm["participantIdentities"].each do |pi|
 				#		puts pi["player"]["summonerName"]
 				#		pp pi
-						@player_dto = PlayerDto.new(platform_id: pi["player"]["platformId"], current_account_id: pi["player"]["currentAccountId"], \
-									    summoner_name: pi["player"]["summonerName"], summoner_id: pi["player"]["summonerId"], \
-									    current_platform_id: pi["player"]["currentPlatformId"], account_id: pi["player"]["accountId"], \
-									    match_history_uri: pi["player"]["matchHistoryUri"], profile_icon: pi["player"]["profileIcon"], \
-									    participant_dto_id: pi["participantId"])    
+						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
+									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
+									    summoner_name: is_nil_ret_char(pi.dig("player", "summonerName")), \
+									    summoner_id: is_nil_ret_int(pi.dig("player", "summonerId")), \
+									    current_platform_id: is_nil_ret_char(pi.dig("player", "currentPlatformId")), \
+									    account_id: is_nil_ret_int(pi.dig("player", "accountId")), \
+									    match_history_uri: is_nil_ret_char(pi.dig("player", "matchHistoryUri")), \
+									    profile_icon: is_nil_ret_int(pi.dig("player", "profileIcon")), \
+									    participant_dto_id: is_nil_ret_int(pi.dig("participantId")))    
 						@player_dto.save
 				end
 				
 				jm["participants"].each do |parti|
-					@participant_dto = ParticipantDto.new(participant_id: parti["participantId"], team_id: parti["teamId"], matches_id: @match.id, champion_id: parti["championId"], \
-									     spell_1_id: parti["spell1Id"], spell_2_id: parti["spell2Id"], highest_achieved_season_tier: parti["highestAchievedSeasonTier"])										
+					@participant_dto = ParticipantDto.new(participant_id: is_nil_ret_int(parti.dig("participantId")), \
+									      team_id: is_nil_ret_int(parti.dig("teamId")), \
+									      matches_id: @match.id, \
+									      champion_id: is_nil_ret_int(parti.dig("championId")), \
+	 								      spell_1_id: is_nil_ret_int(parti.dig("spell1Id")), \
+	 								      spell_2_id: is_nil_ret_int(parti.dig("spell2Id")), \
+									      highest_achieved_season_tier: is_nil_ret_char(parti.dig("highestAchievedSeasonTier")))										
 					@participant_dto.save
 
 					@participant_stats_dto = ParticipantStatsDto.new(first_blood_assist: is_nil_ret_bool(parti.dig("stats", "firstBloodAssist")), \
@@ -158,7 +169,7 @@ class MatchesController < ApplicationController
 											first_blood_kill: is_nil_ret_bool(parti.dig("stats", "firstBloodKill")), \
 											true_damage_dealt_to_champions: is_nil_ret_int(parti.dig("stats", "trueDamageDealtToChampions")), \
 											gold_earned: is_nil_ret_int(parti.dig("stats", "goldEarned")), \
-											killing_sprees: is_nil_ret_int(parti.dig("stats", "killing_sprees")), \
+											killing_sprees: is_nil_ret_int(parti.dig("stats", "killingSprees")), \
 											unreal_kills: is_nil_ret_int(parti.dig("stats", "unrealKills")), \
 											altars_captured: is_nil_ret_int(parti.dig("stats", "altarsCaptured")), \
 											first_tower_assist: is_nil_ret_bool(parti.dig("stats", "firstTowerAssist")), \
@@ -233,6 +244,7 @@ class MatchesController < ApplicationController
 
 	def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
 		if input.nil?
+				puts "Could not read value. Int 0 returned instead."
                                 return 0
                         else
                                 return input
@@ -241,6 +253,7 @@ class MatchesController < ApplicationController
 	end
 		def is_nil_ret_char (input)
                         if input.nil?
+				puts "Could not read value. Char 0 returned instead."
                                 return "0"
                         else
                                 return input
@@ -249,6 +262,7 @@ class MatchesController < ApplicationController
 
 		def is_nil_ret_bool (input)
                         if input.nil?
+				puts "Could not read value. False returned instead."
                                 return false
                         else
                                 return input
