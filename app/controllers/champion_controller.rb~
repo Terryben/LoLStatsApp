@@ -1,8 +1,10 @@
 class ChampionController < ApplicationController
 	def list
+		@champions = Champion.all
 	end
 
 	def show
+		
 	end
 	
 	def new

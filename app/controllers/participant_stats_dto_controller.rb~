@@ -1,0 +1,2 @@
+class ParticipantStatsDtoController < ApplicationController
+end

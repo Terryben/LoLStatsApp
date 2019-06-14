@@ -1,0 +1,215 @@
+<h1> Participant Stats Dtos </h1>
+
+<table>
+	<tr>
+		<td> Id </td>
+		<td> First Blood Assist </td>
+		<td> Vision Score </td>
+		<td> Magic Damage Dealt To Champions </td>
+		<td> Damage Dealt To Objectives </td>
+		<td> Total Time Crowd Control Dealt </td>
+		<td> Longest Time Spent Living </td>
+		<td> Triple Kills </td>
+		<td> Node Neutralize Assist </td>
+		<td> Player Score 0 </td>
+		<td> Player Score 1 </td>
+		<td> Player Score 2 </td>
+		<td> Player Score 3 </td>
+		<td> Player Score 4 </td>
+		<td> Player Score 5 </td>
+		<td> Player Score 6 </td>
+		<td> Player Score 7 </td>
+		<td> Player Score 8 </td>
+		<td> Player Score 9 </td>
+		<td> Kills </td>
+		<td> Total Score Rank </td>
+		<td> Neutral Minions Killed </td>
+		<td> Damage Dealt To Turrets </td>
+		<td> Physical Damage Dealt To Champions </td>
+		<td> Node Capture </td>
+		<td> Largest Multikill </td>
+		<td> Total Units Healed </td>
+		<td> Wards Killed </td>
+		<td> Largest Critical Strike </td>
+		<td> Largest Killing Spree </td>
+		<td> Quadra Kills </td>
+		<td> Team Objective </td>
+		<td> Magic Damage Dealt </td>
+		<td> Item 0 </td>
+		<td> Item 1 </td>
+		<td> Item 2 </td>
+		<td> Item 3 </td>
+		<td> Item 4 </td>
+		<td> Item 5 </td>
+		<td> Item 6 </td>
+		<td> Neutral Minions Killed Team Jungle </td>
+		<td> Damage Self Mitigated </td>
+		<td> Magical Damage Taken </td>
+		<td> First Inhibitor Kill </td>
+		<td> True Damage Taken </td>
+		<td> Node Neutralize </td>
+		<td> Assists </td>
+		<td> Combat Player Score </td>
+		<td> Perk Primary Style </td>
+		<td> Gold Spent </td>
+		<td> True Damage Dealt </td>
+		<td> Participant Id </td>
+		<td> Total Damage Taken </td>
+		<td> Physical Damage Dealt </td>
+		<td> Sight Wards Bought In Game </td>
+		<td> Total Damage Dealt To Champions  </td>
+		<td> Physical Damage Taken  </td>
+		<td> Total Player Score </td>
+		<td> Win </td>
+		<td> Objective Player Score </td>
+		<td> Total Damage Dealt </td>
+		<td> Neutral Minions Killed Enemy Jungle </td>
+		<td> Deaths </td>
+		<td> Wards Placed </td>
+		<td> Perk Sub Style </td>
+		<td> Turret Kills </td>
+		<td> First Blood Kill </td>
+		<td> True Damage Dealt To Champions </td>
+		<td> Gold Earned </td>
+		<td> Killing Sprees </td>
+		<td> Unreal Kills </td>
+		<td> Altars Captured </td>
+		<td> First Tower Assist </td>
+		<td> Champ Level </td>
+		<td> First Tower Kill </td>
+		<td> Double Kills </td>
+		<td> Node Capture Assist </td>
+		<td> Inhibitor Kills </td>
+		<td> Vision Wards Bought In Game </td>
+		<td> Altars Neutralized </td>
+		<td> Penta Kills </td>
+		<td> Total Heal </td>
+		<td> Time CCing Others </td>
+		<td> Perk 0 Var 1 </td>
+		<td> Perk 0 Var 2 </td>
+		<td> Perk 0 Var 3 </td>
+		<td> Perk 1 Var 1 </td>
+		<td> Perk 1 Var 2 </td>
+		<td> Perk 1 Var 3 </td>
+		<td> Perk 2 Var 1 </td>
+		<td> Perk 2 Var 2 </td>
+		<td> Perk 2 Var 3 </td>
+		<td> Perk 3 Var 1 </td>
+		<td> Perk 3 Var 2 </td>
+		<td> Perk 3 Var 3 </td>
+		<td> Perk 4 Var 1 </td>
+		<td> Perk 4 Var 2 </td>
+		<td> Perk 4 Var 3 </td>
+		<td> Perk 5 Var 1 </td>
+		<td> Perk 5 Var 2 </td>
+		<td> Perk 5 Var 3 </td>
+		<td> Perk 0 </td>
+		<td> Perk 1 </td>
+		<td> Perk 2 </td>
+		<td> Perk 3 </td>
+		<td> Perk 4 </td>
+		<td> Perk 5 </td>
+	</tr>
+
+	<tr>
+		<td><% @participant_stats_dtos.each do |psd| %>
+			<td> <%= psd.id %></td>
+			<td> <%= psd.first_blood_assist %></td>
+			<td> <%= psd.vision_score %></td>
+			<td> <%= psd.magic_damage_dealt_to_champions %></td>
+			<td> <%= psd.damage_dealt_to_objectives %></td>
+			<td> <%= psd.total_time_crowd_control_dealt %></td>
+			<td> <%= psd.longest_time_spent_living %></td>
+			<td> <%= psd.triple_kills %></td>
+			<td> <%= psd.node_neutralize_assist %></td>
+			<td> <%= psd.kills %></td>
+			<td> <%= psd.total_score_rank %></td>
+			<td> <%= psd.neutral_minions_killed %></td>
+			<td> <%= psd.damage_dealt_to_turrets %></td>
+			<td> <%= psd.physical_damage_dealt_to_champions %></td>
+			<td> <%= psd.node_capture %></td>
+			<td> <%= psd.largest_multikill %></td>
+			<td> <%= psd.total_units_healed %></td>
+			<td> <%= psd.wards_killed %></td>
+			<td> <%= psd.largest_critical_strike %></td>
+			<td> <%= psd.largest_killing_spree %></td>
+			<td> <%= psd.quadra_kills %></td>
+			<td> <%= psd.team_objective %></td>
+			<td> <%= psd.magic_damage_dealt %></td>
+			<td> <%= psd.item_0 %></td>
+			<td> <%= psd.item_1 %></td>
+			<td> <%= psd.item_2 %></td>
+			<td> <%= psd.item_3 %></td>
+			<td> <%= psd.item_4 %></td>
+			<td> <%= psd.item_5 %></td>
+			<td> <%= psd.item_6 %></td>
+			<td> <%= psd.neutral_minions_killed_team_jungle %></td>
+			<td> <%= psd.damage_self_mitigated %></td>
+			<td> <%= psd.magical_damage_taken %></td>
+			<td> <%= psd.first_inhibitor_kill %></td>
+			<td> <%= psd.true_damage_taken %></td>
+			<td> <%= psd.node_neutralize %></td>
+			<td> <%= psd.assists %></td>
+			<td> <%= psd.combat_player_score %></td>
+			<td> <%= psd.perk_primary_style %></td>
+			<td> <%= psd.gold_spent %></td>
+			<td> <%= psd.true_damage_dealt %></td>
+			<td> <%= psd.participant_id %></td>
+			<td> <%= psd.total_damage_taken %></td>
+			<td> <%= psd.physical_damage_dealt %></td>
+			<td> <%= psd.sight_wards_bought_in_game %></td>
+			<td> <%= psd.total_damage_dealt_to_champions %></td>
+			<td> <%= psd.physical_damage_taken %></td>
+			<td> <%= psd.total_player_score %></td>
+			<td> <%= psd.win %></td>
+			<td> <%= psd.objective_player_score %></td>
+			<td> <%= psd.total_damage_dealt %></td>
+			<td> <%= psd.neutral_minions_killed_enemy_jungle %></td>
+			<td> <%= psd.deaths %></td>
+			<td> <%= psd.wards_placed %></td>
+			<td> <%= psd.perk_sub_style %></td>
+			<td> <%= psd.turret_kills %></td>
+			<td> <%= psd.first_blood_kill %></td>
+			<td> <%= psd.true_damage_dealt_to_champions %></td>
+			<td> <%= psd.gold_earned %></td>
+			<td> <%= psd.killing_sprees %></td>
+			<td> <%= psd.unreal_kills %></td>
+			<td> <%= psd.altars_captured %></td>
+			<td> <%= psd.first_tower_assist %></td>
+			<td> <%= psd.champ_level %></td>
+			<td> <%= psd.first_tower_kill %></td>
+			<td> <%= psd.double_kills %></td>
+			<td> <%= psd.node_capture_assist %></td>
+			<td> <%= psd.inhibitor_kills %></td>
+			<td> <%= psd.vision_wards_bought_in_game %></td>
+			<td> <%= psd.altars_neutralized %></td>
+			<td> <%= psd.penta_kills %></td>
+			<td> <%= psd.total_heal %></td>
+			<td> <%= psd.time_ccing_others %></td>
+			<td> <%= psd.perk_0_var_1 %></td>
+			<td> <%= psd.perk_0_var_2 %></td>
+			<td> <%= psd.perk_0_var_3 %></td>
+			<td> <%= psd.perk_1_var_1 %></td>
+			<td> <%= psd.perk_1_var_2 %></td>
+			<td> <%= psd.perk_1_var_3 %></td>
+			<td> <%= psd.perk_2_var_1 %></td>
+			<td> <%= psd.perk_2_var_2 %></td>
+			<td> <%= psd.perk_2_var_3 %></td>
+			<td> <%= psd.perk_3_var_1 %></td>
+			<td> <%= psd.perk_3_var_2 %></td>
+			<td> <%= psd.perk_3_var_3 %></td>
+			<td> <%= psd.perk_4_var_1 %></td>
+			<td> <%= psd.perk_4_var_2 %></td>
+			<td> <%= psd.perk_4_var_3 %></td>
+			<td> <%= psd.perk_5_var_1 %></td>
+			<td> <%= psd.perk_5_var_2 %></td>
+			<td> <%= psd.perk_5_var_3 %></td>
+			<td> <%= psd.perk_0 %></td>
+			<td> <%= psd.perk_1 %></td>
+			<td> <%= psd.perk_2 %></td>
+			<td> <%= psd.perk_3 %></td>
+			<td> <%= psd.perk_4 %></td>
+			<td> <%= psd.perk_5 %></td>
+	</tr>
+<% end %>
+</table>

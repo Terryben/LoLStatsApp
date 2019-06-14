@@ -1,5 +1,5 @@
 class ChampionController < ApplicationController
-	def list
+	def index
 		@champions = Champion.all
 	end
 

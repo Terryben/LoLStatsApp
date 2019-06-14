@@ -1,0 +1,2 @@
+module ParticipantStatsDtoHelper
+end

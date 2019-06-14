@@ -1,0 +1,72 @@
+<h1>Participant Timeline Dtos</h1>
+
+
+<table>
+        <tr>
+                <th>Id</th>
+                <th>Lane</th>
+                <th>Role</th>
+		<th>Participant Dto ID</th>
+                <th>Creep Per Minute Delta 0-10</th>
+                <th>Creep Per Minute Delta 10-20</th>
+                <th>Creep Per Minute Delta 20-30</th>
+		<th>Creep Per Minute Delta 30-End</th>
+                <th>XP Per Minute Delta 0-10</th>
+                <th>XP Per Minute Delta 10-20</th>
+                <th>XP Per Minute Delta 20-30</th>
+                <th>XP Per Minute Delta 30-End</th>
+                <th>Gold Per Minute Delta 0-10</th>
+                <th>Gold Per Minute Delta 10-20</th>
+                <th>Gold Per Minute Delta 20-30</th>
+                <th>Gold Per Minute Delta 30-End</th>
+                <th>Damage Taken Per Minute Delta 0-10</th>
+                <th>Damage Taken Per Minute Delta 10-20</th>
+                <th>Damage Taken Per Minute Delta 20-30</th>
+                <th>Damage Taken Per Minute Delta 30-End</th>
+                <th>Damage Taken Difference Per Min Delta 0-10</th>
+                <th>Damage Taken Difference Per Min Delta 10-20</th>
+                <th>Damage Taken Difference Per Min Delta 20-30</th>
+                <th>Damage Taken Difference Per Min Delta 30-End</th>
+                <th>CS Diff Per Min Delta 0-10</th>
+                <th>CS Diff Per Min Delta 10-20</th>
+                <th>CS Diff Per Min Delta 20-30</th>
+                <th>CS Diff Per Min Delta 30-End</th>
+                <th>XP Diff Per Min Delta 0-10</th>
+                <th>XP Diff Per Min Delta 10-20</th>
+                <th>XP Diff Per Min Delta 20-30</th>
+                <th>XP Diff Per Min Delta 30-End</th>
+        </tr>
+
+        <% @participant_timeline_dtos.each do |ptd| %>
+                <tr>
+                        <td><%= ptd.id %></td>
+                        <td><%= ptd.lane %></td>
+                        <td><%= ptd.role %></td>
+                        <td><%= ptd.participant_dto_id %></td>
+                        <td><%= ptd.creeps_pmd_0_10 %></td>
+                        <td><%= ptd.creeps_pmd_10_20 %></td>
+                        <td><%= ptd.creeps_pmd_20_30 %></td>
+                        <td><%= ptd.creeps_pmd_30_end %></td>
+                        <td><%= ptd.xp_pmd_0_10 %></td>
+                        <td><%= ptd.xp_pmd_10_20 %></td>
+                        <td><%= ptd.xp_pmd_20_30 %></td>
+                        <td><%= ptd.xp_pmd_30_end %></td>
+			<td><%= ptd.gold_pmd_0_10 %></td>
+			<td><%= ptd.gold_pmd_10_20 %></td>
+			<td><%= ptd.gold_pmd_20_30 %></td>
+			<td><%= ptd.gold_pmd_30_end %></td>
+			<td><%= ptd.damage_taken_pmd_0_10 %></td>
+			<td><%= ptd.damage_taken_pmd_10_20 %></td>
+			<td><%= ptd.damage_taken_pmd_20_30 %></td>
+			<td><%= ptd.damage_taken_pmd_30_end %></td>
+                        <td><%= ptd.cs_diff_pmd_0_10 %></td>
+                        <td><%= ptd.cs_diff_pmd_10_20 %></td>
+                        <td><%= ptd.cs_diff_pmd_20_30 %></td>
+                        <td><%= ptd.cs_diff_pmd_30_end %></td>
+                        <td><%= ptd.xp_diff_pmd_0_10 %></td>
+                        <td><%= ptd.xp_diff_pmd_10_20 %></td>
+                        <td><%= ptd.xp_diff_pmd_20_30 %></td>
+                        <td><%= ptd.xp_diff_pmd_30_end %></td>
+                </tr>
+        <% end %>
+</table>
