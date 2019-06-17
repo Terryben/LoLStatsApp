@@ -1,0 +1,32 @@
+<h1> Participant Dtos </h1>
+
+<%= link_to 'Back to Welcome Page', controller: 'welcome_page' %>
+
+<table>
+	<tr>
+		<td> Id </td>
+		<td> Team Id </td>
+		<td> Spell 1 </td>
+		<td> Spell 2 </td>
+		<td> Highest Achieved Tier </td>
+		<td> Created At </td>
+		<td> Updated At </td>
+		<td> Match Id </td>
+		<td> Participant Id </td>
+		<td> Champion Id </td>
+	</tr>
+	<% @participant_dtos.each do |pd| %>
+	<tr>
+		<td><% pd.id %></td>
+		<td><% pd.team_id %></td>
+		<td><% pd.spell_1_id %></td>
+		<td><% pd.spell_2_id %></td>
+		<td><% pd.highest_achieved_season_tier %></td>
+		<td><% pd.created_at %></td>
+		<td><% pd.updated_at %></td>
+		<td><% pd.matches_id %></td>
+		<td><% pd.participant_id %></td>
+		<td><% pd.champion_id %></td>
+	</tr>
+<% end %>
+</table>

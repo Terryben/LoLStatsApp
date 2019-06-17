@@ -8,7 +8,7 @@ class MatchesController < ApplicationController
 	end
 	
 	def show
-		@match = Match.find(params[:id])
+		@match = Match.joins("JOIN player_dtos ON player_dtos.matches_id = matches.id AND matches.id = #{params[:id]}")
 	end
 	
 	
@@ -39,12 +39,22 @@ class MatchesController < ApplicationController
                                 @match.save
 			#	Save the team stats dto		
 				jm["teams"].each do |team|
-					@team_stats_dto = TeamStatsDto.new(team_id: team["teamId"], first_dragon: team["firstDragon"], first_inhibitor: team["firstInhibitor"], \
-									     baron_kills: team["baronKills"], first_rift_herald: team["firstRiftHerald"], first_baron: team["firstBaron"], \
-									     rift_herald_kills: team["riftHeraldKills"], first_blood: team["firstBlood"], first_tower: team["firstTower"], \
-									     vilemaw_kills: team["vilemawKills"], inhibitor_kills: team["inhibitorKills"], tower_kills: team["tower_kills"], \
-									     dominion_victory_score: team["dominionVictoryScore"], win: team["win"], dragon_kills: team["dragonKills"], \
-									     matches_id: @match.id)
+					@team_stats_dto = TeamStatsDto.new(team_id: is_nil_ret_bool(team.dig("teamId")), \
+									   first_dragon: is_nil_ret_bool(team.dig("firstDragon")), \
+									   first_inhibitor: is_nil_ret_bool(team.dig("firstInhibitor")), \
+									   baron_kills: is_nil_ret_int(team.dig("baronKills")), \
+									   first_rift_herald: is_nil_ret_bool(team.dig("firstRiftHerald")), \
+									   first_baron: is_nil_ret_bool(team.dig("firstBaron")), \
+									   rift_herald_kills: is_nil_ret_int(team.dig("riftHeraldKills")), \
+									   first_blood: is_nil_ret_bool(team.dig("firstBlood")), \
+									   first_tower: is_nil_ret_bool(team.dig("firstTower")), \
+									   vilemaw_kills: is_nil_ret_int(team.dig("vilemawKills")), \
+									   inhibitor_kills: is_nil_ret_int(team.dig("inhibitorKills")), \
+									   tower_kills: is_nil_ret_int(team.dig("tower_kills")), \
+									   dominion_victory_score: is_nil_ret_int(team.dig("dominionVictoryScore")), \
+									   win: is_nil_ret_char(team.dig("win")), \
+									   dragon_kills: is_nil_ret_bool(team.dig("dragonKills")), \
+									   matches_id: @match.id)
 					@team_stats_dto.save
 					#team bans
 					team["bans"].each do |ban|
@@ -58,6 +68,7 @@ class MatchesController < ApplicationController
 				jm["participantIdentities"].each do |pi|
 				#		puts pi["player"]["summonerName"]
 				#		pp pi
+						puts "THIS IS THE START OF PLAYER DTO"
 						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
 									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
 									    summoner_name: is_nil_ret_char(pi.dig("player", "summonerName")), \
@@ -68,6 +79,7 @@ class MatchesController < ApplicationController
 									    profile_icon: is_nil_ret_int(pi.dig("player", "profileIcon")), \
 									    participant_dto_id: is_nil_ret_int(pi.dig("participantId")))    
 						@player_dto.save
+						puts "PLAYER DTO HAS JUST BEEN SAVED"
 				end
 				
 				jm["participants"].each do |parti|

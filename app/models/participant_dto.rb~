@@ -1,0 +1,7 @@
+class ParticipantDto < ApplicationRecord
+
+def index
+	@participant_dtos = ParticipantDto.all
+end
+
+end

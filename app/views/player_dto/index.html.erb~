@@ -1,0 +1,40 @@
+<h1> Player Dtos </h1>
+
+<% link_to 'Back To Welcome Page', controller: 'player_dto' %>
+
+<table>
+	<tr>
+		<td> Id </td>
+		<td> Current Platform Id </td>
+		<td> Summoner Name </td>
+		<td> Match History Url</td>
+		<td> Platform Id</td>
+		<td> Current Account Id</td>
+		<td> Summoner Id String</td>
+		<td> Participant Dto Id</td>
+		<td> Profile Icon</td>
+		<td> Created At</td>
+		<td> Updated At</td>
+		<td> Matches Id</td>
+		<td> Summer Id</td>
+		<td> Account Id</td>
+	</tr>
+	<% @player_dtos.each do |pd| %>
+		<tr>
+			<td><%= pd.id %></td>
+			<td><%= pd.current_platform_id %></td>
+			<td><%= pd.summoner_name %></td>
+			<td><%= pd.match_history_uri %></td>
+			<td><%= pd.platform_id %></td>
+			<td><%= pd.current_account_id %></td>
+			<td><%= pd.summoner_id_string %></td>
+			<td><%= pd.participant_dto_id %></td>
+			<td><%= pd.profile_icon %></td>
+			<td><%= pd.created_at %></td>
+			<td><%= pd.updated_at  %></td>
+			<td><%= pd.summoner_id %></td>
+			<td><%= pd.account_id %></td>
+		</tr>
+	<% end %>
+</table>
+

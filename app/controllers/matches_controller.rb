@@ -8,7 +8,7 @@ class MatchesController < ApplicationController
 	end
 	
 	def show
-		@match = Match.find(params[:id])
+		@match = Match.joins("JOIN player_dtos ON player_dtos.matches_id = matches.id AND matches.id = #{params[:id]}")
 	end
 	
 	
@@ -68,6 +68,7 @@ class MatchesController < ApplicationController
 				jm["participantIdentities"].each do |pi|
 				#		puts pi["player"]["summonerName"]
 				#		pp pi
+						puts "THIS IS THE START OF PLAYER DTO"
 						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
 									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
 									    summoner_name: is_nil_ret_char(pi.dig("player", "summonerName")), \
@@ -76,8 +77,10 @@ class MatchesController < ApplicationController
 									    account_id: is_nil_ret_int(pi.dig("player", "accountId")), \
 									    match_history_uri: is_nil_ret_char(pi.dig("player", "matchHistoryUri")), \
 									    profile_icon: is_nil_ret_int(pi.dig("player", "profileIcon")), \
+									    matches_id: @match.id, \
 									    participant_dto_id: is_nil_ret_int(pi.dig("participantId")))    
 						@player_dto.save
+						puts "PLAYER DTO HAS JUST BEEN SAVED"
 				end
 				
 				jm["participants"].each do |parti|

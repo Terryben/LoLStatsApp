@@ -1,9 +1,10 @@
 <h1>Listing Matches</h1>
 
 <%= button_to "Read JSON File", matches_read_json_file_path, method: :post %>
-
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 <table>
 	<tr>
+		<th>Game Id</th>
 		<th>Created At</th>
 		<th>Updated At</th>
 		<th>Season Id</th>
@@ -20,6 +21,7 @@
 
 	<% @matches.each do |match| %>
 		<tr>
+			<td><%= match.riot_game_id %></td>
 			<td><%= match.created_at %></td>
 			<td><%= match.updated_at %></td>
 			<td><%= match.season_id %></td>

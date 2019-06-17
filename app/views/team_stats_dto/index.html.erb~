@@ -36,7 +36,7 @@
 			<td><%= tsd.vilemaw_kills %></td>
 			<td><%= tsd.inhibitor_kills %></td>
 			<td><%= tsd.tower_kills %></td>
-			<td><%= tsd.dominion_victory_score %><_td>
+			<td><%= tsd.dominion_victory_score %></td>
 			<td><%= tsd.win %></td>
 			<td><%= tsd.dragon_kills %></td>
 			<td><%= tsd.matches_id %></td>
