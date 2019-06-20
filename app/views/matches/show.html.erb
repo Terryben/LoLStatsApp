@@ -1,4 +1,50 @@
-	<p>
-	  <strong>Created At</strong>
-	  <%= @match.first.created_at %>
-	</p>
+<table>
+	<tr>
+		<td>Season Id</td>
+		<td> Queue Id </td>
+		<td> Game Version </td>
+		<td> Platform Id </td>
+		<td> Game Mode </td>
+		<td> Map Id </td>
+		<td> Game Type </td>
+		<td> Game Duration </td>
+		<td> Game Creation </td>
+		<td> ID </td>
+		<td> Riot Games Id </td>
+		<td> PD - Current Platform Id </td>
+		<td> PD - Summoner Name </td>
+		<td> PD - Match History URI </td>
+		<td> PD - Platform Id </td>
+		<td> PD - Current Account Id </td>
+		<td> PD - Participant Dto ID </td>
+		<td> PD - Profile Icon </td>
+		<td> PD - Matches Id </td>
+		<td> PD - Summoner Id </td>
+		<td> PD - Account Id </td>
+	</tr>
+	<% @match.each do |match| %>
+	<tr>
+		<td><%= match.season_id %></td>
+		<td><%= match.queue_id %></td>
+		<td><%= match.game_version %></td>
+		<td><%= match.platform_id %></td>
+		<td><%= match.game_mode %></td>
+		<td><%= match.map_id %></td>
+		<td><%= match.game_type %></td>
+		<td><%= match.game_duration %></td>
+		<td><%= match.game_creation %></td>
+		<td><%= match.id %></td>
+		<td><%= match.riot_game_id %></td>
+		<td><%= match.current_platform_id %></td>
+		<td><%= match.summoner_name %></td>
+		<td><%= match.match_history_uri %></td>
+		<td><%= match.platform_id %></td>
+		<td><%= match.current_account_id %></td>
+		<td><%= match.participant_dto_id %></td>
+		<td><%= match.profile_icon %></td>
+		<td><%= match.id %></td>
+		<td><%= match.summoner_id %></td>
+		<td><%= match.account_id %></td>
+	</tr>
+	<% end %>
+</table>

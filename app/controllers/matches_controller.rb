@@ -8,7 +8,7 @@ class MatchesController < ApplicationController
 	end
 	
 	def show
-		@match = Match.joins("JOIN player_dtos ON player_dtos.matches_id = matches.id AND matches.id = #{params[:id]}")
+		@match = Match.select("*").joins(:player_dtos).where("matches.id = #{params[:id]}")
 	end
 	
 	

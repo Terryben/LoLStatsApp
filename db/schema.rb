@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_02_152948) do
+ActiveRecord::Schema.define(version: 2019_06_20_195336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -59,15 +59,14 @@ ActiveRecord::Schema.define(version: 2019_06_02_152948) do
     t.string "highest_achieved_season_tier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "matches_id"
+    t.bigint "match_id"
     t.integer "participant_id"
     t.integer "champion_id"
-    t.index ["matches_id"], name: "index_participant_dtos_on_matches_id"
+    t.index ["match_id"], name: "index_participant_dtos_on_match_id"
   end
 
   create_table "participant_stats_dtos", force: :cascade do |t|
-    t.bigint "participant_stats_dtos_id"
-    t.bigint "participant_dtos_id"
+    t.bigint "participant_dto_id"
     t.boolean "first_blood_assist"
     t.decimal "vision_score"
     t.decimal "magic_damage_dealt_to_champions"
@@ -179,8 +178,7 @@ ActiveRecord::Schema.define(version: 2019_06_02_152948) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "physical_damage_dealt"
-    t.index ["participant_dtos_id"], name: "index_participant_stats_dtos_on_participant_dtos_id"
-    t.index ["participant_stats_dtos_id"], name: "index_participant_stats_dtos_on_participant_stats_dtos_id"
+    t.index ["participant_dto_id"], name: "index_participant_stats_dtos_on_participant_dto_id"
   end
 
   create_table "participant_timeline_dtos", force: :cascade do |t|
@@ -230,10 +228,10 @@ ActiveRecord::Schema.define(version: 2019_06_02_152948) do
     t.integer "profile_icon"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "matches_id"
+    t.bigint "match_id"
     t.bigint "summoner_id"
     t.bigint "account_id"
-    t.index ["matches_id"], name: "index_player_dtos_on_matches_id"
+    t.index ["match_id"], name: "index_player_dtos_on_match_id"
   end
 
   create_table "stats", force: :cascade do |t|
@@ -255,12 +253,12 @@ ActiveRecord::Schema.define(version: 2019_06_02_152948) do
   end
 
   create_table "team_bans_dtos", force: :cascade do |t|
-    t.bigint "team_stats_dtos_id"
+    t.bigint "team_stats_dto_id"
     t.integer "pick_turn"
     t.integer "champion_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["team_stats_dtos_id"], name: "index_team_bans_dtos_on_team_stats_dtos_id"
+    t.index ["team_stats_dto_id"], name: "index_team_bans_dtos_on_team_stats_dto_id"
   end
 
   create_table "team_stats_dtos", force: :cascade do |t|
@@ -281,15 +279,14 @@ ActiveRecord::Schema.define(version: 2019_06_02_152948) do
     t.integer "dragon_kills"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "matches_id"
-    t.index ["matches_id"], name: "index_team_stats_dtos_on_matches_id"
+    t.bigint "match_id"
+    t.index ["match_id"], name: "index_team_stats_dtos_on_match_id"
   end
 
   add_foreign_key "champion_positional_stats", "champions", column: "champions_id"
-  add_foreign_key "participant_dtos", "matches", column: "matches_id"
-  add_foreign_key "participant_stats_dtos", "participant_dtos", column: "participant_dtos_id"
-  add_foreign_key "participant_stats_dtos", "participant_stats_dtos", column: "participant_stats_dtos_id"
-  add_foreign_key "player_dtos", "matches", column: "matches_id"
-  add_foreign_key "team_bans_dtos", "team_stats_dtos", column: "team_stats_dtos_id"
-  add_foreign_key "team_stats_dtos", "matches", column: "matches_id"
+  add_foreign_key "participant_dtos", "matches"
+  add_foreign_key "participant_stats_dtos", "participant_dtos"
+  add_foreign_key "player_dtos", "matches"
+  add_foreign_key "team_bans_dtos", "team_stats_dtos"
+  add_foreign_key "team_stats_dtos", "matches"
 end
