@@ -1,0 +1,32 @@
+[
+    {
+        "queueType": "RANKED_FLEX_SR",
+        "summonerName": "Chubbles",
+        "hotStreak": false,
+        "wins": 19,
+        "veteran": false,
+        "losses": 20,
+        "rank": "II",
+        "tier": "PLATINUM",
+        "inactive": false,
+        "freshBlood": false,
+        "leagueId": "8911e670-4a33-11e9-9743-c81f66cf2333",
+        "summonerId": "KV6e5YkrCHN3A0mKolnLvRTp6MVbf0LwQn8sJjE47ke9k9I",
+        "leaguePoints": 79
+    },
+    {
+        "queueType": "RANKED_SOLO_5x5",
+        "summonerName": "Chubbles",
+        "hotStreak": false,
+        "wins": 35,
+        "veteran": false,
+        "losses": 29,
+        "rank": "III",
+        "tier": "DIAMOND",
+        "inactive": false,
+        "freshBlood": false,
+        "leagueId": "cd160fc0-435f-11e9-8a61-c81f66dbb56c",
+        "summonerId": "KV6e5YkrCHN3A0mKolnLvRTp6MVbf0LwQn8sJjE47ke9k9I",
+        "leaguePoints": 11
+    }
+]

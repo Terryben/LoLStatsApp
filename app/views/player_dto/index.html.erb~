@@ -32,6 +32,7 @@
 			<td><%= pd.profile_icon %></td>
 			<td><%= pd.created_at %></td>
 			<td><%= pd.updated_at  %></td>
+			<td><%= pd.matches_id  %></td>
 			<td><%= pd.summoner_id %></td>
 			<td><%= pd.account_id %></td>
 		</tr>

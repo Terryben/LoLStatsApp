@@ -1,5 +1,6 @@
 <table>
 	<tr>
+		<td>Match Id</td>
 		<td>Season Id</td>
 		<td> Queue Id </td>
 		<td> Game Version </td>
@@ -17,13 +18,11 @@
 		<td> PD - Platform Id </td>
 		<td> PD - Current Account Id </td>
 		<td> PD - Participant Dto ID </td>
-		<td> PD - Profile Icon </td>
-		<td> PD - Matches Id </td>
-		<td> PD - Summoner Id </td>
-		<td> PD - Account Id </td>
+		<td> C - Name </td>
 	</tr>
 	<% @match.each do |match| %>
 	<tr>
+		<td><%= match.id %></td>
 		<td><%= match.season_id %></td>
 		<td><%= match.queue_id %></td>
 		<td><%= match.game_version %></td>
@@ -35,16 +34,13 @@
 		<td><%= match.game_creation %></td>
 		<td><%= match.id %></td>
 		<td><%= match.riot_game_id %></td>
-		<td><%= match.current_platform_id %></td>
-		<td><%= match.summoner_name %></td>
-		<td><%= match.match_history_uri %></td>
-		<td><%= match.platform_id %></td>
-		<td><%= match.current_account_id %></td>
-		<td><%= match.participant_dto_id %></td>
-		<td><%= match.profile_icon %></td>
-		<td><%= match.id %></td>
-		<td><%= match.summoner_id %></td>
-		<td><%= match.account_id %></td>
+		<td><%= match.current_platform_id %></td> 
+		<td><%= match.summoner_name %></td> 
+		<td><%= match.match_history_uri %></td> 
+		<td><%= match.platform_id %></td> 
+		<td><%= match.current_account_id %></td> 
+		<td><%= match.participant_dto_id %></td> 
+		<td><%= match.name %></td> 
 	</tr>
 	<% end %>
 </table>

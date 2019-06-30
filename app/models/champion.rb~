@@ -1,3 +1,2 @@
 class Champion < ApplicationRecord
-	has_many :participant_dtos
 end

@@ -1,7 +1,4 @@
 class ParticipantDto < ApplicationRecord
-
-def index
-	@participant_dtos = ParticipantDto.all
-end
-
+	belongs_to :match
+	belongs_to :champion
 end

@@ -2,13 +2,14 @@ class MatchesController < ApplicationController
 	require "json"
 	require "rubygems"
 	require "pp"
+	require "E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/api_fetcher.rb"
 	
 	def index
 		@matches = Match.all
 	end
 	
 	def show
-		@match = Match.select("*").joins(:player_dtos)
+		@match = Match.select("*").joins([participant_dtos: :champion], :player_dtos).where("matches.id = #{params[:id]}").where("participant_dtos.participant_id = player_dtos.participant_dto_id").sort #[participant_dtos: :champion]
 	end
 	
 	

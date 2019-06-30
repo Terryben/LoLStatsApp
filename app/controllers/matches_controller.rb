@@ -2,13 +2,14 @@ class MatchesController < ApplicationController
 	require "json"
 	require "rubygems"
 	require "pp"
+	require "E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/api_fetcher.rb"
 	
 	def index
 		@matches = Match.all
 	end
 	
 	def show
-		@match = Match.select("*").joins(:player_dtos).where("matches.id = #{params[:id]}")
+		@match = Match.select("*").joins([participant_dtos: :champion], :player_dtos).where("matches.id = #{params[:id]}").where("participant_dtos.participant_id = player_dtos.participant_dto_id").sort #[participant_dtos: :champion]
 	end
 	
 	
@@ -281,6 +282,16 @@ class MatchesController < ApplicationController
                                 return input
                         end
                 end
+		def read_summoner_json
+			file = open("E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/player_info.json")
+			json = file.read
+			#run into invalid characters. Double convert to force valid characters
+			json.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+			json.encode!('UTF-8', 'UTF-16')
+			parsed_input = JSON.parse(json)
+			parsed_input["matches"].each do |jm| #jm = json match
+
+		end
 
 	private
 		def match_params	

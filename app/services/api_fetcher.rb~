@@ -1,0 +1,11 @@
+require 'net/http'
+require 'uri'
+require 'json'
+
+uri = URI.parse("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Chubbles?api_key=RGAPI-94ea6491-276a-49dd-a7b2-04e277f05043")
+response = Net::HTTP.get_response(uri)
+
+puts response.body
+
+# response.code
+# response.body
