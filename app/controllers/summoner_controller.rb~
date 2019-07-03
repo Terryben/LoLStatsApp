@@ -1,0 +1,24 @@
+class SummonerController < ApplicationController
+
+	require "json"
+	require "rubygems"
+	require "pp"
+	require "E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/api_fetcher.rb"
+
+	def index
+		@summoner = Summoner.all
+	end
+
+	def show
+		@summoner = Summoner.select("*")
+	end
+
+	def read_summoner_json
+		parsed_input = get_summoner_from_api("Chubbles")
+		Summoner.Find_or_initialize_by(name: parsed_input["name"]).update(puuid:  is_nil_ret_char(parsed_input.dig("puuid")), \
+										  summoner_level: is_nil_ret_int(parsed_input.dig("summoner_level")), \
+										  account_id: is_nil_ret_int(parsed_input.dig("accountId")), \
+										  summoner_id: is_nil_ret_int(parsed_input.dig("id")))
+
+
+end

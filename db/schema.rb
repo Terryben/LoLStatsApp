@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_30_002510) do
+ActiveRecord::Schema.define(version: 2019_07_03_021607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -245,13 +245,11 @@ ActiveRecord::Schema.define(version: 2019_06_30_002510) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.string "summoner_id"
-    t.decimal "summoner_level"
+    t.decimal "level"
     t.string "puuid"
     t.integer "profile_icon_id"
     t.string "account_id", limit: 50
     t.string "queue_type"
-    t.string "summoner_name"
     t.string "rank"
     t.string "tier"
     t.string "league_id"

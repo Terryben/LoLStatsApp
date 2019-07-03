@@ -2,7 +2,7 @@ class MatchesController < ApplicationController
 	require "json"
 	require "rubygems"
 	require "pp"
-	require "E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/api_fetcher.rb"
+	load "E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/api_fetcher.rb"
 	
 	def index
 		@matches = Match.all
@@ -55,13 +55,13 @@ class MatchesController < ApplicationController
 									   dominion_victory_score: is_nil_ret_int(team.dig("dominionVictoryScore")), \
 									   win: is_nil_ret_char(team.dig("win")), \
 									   dragon_kills: is_nil_ret_bool(team.dig("dragonKills")), \
-									   matches_id: @match.id)
+									   match_id: @match.id)
 					@team_stats_dto.save
 					#team bans
 					team["bans"].each do |ban|
 						@team_bans_dto = TeamBansDto.new(pick_turn: is_nil_ret_int(ban.dig("pickTurn")), \
 										 champion_id: is_nil_ret_int(ban.dig("championId")), \
-										 team_stats_dtos_id: @team_stats_dto.id)
+										 team_stats_dto_id: @team_stats_dto.id)
 						@team_bans_dto.save
 					end
 				end
@@ -78,7 +78,7 @@ class MatchesController < ApplicationController
 									    account_id: is_nil_ret_int(pi.dig("player", "accountId")), \
 									    match_history_uri: is_nil_ret_char(pi.dig("player", "matchHistoryUri")), \
 									    profile_icon: is_nil_ret_int(pi.dig("player", "profileIcon")), \
-									    matches_id: @match.id, \
+									    match_id: @match.id, \
 									    participant_dto_id: is_nil_ret_int(pi.dig("participantId")))    
 						@player_dto.save
 						puts "PLAYER DTO HAS JUST BEEN SAVED"
@@ -87,7 +87,7 @@ class MatchesController < ApplicationController
 				jm["participants"].each do |parti|
 					@participant_dto = ParticipantDto.new(participant_id: is_nil_ret_int(parti.dig("participantId")), \
 									      team_id: is_nil_ret_int(parti.dig("teamId")), \
-									      matches_id: @match.id, \
+									      match_id: @match.id, \
 									      champion_id: is_nil_ret_int(parti.dig("championId")), \
 	 								      spell_1_id: is_nil_ret_int(parti.dig("spell1Id")), \
 	 								      spell_2_id: is_nil_ret_int(parti.dig("spell2Id")), \
@@ -255,43 +255,6 @@ class MatchesController < ApplicationController
 	
                         end
                 end
-
-	def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
-		if input.nil?
-				puts "Could not read value. Int 0 returned instead."
-                                return 0
-                        else
-                                return input
-                     
-		end
-	end
-		def is_nil_ret_char (input)
-                        if input.nil?
-				puts "Could not read value. Char 0 returned instead."
-                                return "0"
-                        else
-                                return input
-                        end
-                end
-
-		def is_nil_ret_bool (input)
-                        if input.nil?
-				puts "Could not read value. False returned instead."
-                                return false
-                        else
-                                return input
-                        end
-                end
-		def read_summoner_json
-			file = open("E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/player_info.json")
-			json = file.read
-			#run into invalid characters. Double convert to force valid characters
-			json.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
-			json.encode!('UTF-8', 'UTF-16')
-			parsed_input = JSON.parse(json)
-			parsed_input["matches"].each do |jm| #jm = json match
-
-		end
 
 	private
 		def match_params	

@@ -21,7 +21,7 @@
 		<th></th>
 	</tr>
 
-	<% @matches.each do |match| %>
+	<% @matches.find_each do |match| %>
 		<tr>
 			<td><%= match.riot_game_id %></td>
 			<td><%= match.created_at %></td>

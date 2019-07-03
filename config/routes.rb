@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   resources :participant_stats_dto
   resources :participant_dto
   resources :player_dto
+  resources :summoners
   post 'matches/read_json_file'
+  post 'summoners/read_summoner_json'
   root 'welcome_page#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
