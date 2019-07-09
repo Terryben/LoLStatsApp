@@ -61,7 +61,7 @@ class MatchesController < ApplicationController
 					team["bans"].each do |ban|
 						@team_bans_dto = TeamBansDto.new(pick_turn: is_nil_ret_int(ban.dig("pickTurn")), \
 										 champion_id: is_nil_ret_int(ban.dig("championId")), \
-										 team_stats_dtos_id: @team_stats_dto.id)
+										 team_stats_dto_id: @team_stats_dto.id)
 						@team_bans_dto.save
 					end
 				end

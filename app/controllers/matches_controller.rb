@@ -22,15 +22,15 @@ class MatchesController < ApplicationController
 		redirect_to @match
 	end
 
-	def read_json_file
-                        file = open("F:/Downloads/matches1.json")
-                        json = file.read
+	def read_json_file #Not actually a file, read and save the data from a match by match ID
+                        #file = open("F:/Downloads/matches1.json")
+                        #json = file.read
 			#run into invalid characters. Double convert to force valid characters
-			json.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
-			json.encode!('UTF-8', 'UTF-16')
+			#json.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+			#json.encode!('UTF-8', 'UTF-16')
+			#parsed_input = JSON.parse(json)
 
 
-                        parsed_input = JSON.parse(json)
 
                         parsed_input["matches"].each do |jm| #jm = json match
 			#	Save the match

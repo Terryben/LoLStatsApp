@@ -1,10 +1,43 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'ostruct'
 
 
-def get_summoner_from_api(summoner_name)
-	uri = URI.parse("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Chubbles?api_key=RGAPI-c632ce1d-a793-4b0d-a4ae-90340ff59ad4")
+
+#pull API request from Riot Games. Parse the body of the request as JSON and return it
+def get_api_request_as_json(request_uri2)
+	request_uri = request_uri2.gsub! /\s+/, '%20'
+	puts request_uri
+
+	puts "WHY DIDNT THIS GO OFF?"
+	uri = URI.parse(request_uri)
+	response = Net::HTTP.get_response(uri)
+	
+	puts response.code
+	puts "buffer"
+	puts response.body
+
+	#make a pair to return the reponse body in JSON and the response code
+	ret = OpenStruct.new
+	
+	json = response.body
+	#run into invalid characters. Double convert to force valid characters
+	json.encode!('UTF-16', 'UTF-8', :invalid => :replace, :replace => '')
+	json.encode!('UTF-8', 'UTF-16')
+	
+	ret.head = response.code
+	ret.tail = JSON.parse(json)
+
+	return ret
+
+end
+
+
+
+#fetches summoner information from the Riot Games API when passed a summoner name and an API key
+def get_summoner_from_api(summoner_name, api_key)
+	uri = URI.parse("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}")
 	response = Net::HTTP.get_response(uri)
 	#puts response.body
 
@@ -17,8 +50,9 @@ def get_summoner_from_api(summoner_name)
 
 end
 
-def get_league_from_api(encrypted_sum_id)
-	uri = URI.parse("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/KV6e5YkrCHN3A0mKolnLvRTp6MVbf0LwQn8sJjE47ke9k9I?api_key=RGAPI-c632ce1d-a793-4b0d-a4ae-90340ff59ad4")
+#fetches summoner league information (rank, tier, queue type, etc) when passed an ecrypted summoner id and an API key
+def get_league_from_api(encrypted_sum_id, api_key)
+	uri = URI.parse("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/#{encrypted_sum_id}?api_key=#{api_key}")
 	response = Net::HTTP.get_response(uri)
 
 	json = response.body
@@ -42,7 +76,7 @@ end
 	def is_nil_ret_char (input)
 		if input.nil?
 			puts "Could not read value. Char 0 returned instead."
-			return "zero"
+			return "0"
 		else
 			return input
 		end

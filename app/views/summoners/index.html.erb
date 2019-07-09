@@ -1,6 +1,16 @@
 <h1> Summoners </h1>
+<br>
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 
-<%= button_to "Read Summoner Json", summoners_read_summoner_json_path, method: :post %>
+<br>
+<%= form_tag(controller: :summoners, action: :read_summoner_json) do %>
+	<%= label_tag(:api_key, "Summoner API Key: ") %>
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:summoner_name, "Summoner_name: ") %>
+	<%= text_field_tag(:summoner_name) %>
+	<%= submit_tag("Pull from Riot API") %>
+<% end %>
+<br>
 
 <table>
 	<tr>
@@ -13,7 +23,8 @@
 		<td> Rank </td>
 		<td> Tier </td>
 	</tr>
-		<%= @summoners.find_each do |sum| %>
+		<% @summoners.find_each do |sum| %>
+	<tr>
 			<td> <%= sum.id %> </td>
 			<td> <%= sum.name %> </td>
 			<td> <%= sum.league_id %> </td>
