@@ -22,6 +22,16 @@ class MatchesController < ApplicationController
 		redirect_to @match
 	end
 
+	def read_match_by_id
+		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
+		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/2585563902?api_key=RGAPI-98115b16-f549-4bfb-a034-96b5fde320d5"
+		parsed_match_input = get_api_request_as_json(uri)
+		if parsed_match_input.head = 200 && !parsed_match_input.tail.nil? then
+			parsed_input = parsed_match_input.tail
+
+	end
+	end
+
 	def read_json_file #Not actually a file, read and save the data from a match by match ID
                         #file = open("F:/Downloads/matches1.json")
                         #json = file.read
@@ -30,13 +40,29 @@ class MatchesController < ApplicationController
 			#json.encode!('UTF-8', 'UTF-16')
 			#parsed_input = JSON.parse(json)
 
-
-
-                        parsed_input["matches"].each do |jm| #jm = json match
+		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
+		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{params[:match_id]}?api_key=#{params[:api_key]}"
+		parsed_match_input = get_api_request_as_json(uri)
+		puts "HERE IS INPUT HEAD"
+		puts parsed_match_input.head
+		if parsed_match_input.head == 200 && !parsed_match_input.tail.nil? then
+			
+			#jm = json_match
+			jm = parsed_match_input.tail
+                        #parsed_input["matches"].each do |jm| #jm = json match
 			#	Save the match
-                                @match = Match.new(riot_game_id: jm["gameId"], created_at: jm["gameCreation"], updated_at: Time.now, season_id: jm["seasonId"], queue_id: jm["queueId"],\
-                                           game_version: jm["gameVersion"], platform_id: jm["platformId"], game_mode: jm["gameMode"], map_id: jm["mapId"], \
-                                           game_type: jm["gameType"], game_duration: jm["gameDuration"], game_creation: jm["gameCreation"])
+			@match = Match.new(riot_game_id: is_nil_ret_int(jm.dig("gameId")), \
+					   created_at: jm["gameCreation"], \
+					   updated_at: Time.now, \
+					   season_id: is_nil_ret_int(jm.dig("seasonId")), \
+					   queue_id: is_nil_ret_int(jm.dig("queueId")), \
+					   game_version: is_nil_ret_char(jm.dig("gameVersion")), \
+					   platform_id: is_nil_ret_char(jm.dig("platformId")), \
+					   game_mode: is_nil_ret_char(jm.dig("gameMode")), \
+					   map_id: is_nil_ret_int(jm.dig("mapId")), \
+					   game_type: is_nil_ret_char(jm.dig("gameType")), \
+					   game_duration: is_nil_ret_int(jm.dig("gameDuration")), \
+					   game_creation: is_nil_ret_int(jm.dig("gameCreation")))
                                 @match.save
 			#	Save the team stats dto		
 				jm["teams"].each do |team|
@@ -68,7 +94,7 @@ class MatchesController < ApplicationController
 			#	Save player dto which is inside participant identities	
 				jm["participantIdentities"].each do |pi|
 				#		puts pi["player"]["summonerName"]
-				#		pp pi
+						pp pi
 						puts "THIS IS THE START OF PLAYER DTO"
 						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
 									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
@@ -252,8 +278,8 @@ class MatchesController < ApplicationController
 
 				end
 
-	
-                        end
+			end
+		redirect_to action: "index"	
                 end
 
 	private

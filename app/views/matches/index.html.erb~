@@ -1,5 +1,4 @@
 <h1>Listing Matches</h1>
-<h2> Hi Ben </h2>
 <%= button_to "Read JSON File", matches_read_json_file_path, method: :post %>
 <br>
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

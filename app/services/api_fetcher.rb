@@ -8,9 +8,7 @@ require 'ostruct'
 #pull API request from Riot Games. Parse the body of the request as JSON and return it
 def get_api_request_as_json(request_uri2)
 	request_uri = request_uri2.gsub /\s+/, '%20'
-	puts request_uri
 
-	puts "WHY DIDNT THIS GO OFF?"
 	uri = URI.parse(request_uri)
 	response = Net::HTTP.get_response(uri)
 	
@@ -28,6 +26,9 @@ def get_api_request_as_json(request_uri2)
 	
 	ret.head = response.code
 	ret.tail = JSON.parse(json)
+	
+	puts "HERE is the response code"
+	puts response.code
 
 	return ret
 
@@ -68,7 +69,7 @@ end
         def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
 		if input.nil?
 			puts "Could not read value. Int 0 returned instead."
-			return 0
+			return -1
 		else
 			return input
 		end
@@ -76,7 +77,7 @@ end
 	def is_nil_ret_char (input)
 		if input.nil?
 			puts "Could not read value. Char 0 returned instead."
-			return "0"
+			return "-1"
 		else
 			return input
 		end
