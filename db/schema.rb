@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_03_021607) do
+ActiveRecord::Schema.define(version: 2019_07_23_184722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2019_07_03_021607) do
     t.decimal "game_creation"
     t.integer "ladder_rank_of_match"
     t.decimal "riot_game_id"
+    t.boolean "analyzed"
   end
 
   create_table "participant_dtos", force: :cascade do |t|

@@ -22,17 +22,42 @@ class MatchesController < ApplicationController
 		redirect_to @match
 	end
 
-	def read_match_by_id
-		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
-		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/2585563902?api_key=RGAPI-98115b16-f549-4bfb-a034-96b5fde320d5"
-		parsed_match_input = get_api_request_as_json(uri)
-		if parsed_match_input.head = 200 && !parsed_match_input.tail.nil? then
-			parsed_input = parsed_match_input.tail
+	def get_matchlist_from_api(match_id, api_key)
+		if !Match.find_by(riot_game_id: match_id).nil?
+			#analyzing a match means you have pulled the match list for the ten players in that match.
+			#array for the summoners in a specific match. Load all summoners in the database
+			summoners_in_match = Match.select("summoner_name").join(:player_dtos).where("matches.riot_game_id = #{match_id}")
+			summoners_in_match.each do |sum|
+				Summoner.lead_summoner_from_api(sum.name, api_key)
+			end
+			#now get the matchlist for each summoner. Pulling the summoner account id from the JSON above would be faster than querying the database
+			summoners_in_match.each do |sum|
+				account_id = Summoner.select("account_id").where("summoner.name" = sum.name)
+			end	
+			uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/ACCOUNT ID"
+			parsed_match_input = get_api_request_as_json(uri)
+			if parsed_match_input.head = 200 && !parsed_match_input.tail.nil? then
+				parsed_input = parsed_match_input.tail
 
-	end
+			end
+			load_match_from_api(match_id, api_key)
+		else
+			flash[:error] = "Match not loaded in database."
+			redirect_to action: "index"
+		end
 	end
 
-	def read_json_file #Not actually a file, read and save the data from a match by match ID
+	def read_json_file #load match from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
+		if Match.find_by(riot_game_id: params[:match_id]).nil?
+			load_match_from_api(params[:match_id], params[:api_key])
+			redirect_to action: "index"	
+		else
+			flash[:error] = "Match already loaded in database."
+			redirect_to action: "index"	
+		end
+	end
+
+	def load_match_from_api(match_id, api_key) #Not actually a file, read and save the data from a match by match ID
                         #file = open("F:/Downloads/matches1.json")
                         #json = file.read
 			#run into invalid characters. Double convert to force valid characters
@@ -41,11 +66,19 @@ class MatchesController < ApplicationController
 			#parsed_input = JSON.parse(json)
 
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
-		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{params[:match_id]}?api_key=#{params[:api_key]}"
+		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
 		parsed_match_input = get_api_request_as_json(uri)
-		puts "HERE IS INPUT HEAD"
-		puts parsed_match_input.head
-		if parsed_match_input.head == 200 && !parsed_match_input.tail.nil? then
+		#puts "HERE IS INPUT HEAD"
+		#puts parsed_match_input.head
+		#puts "Does it equal 200?"
+		#puts parsed_match_input.head.class
+		#puts "HERE IS THE TAIL"
+		#puts parsed_match_input.tail
+		#puts "Is false?"
+		#puts parsed_match_input.tail.nil?
+		#puts "evaluation"
+		#puts parsed_match_input.head == 200 && !parsed_match_input.tail.nil?
+		if parsed_match_input.head == "200" && !parsed_match_input.tail.nil? then
 			
 			#jm = json_match
 			jm = parsed_match_input.tail
@@ -62,7 +95,8 @@ class MatchesController < ApplicationController
 					   map_id: is_nil_ret_int(jm.dig("mapId")), \
 					   game_type: is_nil_ret_char(jm.dig("gameType")), \
 					   game_duration: is_nil_ret_int(jm.dig("gameDuration")), \
-					   game_creation: is_nil_ret_int(jm.dig("gameCreation")))
+					   game_creation: is_nil_ret_int(jm.dig("gameCreation")), \
+					   analyzed: false)
                                 @match.save
 			#	Save the team stats dto		
 				jm["teams"].each do |team|
@@ -279,7 +313,7 @@ class MatchesController < ApplicationController
 				end
 
 			end
-		redirect_to action: "index"	
+		flash[:success] = "Match successfully loaded into database."
                 end
 
 	private

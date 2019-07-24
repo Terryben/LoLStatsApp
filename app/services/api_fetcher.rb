@@ -12,9 +12,9 @@ def get_api_request_as_json(request_uri2)
 	uri = URI.parse(request_uri)
 	response = Net::HTTP.get_response(uri)
 	
-	puts response.code
-	puts "buffer"
-	puts response.body
+	#puts response.code
+	#puts "buffer"
+	#puts response.body
 
 	#make a pair to return the reponse body in JSON and the response code
 	ret = OpenStruct.new
@@ -27,8 +27,8 @@ def get_api_request_as_json(request_uri2)
 	ret.head = response.code
 	ret.tail = JSON.parse(json)
 	
-	puts "HERE is the response code"
-	puts response.code
+	#puts "HERE is the response code"
+	#puts response.code
 
 	return ret
 

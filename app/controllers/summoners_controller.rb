@@ -14,15 +14,20 @@ class SummonersController < ApplicationController
 		@summoner = Summoner.select("*")
 	end
 
+	def read_summoner_json
+			load_summoner_from_api(params[:summoner_name], params[:api_key])
+			redirect_to action: "index"
+	end
+
 	#uses api_fetcher in services to pull needed info from Riot's api to create a summoner in the database. Parses data from two separate API calls then queries to see if the summoner already
 	# exists in the database. If not, it creates it. If it does exist, it updates the summoner with the new up to date data.
-	def read_summoner_json
-		r_uri = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{params[:summoner_name]}?api_key=#{params[:api_key]}"
+	def load_summoner_from_api(summoner_name, api_key)
+		r_uri = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}"
 		parsed_summoner_input = get_api_request_as_json(r_uri)
 		
 		if parsed_summoner_input.head = 200 && !parsed_summoner_input.tail.nil? then
 
-			parsed_league_input = get_api_request_as_json("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/#{parsed_summoner_input.tail.dig("id")}?api_key=#{params[:api_key]}")
+			parsed_league_input = get_api_request_as_json("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/#{parsed_summoner_input.tail.dig("id")}?api_key=#{api_key}")
 		
 			if parsed_league_input.head = 200 && !parsed_league_input.tail[0].nil? then
 				
@@ -51,7 +56,6 @@ class SummonersController < ApplicationController
 			puts "ERROR: Response from API was nil and/or code was not 200."
 		end
 
-		redirect_to action: "index"
 
 	end
 
