@@ -6,7 +6,15 @@
 	<%= text_field_tag(:api_key) %>
 	<%= label_tag(:match_id, "Match Id: ") %>
 	<%= text_field_tag(:match_id) %>
-	<%= submit_tag("Pull from Riot API") %>
+	<%= submit_tag("Pull Match from Riot API") %>
+<% end %>
+<br>
+<%= form_tag(controller: :matches, action: :get_matchlist_from_api) do %>                                                                                                                   	
+	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:match_id, "Match Id: ") %>
+	<%= text_field_tag(:match_id) %>
+	<%= submit_tag("Pull matchlist from Riot API") %>
 <% end %>                                                                                                                                                                              
 <br>       
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

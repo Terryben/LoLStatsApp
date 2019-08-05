@@ -1,6 +1,21 @@
 <h1>Listing Matches</h1>
-<%= button_to "Read JSON File", matches_read_json_file_path, method: :post %>
 <br>
+
+<%= form_tag(controller: :matches, action: :read_json_file) do %>                                                                                                                   	
+	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:match_id, "Match Id: ") %>
+	<%= text_field_tag(:match_id) %>
+	<%= submit_tag("Pull from Riot API") %>
+<% end %>                                                                                                                                                                              
+<%= form_tag(controller: :matches, action: :get_matchlist_from_api) do %>                                                                                                                   	
+	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:match_id, "Match Id: ") %>
+	<%= text_field_tag(:match_id) %>
+	<%= submit_tag("Pull from Riot API") %>
+<% end %>                                                                                                                                                                              
+br>       
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 <br>
 

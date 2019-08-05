@@ -19,6 +19,11 @@ class SummonersController < ApplicationController
 			redirect_to action: "index"
 	end
 
+	def get_account_id(sum)
+		acc_id = Summoner.select("account_id").where("summoners.name = '#{sum}'")
+		return acc_id.first.account_id
+	end
+
 	#uses api_fetcher in services to pull needed info from Riot's api to create a summoner in the database. Parses data from two separate API calls then queries to see if the summoner already
 	# exists in the database. If not, it creates it. If it does exist, it updates the summoner with the new up to date data.
 	def load_summoner_from_api(summoner_name, api_key)
@@ -26,6 +31,8 @@ class SummonersController < ApplicationController
 		parsed_summoner_input = get_api_request_as_json(r_uri)
 		
 		if parsed_summoner_input.head = 200 && !parsed_summoner_input.tail.nil? then
+			puts "Id is: "
+			puts parsed_summoner_input.tail.dig("id")
 
 			parsed_league_input = get_api_request_as_json("https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/#{parsed_summoner_input.tail.dig("id")}?api_key=#{api_key}")
 		

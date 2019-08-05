@@ -8,8 +8,13 @@ require 'ostruct'
 #pull API request from Riot Games. Parse the body of the request as JSON and return it
 def get_api_request_as_json(request_uri2)
 	request_uri = request_uri2.gsub /\s+/, '%20'
-
-	uri = URI.parse(request_uri)
+	begin
+		uri = URI.parse(request_uri)
+		puts "The URI is #{uri}"
+	rescue
+		uri = URI.parse(URI.escape(request_uri))
+		puts "The escaped uri is #{uri}"
+	end
 	response = Net::HTTP.get_response(uri)
 	
 	#puts response.code
@@ -27,6 +32,10 @@ def get_api_request_as_json(request_uri2)
 	ret.head = response.code
 	ret.tail = JSON.parse(json)
 	
+	if ret.head == "429" then
+		flash[:error] = "API Timeout code received. Stop making calls for an hour"
+		redirect_to action: 'welcome_page#index'
+	end	
 	#puts "HERE is the response code"
 	#puts response.code
 
@@ -38,7 +47,11 @@ end
 
 #fetches summoner information from the Riot Games API when passed a summoner name and an API key
 def get_summoner_from_api(summoner_name, api_key)
-	uri = URI.parse("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}")
+	begin
+		uri = URI.parse("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}")
+	rescue
+		uri = URI.parse(URI.excape("https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}"))
+	end
 	response = Net::HTTP.get_response(uri)
 	#puts response.body
 

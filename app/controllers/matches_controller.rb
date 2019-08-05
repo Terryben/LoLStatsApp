@@ -21,26 +21,51 @@ class MatchesController < ApplicationController
 		@match.save
 		redirect_to @match
 	end
-
-	def get_matchlist_from_api(match_id, api_key)
+	def get_matchlist_from_api #load matchlist from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
+			get_matchlist_from_api_params(params[:match_id], params[:api_key])
+	end	
+	
+	def get_matchlist_from_api_params(match_id, api_key)
 		if !Match.find_by(riot_game_id: match_id).nil?
+			sum_instance = SummonersController.new
 			#analyzing a match means you have pulled the match list for the ten players in that match.
 			#array for the summoners in a specific match. Load all summoners in the database
-			summoners_in_match = Match.select("summoner_name").join(:player_dtos).where("matches.riot_game_id = #{match_id}")
+			summoners_in_match = PlayerDto.select("summoner_name").joins(:match).where("matches.riot_game_id = #{match_id}")
 			summoners_in_match.each do |sum|
-				Summoner.lead_summoner_from_api(sum.name, api_key)
+				puts sum.summoner_name
+				sleep(0.5)
+				sum_instance.load_summoner_from_api(sum.summoner_name, api_key)
 			end
-			#now get the matchlist for each summoner. Pulling the summoner account id from the JSON above would be faster than querying the database
+			puts "Here 1"
+			jsonMatchListArray = Array.new
+			i = 0
+			#now get the account id and matchlist for each summoner. Pulling the summoner account id from the JSON above would be faster than querying the database
 			summoners_in_match.each do |sum|
-				account_id = Summoner.select("account_id").where("summoner.name" = sum.name)
-			end	
-			uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/ACCOUNT ID"
-			parsed_match_input = get_api_request_as_json(uri)
-			if parsed_match_input.head = 200 && !parsed_match_input.tail.nil? then
-				parsed_input = parsed_match_input.tail
-
+				puts "Here 2"
+				accId = sum_instance.get_account_id(sum.summoner_name)
+				puts accId
+				sleep(0.5)
+				uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/#{accId}?api_key=#{api_key}"
+				jsonMatchListArray[i] = get_api_request_as_json(uri)
+				i = i + 1
 			end
-			load_match_from_api(match_id, api_key)
+			#loop through the match lists in the array. Loop through the matches in the match list and add them to the database
+			jsonMatchListArray.each do |matchList|
+				puts "Here 3"
+				puts matchList
+				if matchList.head == "200" && !matchList.tail.nil? then
+					ml = matchList.tail
+					puts "ML IS"
+					puts ml
+					ml["matches"].each do |match|
+						id = is_nil_ret_char(match.dig("gameId"))
+						if !(id	== "-1")
+							load_match_from_api(id, api_key)
+						end
+					end
+				end
+			end
+			redirect_to action: "index"
 		else
 			flash[:error] = "Match not loaded in database."
 			redirect_to action: "index"
