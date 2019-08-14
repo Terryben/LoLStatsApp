@@ -32,10 +32,8 @@ def get_api_request_as_json(request_uri2)
 	ret.head = response.code
 	ret.tail = JSON.parse(json)
 	
-	if ret.head == "429" then
-		flash[:error] = "API Timeout code received. Stop making calls for an hour"
-		redirect_to action: 'welcome_page#index'
-	end	
+	puts "The head is #{ret.head}" 	
+	puts "The tail is #{ret.tail}" 	
 	#puts "HERE is the response code"
 	#puts response.code
 

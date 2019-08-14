@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_04_225939) do
+ActiveRecord::Schema.define(version: 2019_08_13_020021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2019_08_04_225939) do
     t.string "game_type"
     t.decimal "game_duration"
     t.decimal "game_creation"
-    t.integer "ladder_rank_of_match"
+    t.string "ladder_rank_of_match"
     t.decimal "riot_game_id"
     t.boolean "analyzed"
   end

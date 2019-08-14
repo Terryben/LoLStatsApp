@@ -24,31 +24,64 @@ class MatchesController < ApplicationController
 	def get_matchlist_from_api #load matchlist from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
 			get_matchlist_from_api_params(params[:match_id], params[:api_key])
 	end	
-	
-	def get_matchlist_from_api_params(match_id, api_key)
-		if !Match.find_by(riot_game_id: match_id).nil?
-			sum_instance = SummonersController.new
-			#analyzing a match means you have pulled the match list for the ten players in that match.
-			#array for the summoners in a specific match. Load all summoners in the database
-			summoners_in_match = PlayerDto.select("summoner_name").joins(:match).where("matches.riot_game_id = #{match_id}")
-			summoners_in_match.each do |sum|
-				puts sum.summoner_name
-				sleep(0.5)
-				sum_instance.load_summoner_from_api(sum.summoner_name, api_key)
+	def get_rank_of_match(sum_instance, match_id, api_key, summoners_in_match)
+		#array for player ranks in match to find match average
+		rankHash = Hash.new
+		#analyzing a match means you have pulled the match list for the ten players in that match.
+		#array for the summoners in a specific match. Load all summoners in the database
+		summoners_in_match.each do |sum|
+			sum_rank = sum_instance.load_summoner_from_api(sum.summoner_name, api_key)
+			#load the rank value into the hash set, or increment the count value if it already exists. 
+			if rankHash.key?(sum_rank)
+				rankHash[sum_rank] += 1
+			else
+				rankHash[sum_rank] = 1
 			end
-			puts "Here 1"
+			sleep(2)
+		end
+
+		#loop through and find highest count and use that value as the rank of the match
+		highestRank = ""
+		rankCount = 0
+		rankHash.each do |rank, count|
+			puts "The rank is: #{rank}"
+			puts count
+			if count > rankCount
+				highestRank = rank
+				rankCount = count
+			end
+		end
+		puts "The highest rank is: #{highestRank}"
+		puts "RankCount is: #{rankCount}"
+		Match.where(:riot_game_id => match_id).update_all(:ladder_rank_of_match => highestRank)
+		
+	end
+	def get_matchlist_from_api_params(match_id, api_key)
+		main_match = Match.find_by(riot_game_id: match_id)
+		puts "Main match is #{main_match}"
+		puts "Analyzed is #{main_match.analyzed.nil?}"
+		puts main_match.nil?
+		if !main_match.nil? && main_match.analyzed == false then 
+			sum_instance = SummonersController.new
+			summoners_in_match = PlayerDto.select("summoner_name").joins(:match).where("matches.riot_game_id = #{match_id}")
+			get_rank_of_match(sum_instance, match_id, api_key, summoners_in_match)
 			jsonMatchListArray = Array.new
 			i = 0
 			#now get the account id and matchlist for each summoner. Pulling the summoner account id from the JSON above would be faster than querying the database
 			summoners_in_match.each do |sum|
 				puts "Here 2"
-				accId = sum_instance.get_account_id(sum.summoner_name)
-				puts accId
-				sleep(0.5)
-				uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/#{accId}?api_key=#{api_key}"
-				jsonMatchListArray[i] = get_api_request_as_json(uri)
-				i = i + 1
+				puts "Name is #{sum.summoner_name}"
+				if Summoner.exists?(name: sum.summoner_name) then
+					accId = sum_instance.get_account_id(sum.summoner_name)
+					puts accId
+					uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/#{accId}?api_key=#{api_key}"
+					jsonMatchListArray[i] = get_api_request_as_json(uri)
+					i = i + 1
+					sleep(2)
+				end
 			end
+		
+			i = 0
 			#loop through the match lists in the array. Loop through the matches in the match list and add them to the database
 			jsonMatchListArray.each do |matchList|
 				puts "Here 3"
@@ -61,10 +94,15 @@ class MatchesController < ApplicationController
 						id = is_nil_ret_char(match.dig("gameId"))
 						if !(id	== "-1")
 							load_match_from_api(id, api_key)
+							sleep(2)
+							summoners_in_match = PlayerDto.select("summoner_name").joins(:match).where("matches.riot_game_id = #{id}")
+							get_rank_of_match(sum_instance, id, api_key, summoners_in_match)
 						end
 					end
 				end
 			end
+			main_match.analyzed = true
+			main_match.save
 			redirect_to action: "index"
 		else
 			flash[:error] = "Match not loaded in database."
@@ -93,6 +131,10 @@ class MatchesController < ApplicationController
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
 		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
 		parsed_match_input = get_api_request_as_json(uri)
+		if parsed_match_input.head == "429" then
+			flash[:error] = "API Timeout. Stop making calls for a while."
+			return redirect_to 'http://localhost:3000'
+		end
 		#puts "HERE IS INPUT HEAD"
 		#puts parsed_match_input.head
 		#puts "Does it equal 200?"
@@ -103,7 +145,7 @@ class MatchesController < ApplicationController
 		#puts parsed_match_input.tail.nil?
 		#puts "evaluation"
 		#puts parsed_match_input.head == 200 && !parsed_match_input.tail.nil?
-		if parsed_match_input.head == "200" && !parsed_match_input.tail.nil? then
+		if parsed_match_input.head == "200" && !parsed_match_input.tail.nil? && !Match.exists?(riot_game_id: match_id) then
 			
 			#jm = json_match
 			jm = parsed_match_input.tail

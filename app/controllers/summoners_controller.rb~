@@ -29,7 +29,7 @@ class SummonersController < ApplicationController
 	def load_summoner_from_api(summoner_name, api_key)
 		r_uri = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}"
 		parsed_summoner_input = get_api_request_as_json(r_uri)
-		
+		ret_val = ""	
 		if parsed_summoner_input.head = 200 && !parsed_summoner_input.tail.nil? then
 			puts "Id is: "
 			puts parsed_summoner_input.tail.dig("id")
@@ -42,7 +42,7 @@ class SummonersController < ApplicationController
 				puts parsed_summoner_input
 				puts parsed_league_input
 
-
+				ret_val = parsed_league_input.tail[0].dig("rank")
 				Summoner.find_or_initialize_by(name: parsed_summoner_input.tail["name"]).update(puuid: is_nil_ret_char(parsed_summoner_input.tail.dig("puuid")), \
 										  level: is_nil_ret_int(parsed_summoner_input.tail.dig("summonerLevel")), \
 										  account_id: is_nil_ret_char(parsed_summoner_input.tail.dig("accountId")), \
@@ -62,7 +62,7 @@ class SummonersController < ApplicationController
 		else
 			puts "ERROR: Response from API was nil and/or code was not 200."
 		end
-
+		return ret_val
 
 	end
 
