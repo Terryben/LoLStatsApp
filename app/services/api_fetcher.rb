@@ -79,7 +79,7 @@ end
 
         def is_nil_ret_int (input) #values can be empty or nil. Checking for nil so code doesnt error out. Return 0 for nil value
 		if input.nil?
-			puts "Could not read value. Int 0 returned instead."
+			puts "Could not read value. Int -1 returned instead."
 			return -1
 		else
 			return input
@@ -87,7 +87,7 @@ end
 	end
 	def is_nil_ret_char (input)
 		if input.nil?
-			puts "Could not read value. Char 0 returned instead."
+			puts "Could not read value. Char -1 returned instead."
 			return "-1"
 		else
 			return input

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :champion_positional_stats
   get 'welcome_page/index'
 
   resources :stats

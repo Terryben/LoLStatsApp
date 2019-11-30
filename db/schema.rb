@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_13_020021) do
+ActiveRecord::Schema.define(version: 2019_10_15_223603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2019_08_13_020021) do
     t.decimal "num_of_matches_lost"
     t.string "game_version"
     t.integer "cps_ladder_rank"
-    t.integer "cps_position"
+    t.string "cps_position"
     t.bigint "champions_id"
     t.index ["champions_id"], name: "index_champion_positional_stats_on_champions_id"
   end
@@ -34,6 +34,24 @@ ActiveRecord::Schema.define(version: 2019_08_13_020021) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.string "title", limit: 50
+    t.integer "num_bronze_games"
+    t.integer "num_iron_games"
+    t.integer "num_silver_games"
+    t.integer "num_gold_games"
+    t.integer "num_platinum_games"
+    t.integer "num_diamond_games"
+    t.integer "num_master_games"
+    t.integer "num_grandmaster_games"
+    t.integer "num_challenger_games"
+    t.decimal "iron_winrate"
+    t.decimal "bronze_winrate"
+    t.decimal "silver_winrate"
+    t.decimal "gold_winrate"
+    t.decimal "platinum_winrate"
+    t.decimal "diamond_winrate"
+    t.decimal "master_winrate"
+    t.decimal "grandmaster_winrate"
+    t.decimal "challenger_winrate"
   end
 
   create_table "matches", force: :cascade do |t|

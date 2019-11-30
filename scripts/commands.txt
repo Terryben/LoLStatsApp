@@ -1,0 +1,8 @@
+#this will delete all the data in the database. Need to run twice due to
+foreign key constraints.
+\i E:/Ruby/Ruby25-x64/LoL_Stats_App/scripts/delete_readable_data.sql
+
+
+#this will delete all the champions then reinsert them. It will NOT update the
+ID counter
+\i E:/Ruby/Ruby25-x64/LoL_Stats_App/scripts/insert_champions.sql

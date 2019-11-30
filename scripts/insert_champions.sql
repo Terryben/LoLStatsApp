@@ -1,3 +1,4 @@
+delete from champions;
 insert into champions (id, created_at, updated_at, name, title) values (266, now(), now(), 'Aatrox', 'The Darkin Blade');
 insert into champions (id, created_at, updated_at, name, title) values (103, now(), now(), 'Ahri', 'The Nine-Tailed Fox');
 insert into champions (id, created_at, updated_at, name, title) values (84, now(), now(), 'Akali', 'The Rogue Assassin');
@@ -86,6 +87,7 @@ insert into champions (id, created_at, updated_at, name, title) values (80, now(
 insert into champions (id, created_at, updated_at, name, title) values (78, now(), now(), 'Poppy', 'Keeper of the Hammer');
 insert into champions (id, created_at, updated_at, name, title) values (555, now(), now(), 'Pyke', 'The Bloodharbor Ripper');
 insert into champions (id, created_at, updated_at, name, title) values (133, now(), now(), 'Quinn', 'Demacia''s Wings');
+insert into champions (id, created_at, updated_at, name, title) values (246, now(), now(), 'Qiyana', 'Empress of the Elements');
 insert into champions (id, created_at, updated_at, name, title) values (497, now(), now(), 'Rakan', 'The Charmer');
 insert into champions (id, created_at, updated_at, name, title) values (33, now(), now(), 'Rammus', 'The Armordillo');
 insert into champions (id, created_at, updated_at, name, title) values (421, now(), now(), 'Rek''sai', 'The Void Burrower');

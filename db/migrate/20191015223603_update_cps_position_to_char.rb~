@@ -1,0 +1,5 @@
+class UpdateCpsPositionToChar < ActiveRecord::Migration[5.2]
+  def change
+	  update_column :champion_positional_stats, :cps_position, :string
+  end
+end

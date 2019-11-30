@@ -26,6 +26,7 @@ class SummonersController < ApplicationController
 
 	#uses api_fetcher in services to pull needed info from Riot's api to create a summoner in the database. Parses data from two separate API calls then queries to see if the summoner already
 	# exists in the database. If not, it creates it. If it does exist, it updates the summoner with the new up to date data.
+	# also returns the summoners rank
 	def load_summoner_from_api(summoner_name, api_key)
 		r_uri = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/#{summoner_name}?api_key=#{api_key}"
 		parsed_summoner_input = get_api_request_as_json(r_uri)
