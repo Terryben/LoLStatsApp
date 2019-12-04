@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_223603) do
+ActiveRecord::Schema.define(version: 2019_12_04_030713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_223603) do
     t.decimal "num_of_matches_won"
     t.decimal "num_of_matches_lost"
     t.string "game_version"
-    t.integer "cps_ladder_rank"
+    t.string "cps_ladder_rank"
     t.string "cps_position"
     t.bigint "champions_id"
     t.index ["champions_id"], name: "index_champion_positional_stats_on_champions_id"
@@ -291,7 +291,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_223603) do
     t.boolean "first_baron"
     t.integer "rift_herald_kills"
     t.boolean "first_blood"
-    t.boolean "team_id"
+    t.integer "team_id"
     t.boolean "first_tower"
     t.integer "vilemaw_kills"
     t.integer "inhibitor_kills"

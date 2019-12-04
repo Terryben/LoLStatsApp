@@ -197,7 +197,7 @@ class MatchesController < ApplicationController
 			#create an array to hold the 10 champion positional stats structs we will use later. CPS requires info from many different tables. Better to collect it all here, than pull it out of the data base later
 			cps_array = Array.new
 			puts jm
-			cps_struct = Struct.new(:champion_id, :team_id, :ladder_rank_of_match, :game_version, :role, :participant_dto_id, :team_stats_dto_id, :win, :match_id)
+			cps_struct = Struct.new(:champion_id, :team_id, :ladder_rank_of_match, :game_version, :lane, :participant_dto_id, :team_stats_dto_id, :win, :match_id)
 			for k in 0..9 do
 				cps_array[k] = cps_struct.new(-1, -1, -1, "none", "none", -1, -1, "null", -1) 
 				
@@ -246,8 +246,6 @@ class MatchesController < ApplicationController
 					until k == 5 do
 						cps_array[k + j]["match_id"] = @match.id
 						cps_array[k + j].team_id = @team_stats_dto.team_id
-						puts "The TEAM ID IS:"
-						puts @team_stats_dto.team_id
 						cps_array[k + j].win = @team_stats_dto.win
 						cps_array[k + j].game_version = @match.game_version
 						cps_array[k + j].team_stats_dto_id = @team_stats_dto.id
@@ -270,9 +268,6 @@ class MatchesController < ApplicationController
 				k = 0
 			#	Save player dto which is inside participant identities	
 				jm["participantIdentities"].each do |pi|
-				#		puts pi["player"]["summonerName"]
-						pp pi
-						puts "THIS IS THE START OF PLAYER DTO"
 						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
 									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
 									    summoner_name: is_nil_ret_char(pi.dig("player", "summonerName")), \
@@ -290,7 +285,9 @@ class MatchesController < ApplicationController
 				end
 				k = 0
 				#need all the participant dtos before we can calculate win percentage. stuffing them in an array is faster than recalling them from the database. Same with the participant timelines
+				#participant timeline dto array
 				pt_array = Array.new
+				#participant dto array
 				pd_array = Array.new
 				jm["participants"].each do |parti|
 					@participant_dto = ParticipantDto.new(participant_id: is_nil_ret_int(parti.dig("participantId")), \
@@ -453,60 +450,67 @@ class MatchesController < ApplicationController
 					#=end
 					k = k + 1
 				end
-				
 				#cps_array[k] = Struct.new(:champion_id, :match_id, :team_id, :ladder_rank_of_match, :game_version, :role, :participant_dto_id, :team_stats_dto_id, :win, :match_id)
 				#loop through the participant dto array and assign the values to a cps struct in the cps struct array
 				pd_array.each do |pd|
-					for k in 0..9 do
-						puts "This is the PD.champion ids:"
-						puts pd.champion_id
-						puts "cps team ID"
-						puts cps_array[k].team_id
-						puts "pd.teamid"
-						puts pd.team_id
-						if cps_array[k].team_id == pd.team_id then
+					puts "The team id is #{pd.team_id} and champ id is: #{pd.champion_id}"
+					k = 0
+					while k < 10
+						#puts "This is the PD.champion ids:"
+						#puts pd.champion_id
+						#puts "cps team ID"
+						#puts cps_array[k].team_id
+						#puts "pd.teamid"
+						#puts pd.team_id
+						if cps_array[k].team_id == pd.team_id && cps_array[k].champion_id == -1 then
 							cps_array[k].champion_id = pd.champion_id
 							cps_array[k].participant_dto_id = pd.participant_id
 							k = 10
 						end
+						k = k + 1
 					end
 				end
 				pt_array.each do |pt|
-					for k in 0..9 do
+					puts "the timeline role is: #{pt.lane}"
+					k = 0
+					while k < 10
 						if pt.participant_dto_id == cps_array[k].participant_dto_id then
-							cps_array[k].role = pt.role
+							cps_array[k].lane = pt.lane
 							k = 10
 						end
+						k = k + 1
 					end
 				end
-				
-
-
 				#after this, create the champ pos stats object.
 				rank_of_match = return_rank_of_match(SummonersController.new, api_key, summoners_in_match)
 				@match.ladder_rank_of_match = rank_of_match
+				matches_won = 0
+				matches_lost = 0
 				cps_array.each do |cps|
-					if cps.win.casecmp("win") || cps.win.casecmp("true") then
+					puts "The win is #{cps.win}"
+					if cps.win.casecmp("win") == 0 || cps.win.casecmp("true") == 0 then
 						matches_won = 1
 						matches_lost = 0
+						puts "AM I HERE WHEN I SHOULDNT BE???"
 					else
 						matches_won = 0
 						matches_lost = 1
 					end
-					@cps_from_db = ChampionPositionalStat.find_by(champions_id:  cps.champion_id, cps_ladder_rank: rank_of_match, cps_position: cps.role)
+					@cps_from_db = ChampionPositionalStat.find_by(champions_id:  cps.champion_id, cps_ladder_rank: rank_of_match, cps_position: cps.lane)
 					if @cps_from_db.nil? then
 						@cps_from_db = ChampionPositionalStat.new(pickrate: 1, banrate: 0, num_of_matches_won: matches_won, num_of_matches_lost: matches_lost, \
-											   game_version: cps.game_version, cps_ladder_rank: cps.ladder_rank_of_match, \
-											   cps_position: cps.role, champions_id: cps.champion_id)
+											   game_version: cps.game_version, cps_ladder_rank: rank_of_match, \
+											   cps_position: cps.lane, champions_id: cps.champion_id)
 						@cps_from_db.save
 					else
 						@cps_from_db.pickrate = @cps_from_db.pickrate + 1
 						@cps_from_db.num_of_matches_won = @cps_from_db.num_of_matches_won + matches_won				
 						@cps_from_db.num_of_matches_lost = @cps_from_db.num_of_matches_lost + matches_lost
 						@cps_from_db.save
-					end				
-				end
+					end
+				end				
 			end
+					
 		flash[:success] = "Match successfully loaded into database."
                 end
 
