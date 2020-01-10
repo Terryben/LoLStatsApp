@@ -4,7 +4,7 @@ class ChampionPositionalStatsController < ApplicationController
   # GET /champion_positional_stats
   # GET /champion_positional_stats.json
   def index
-	  @champion_positional_stats = ChampionPositionalStat.select("*").joins(:champion).where("cps_position != 'NONE'").where("cps_position != '0'").where("cps_ladder_rank != ''")
+	  @champion_positional_stats = ChampionPositionalStat.select("*").joins(:champion).where("cps_position != 'NONE'").where("cps_position != '0'")
   end
 
   # GET /champion_positional_stats/1

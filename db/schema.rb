@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_04_030713) do
+ActiveRecord::Schema.define(version: 2020_01_05_171122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
 
   create_table "champion_positional_stats", force: :cascade do |t|
-    t.decimal "winrate"
     t.decimal "pickrate"
     t.decimal "banrate"
     t.decimal "num_of_matches_won"
@@ -25,8 +24,8 @@ ActiveRecord::Schema.define(version: 2019_12_04_030713) do
     t.string "game_version"
     t.string "cps_ladder_rank"
     t.string "cps_position"
-    t.bigint "champions_id"
-    t.index ["champions_id"], name: "index_champion_positional_stats_on_champions_id"
+    t.bigint "champion_id"
+    t.index ["champion_id"], name: "index_champion_positional_stats_on_champion_id"
   end
 
   create_table "champions", force: :cascade do |t|
@@ -305,7 +304,7 @@ ActiveRecord::Schema.define(version: 2019_12_04_030713) do
     t.index ["match_id"], name: "index_team_stats_dtos_on_match_id"
   end
 
-  add_foreign_key "champion_positional_stats", "champions", column: "champions_id"
+  add_foreign_key "champion_positional_stats", "champions"
   add_foreign_key "participant_dtos", "matches"
   add_foreign_key "participant_stats_dtos", "participant_dtos"
   add_foreign_key "player_dtos", "matches"

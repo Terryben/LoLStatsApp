@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   resources :participant_dto
   resources :player_dto
   resources :summoners
+  resources :champion_positional_stats
   post 'matches/read_json_file'
+  post 'matches/get_running_thread_count'
   post 'matches/get_matchlist_from_api'
   post 'summoners/read_summoner_json'
   root 'welcome_page#index'

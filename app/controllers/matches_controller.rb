@@ -2,14 +2,16 @@ class MatchesController < ApplicationController
 	require "json"
 	require "rubygems"
 	require "pp"
-	load "E:/Ruby/Ruby25-x64/LoL_Stats_App/app/services/api_fetcher.rb"
+	load "E:/Ruby/Ruby25-x64/LoL_Stats_App/lib/user_created_classes/api_logic.rb"
 	
+	@@api_logic = APILogic.new
+
 	def index
 		@matches = Match.all
 	end
 	
 	def show
-		@match = Match.select("*").joins([participant_dtos: :champion], :player_dtos).where("matches.id = #{params[:id]}").where("participant_dtos.participant_id = player_dtos.participant_dto_id").sort #[participant_dtos: :champion]
+		@match = Match.select("*").joins([participant_dtos: :champion], :player_dtos).where("matches.id = ?", params[:id]).where("participant_dtos.participant_id = player_dtos.participant_dto_id").sort #[participant_dtos: :champion]
 	end
 	
 	
@@ -21,32 +23,17 @@ class MatchesController < ApplicationController
 		@match.save
 		redirect_to @match
 	end
-	def get_running_thread_count #borrowed from used Kashyap on Stack Overflow
-		Thread.list.select {|thread| thread.status == "run"}.count
+	def get_running_thread_count
+		#@@api_logic = APILogic.new
+		puts @@api_logic.running_thread_count
+		@@api_logic.running_thread_count
 	end
 	def get_matchlist_from_api #load matchlist from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
 		#spawn a concurrent tast that loads the matches while the user can still move about the site
-		i = 0
-		j = 0
-		#f = File.open('logfile.txt', 'w')
-		#f.write("The running thread count is #{get_running_thread_count}")
-		#f.close
-		isMatchListRunning = false
-		Thread.list.select {|thread|
-			if thread[:name] == "TheGetMatchListThread" && thread.alive? then
-				isMatchListRunning = true
-			end
-		}
-		puts "The running thread count is #{get_running_thread_count}"
-		if !isMatchListRunning then
-			child_pid = Thread.new{
-				Thread.current[:name] = "TheGetMatchListThread"
-				get_matchlist_from_api_params(params[:match_id], params[:api_key])
-			}
+		if @@api_logic.matchlist_from_api(params[:match_id], params[:api_key]
 			redirect_to action: "index"
-				
 		else
-			flash[:error] = "Matchlist thread already running."
+			flash[:error] = "Matchlist thread already running"
 			redirect_to action: "index"
 		end
 	end	
@@ -116,10 +103,10 @@ class MatchesController < ApplicationController
 	
 	def get_matchlist_from_api_params(match_id, api_key)
 		main_match = Match.find_by(riot_game_id: match_id)
-		puts "Main match is #{main_match}"
-		puts "Analyzed is #{main_match.analyzed.nil?}"
+		#puts "Main match is #{main_match}"
+		#puts "Analyzed is #{main_match.analyzed.nil?}"
 		puts main_match.nil?
-		if !main_match.nil? && main_match.analyzed == false then 
+		if !main_match.nil? && main_match.analyzed == false then
 			sum_instance = SummonersController.new
 			champ_instance = ChampionController.new
 			summoners_in_match = PlayerDto.select("summoner_name").joins(:match).where("matches.riot_game_id = #{match_id}")
@@ -169,7 +156,11 @@ class MatchesController < ApplicationController
 	end
 
 	def read_json_file #load match from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
-		if Match.find_by(riot_game_id: params[:match_id]).nil?
+		
+		if params[:match_id] == ""
+			flash[:error] = "Invalid input."
+			redirect_to action: "index"	
+		elsif Match.find_by(riot_game_id: params[:match_id]).nil?
 			load_match_from_api(params[:match_id], params[:api_key])
 			redirect_to action: "index"	
 		else
@@ -196,15 +187,17 @@ class MatchesController < ApplicationController
 			summoners_in_match = Array.new
 			#create an array to hold the 10 champion positional stats structs we will use later. CPS requires info from many different tables. Better to collect it all here, than pull it out of the data base later
 			cps_array = Array.new
-			puts jm
+			#puts jm
 			cps_struct = Struct.new(:champion_id, :team_id, :ladder_rank_of_match, :game_version, :lane, :participant_dto_id, :team_stats_dto_id, :win, :match_id)
 			for k in 0..9 do
 				cps_array[k] = cps_struct.new(-1, -1, -1, "none", "none", -1, -1, "null", -1) 
 				
 			end
 			#need another array for the banned champions. We will add to a champions ban rate after we know the ladder rank of the match
+			ban_array = Array.new
+			ban_array_struct = Struct.new(:champion_id, :match_id)
 			for j in 0..9
-				ban_array = Struct.new(:champion_id, :match_id)
+				ban_array[j] = ban_array_struct.new(-1, -1)
 			end
 			@match = Match.new(riot_game_id: is_nil_ret_int(jm.dig("gameId")), \
 					   created_at: jm["gameCreation"], \
@@ -259,8 +252,8 @@ class MatchesController < ApplicationController
 										 team_stats_dto_id: @team_stats_dto.id)
 						@team_bans_dto.save
 						#get the banned champs
-						ban_array[k].champion_id = @team_bans_dto.champion_id
-						ban_array[k].match_id = @match.id
+						ban_array[k + j].champion_id = @team_bans_dto.champion_id
+						ban_array[k + j].match_id = @match.id
 						k = k + 1
 					end
 					j = 5
@@ -486,6 +479,7 @@ class MatchesController < ApplicationController
 				@match.ladder_rank_of_match = rank_of_match
 				matches_won = 0
 				matches_lost = 0
+				g_version = cps_array[0].game_version[0..3]
 				cps_array.each do |cps|
 					puts "The win is #{cps.win}"
 					if cps.win.casecmp("win") == 0 || cps.win.casecmp("true") == 0 then
@@ -496,11 +490,11 @@ class MatchesController < ApplicationController
 						matches_won = 0
 						matches_lost = 1
 					end
-					@cps_from_db = ChampionPositionalStat.find_by(champions_id:  cps.champion_id, cps_ladder_rank: rank_of_match, cps_position: cps.lane)
+					@cps_from_db = ChampionPositionalStat.find_by(champion_id:  cps.champion_id, cps_ladder_rank: rank_of_match, cps_position: cps.lane, game_version: g_version)
 					if @cps_from_db.nil? then
 						@cps_from_db = ChampionPositionalStat.new(pickrate: 1, banrate: 0, num_of_matches_won: matches_won, num_of_matches_lost: matches_lost, \
-											   game_version: cps.game_version, cps_ladder_rank: rank_of_match, \
-											   cps_position: cps.lane, champions_id: cps.champion_id)
+											  game_version: g_version, cps_ladder_rank: rank_of_match, \
+											   cps_position: cps.lane, champion_id: cps.champion_id)
 						@cps_from_db.save
 					else
 						@cps_from_db.pickrate = @cps_from_db.pickrate + 1
@@ -508,6 +502,21 @@ class MatchesController < ApplicationController
 						@cps_from_db.num_of_matches_lost = @cps_from_db.num_of_matches_lost + matches_lost
 						@cps_from_db.save
 					end
+				end
+				puts "Num of elements in ban array is: #{ban_array.count}"
+				ban_array.each do |ba|
+					@cps_from_db = ChampionPositionalStat.find_by(champion_id: ba.champion_id, cps_ladder_rank: rank_of_match)
+					if @cps_from_db.nil? && ba.champion_id != -1
+						@cps_from_db = ChampionPositionalStat.new(pickrate: 0, banrate: 1, num_of_matches_won: 0, num_of_matches_lost: 0, \
+											  game_version: g_version, cps_ladder_rank: rank_of_match, \
+											  cps_position: 0, champion_id: ba.champion_id)
+						@cps_from_db.save
+					elsif ba.champion_id != -1
+						@cps_from_db.banrate = @cps_from_db.banrate + 1
+						@cps_from_db.game_version = g_version
+						@cps_from_db.save
+					end
+
 				end				
 			end
 					

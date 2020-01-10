@@ -18,10 +18,6 @@
 		<td> PD - Platform Id </td>
 		<td> PD - Current Account Id </td>
 		<td> PD - Participant Dto ID </td>
-		<td> PD - Profile Icon </td>
-		<td> PD - Matches Id </td>
-		<td> PD - Summoner Id </td>
-		<td> PD - Account Id </td>
 		<td> C - Name </td>
 	</tr>
 	<% @match.each do |match| %>

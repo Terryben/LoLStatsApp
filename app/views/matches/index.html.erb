@@ -1,6 +1,10 @@
 <h1>Listing Matches</h1>
 <br>
 
+
+<%= form_tag(controller: :matches, action: :get_running_thread_count) do %>                                                      <%= label_tag(:api_key, "Summoner API Key: ") %>                                                                        <%= submit_tag("Pull Match from Riot API") %>
+<% end %>
+
 <%= form_tag(controller: :matches, action: :read_json_file) do %>                                                                                                                   	
 	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
 	<%= text_field_tag(:api_key) %>

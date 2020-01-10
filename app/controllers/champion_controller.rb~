@@ -1,10 +1,11 @@
 class ChampionController < ApplicationController
-	def list
-		@champions = Champion.all
+	def index
+		@champion = Champion.all
 	end
 
 	def show
-		
+		@champion = Champion.select("*").joins(:champion_positional_stats).where("champions.id = ?", params[:id])
+		#@champion = Champion.select("*").joins("INNER JOIN champion_positional_stats ON champions.id = champion_positional_stats.champion_id").where("champions.id = #{params[:id]}")	
 	end
 	
 	def new

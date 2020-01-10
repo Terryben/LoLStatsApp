@@ -16,7 +16,7 @@
 <br>
 <%= link_to 'Player Dtos', controller: 'player_dto' %>
 <br>
-<%= link_to 'Summoners', controller: 'summoner' %>
+<%= link_to 'Summoners', controller: 'summoners' %>
 <br>
 
 <p>This is my welcome page</p>

@@ -1,6 +1,5 @@
 <table>
 	<tr>
-		<td>Match Id</td>
 		<td>Season Id</td>
 		<td> Queue Id </td>
 		<td> Game Version </td>
@@ -10,7 +9,6 @@
 		<td> Game Type </td>
 		<td> Game Duration </td>
 		<td> Game Creation </td>
-		<td> ID </td>
 		<td> Riot Games Id </td>
 		<td> PD - Current Platform Id </td>
 		<td> PD - Summoner Name </td>
@@ -22,7 +20,6 @@
 	</tr>
 	<% @match.each do |match| %>
 	<tr>
-		<td><%= match.id %></td>
 		<td><%= match.season_id %></td>
 		<td><%= match.queue_id %></td>
 		<td><%= match.game_version %></td>
@@ -32,7 +29,6 @@
 		<td><%= match.game_type %></td>
 		<td><%= match.game_duration %></td>
 		<td><%= match.game_creation %></td>
-		<td><%= match.id %></td>
 		<td><%= match.riot_game_id %></td>
 		<td><%= match.current_platform_id %></td> 
 		<td><%= match.summoner_name %></td> 
