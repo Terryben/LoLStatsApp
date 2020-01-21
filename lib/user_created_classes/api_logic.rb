@@ -118,14 +118,16 @@ class APILogic
 		end
 	end
 
+
 	def api_load_match_from_api(match_id, api_key) #Read and save the data from a match by match ID
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
 		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
-		puts "Can I read this?"
-		#@api_fetch = APIFetcher.new
+		puts "Can I read this2?"
+		api_fetch = APIFetcher.new
 		#puts @api_fetch.nil?
-		#puts "What about this?"
-		parsed_match_input = APIFetcher.get_api_request_as_json(uri)
+		puts "What about this?"
+
+		parsed_match_input = api_fetch.get_api_request_as_json(uri)
 		if parsed_match_input.head == "429" then
 			return [429, "API Timeout. Stop making calls for a while."]
 		end

@@ -2,10 +2,9 @@ class APILogic
 	require "rubygems"
 	require "pp"
 	require "json"
-	load "E:/Ruby/Ruby25-x64/LoL_Stats_App/lib/user_created_classes/api_fetcher.rb"
+	load 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\api_fetcher.rb'
 	
 	#genertic api fetcher for all methods to use
-	@@api_fetch = APIFetcher.new
 
 	def running_thread_count #borrowed from used Kashyap on Stack Overflow
 		Thread.list.select {|thread| thread.status == "run"}.count
@@ -101,7 +100,7 @@ class APILogic
 					puts "ML IS"
 					puts ml
 					ml["matches"].each do |match|
-						id = is_nil_ret_char(match.dig("gameId"))
+						id = APIFetcher.is_nil_ret_int(match.dig("gameId"))
 						if !(id	== "-1")
 							load_match_from_api(id, api_key)
 							sleep(2)
@@ -119,13 +118,15 @@ class APILogic
 		end
 	end
 
+
 	def api_load_match_from_api(match_id, api_key) #Read and save the data from a match by match ID
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
 		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
-		puts "Can I read this?"
-		puts @@api_fetch.nil?
+		puts "Can I read this2?"
+		api_fetch = APIFetcher.new
+		#puts @api_fetch.nil?
 		puts "What about this?"
-		parsed_match_input = APIFetcher.get_api_request_as_json(uri)
+		parsed_match_input = api_fetch.get_api_request_as_json(uri)
 		if parsed_match_input.head == "429" then
 			return [429, "API Timeout. Stop making calls for a while."]
 		end
@@ -150,39 +151,39 @@ class APILogic
 			for j in 0..9
 				ban_array[j] = ban_array_struct.new(-1, -1)
 			end
-			@match = Match.new(riot_game_id: is_nil_ret_int(jm.dig("gameId")), \
+			@match = Match.new(riot_game_id: APIFetcher.is_nil_ret_int(jm.dig("gameId")), \
 					   created_at: jm["gameCreation"], \
 					   updated_at: Time.now, \
-					   season_id: is_nil_ret_int(jm.dig("seasonId")), \
-					   queue_id: is_nil_ret_int(jm.dig("queueId")), \
-					   game_version: is_nil_ret_char(jm.dig("gameVersion")), \
-					   platform_id: is_nil_ret_char(jm.dig("platformId")), \
-					   game_mode: is_nil_ret_char(jm.dig("gameMode")), \
-					   map_id: is_nil_ret_int(jm.dig("mapId")), \
-					   game_type: is_nil_ret_char(jm.dig("gameType")), \
-					   game_duration: is_nil_ret_int(jm.dig("gameDuration")), \
-					   game_creation: is_nil_ret_int(jm.dig("gameCreation")), \
+					   season_id: APIFetcher.is_nil_ret_int(jm.dig("seasonId")), \
+					   queue_id: APIFetcher.is_nil_ret_int(jm.dig("queueId")), \
+					   game_version: APIFetcher.is_nil_ret_int(jm.dig("gameVersion")), \
+					   platform_id: APIFetcher.is_nil_ret_int(jm.dig("platformId")), \
+					   game_mode: APIFetcher.is_nil_ret_int(jm.dig("gameMode")), \
+					   map_id: APIFetcher.is_nil_ret_int(jm.dig("mapId")), \
+					   game_type: APIFetcher.is_nil_ret_int(jm.dig("gameType")), \
+					   game_duration: APIFetcher.is_nil_ret_int(jm.dig("gameDuration")), \
+					   game_creation: APIFetcher.is_nil_ret_int(jm.dig("gameCreation")), \
 					   analyzed: false)
                                 @match.save
 				puts "The match id is: #{@match.id}"
 			#	Save the team stats dto
 				j = 0		
 				jm["teams"].each do |team|
-					@team_stats_dto = TeamStatsDto.new(team_id: is_nil_ret_int(team.dig("teamId")), \
-									   first_dragon: is_nil_ret_bool(team.dig("firstDragon")), \
-									   first_inhibitor: is_nil_ret_bool(team.dig("firstInhibitor")), \
-									   baron_kills: is_nil_ret_int(team.dig("baronKills")), \
-									   first_rift_herald: is_nil_ret_bool(team.dig("firstRiftHerald")), \
-									   first_baron: is_nil_ret_bool(team.dig("firstBaron")), \
-									   rift_herald_kills: is_nil_ret_int(team.dig("riftHeraldKills")), \
-									   first_blood: is_nil_ret_bool(team.dig("firstBlood")), \
-									   first_tower: is_nil_ret_bool(team.dig("firstTower")), \
-									   vilemaw_kills: is_nil_ret_int(team.dig("vilemawKills")), \
-									   inhibitor_kills: is_nil_ret_int(team.dig("inhibitorKills")), \
-									   tower_kills: is_nil_ret_int(team.dig("tower_kills")), \
-									   dominion_victory_score: is_nil_ret_int(team.dig("dominionVictoryScore")), \
-									   win: is_nil_ret_char(team.dig("win")), \
-									   dragon_kills: is_nil_ret_bool(team.dig("dragonKills")), \
+					@team_stats_dto = TeamStatsDto.new(team_id: APIFetcher.is_nil_ret_int(team.dig("teamId")), \
+									   first_dragon: APIFetcher.is_nil_ret_bool(team.dig("firstDragon")), \
+									   first_inhibitor: APIFetcher.is_nil_ret_bool(team.dig("firstInhibitor")), \
+									   baron_kills: APIFetcher.is_nil_ret_int(team.dig("baronKills")), \
+									   first_rift_herald: APIFetcher.is_nil_ret_bool(team.dig("firstRiftHerald")), \
+									   first_baron: APIFetcher.is_nil_ret_bool(team.dig("firstBaron")), \
+									   rift_herald_kills: APIFetcher.is_nil_ret_int(team.dig("riftHeraldKills")), \
+									   first_blood: APIFetcher.is_nil_ret_bool(team.dig("firstBlood")), \
+									   first_tower: APIFetcher.is_nil_ret_bool(team.dig("firstTower")), \
+									   vilemaw_kills: APIFetcher.is_nil_ret_int(team.dig("vilemawKills")), \
+									   inhibitor_kills: APIFetcher.is_nil_ret_int(team.dig("inhibitorKills")), \
+									   tower_kills: APIFetcher.is_nil_ret_int(team.dig("tower_kills")), \
+									   dominion_victory_score: APIFetcher.is_nil_ret_int(team.dig("dominionVictoryScore")), \
+									   win: APIFetcher.is_nil_ret_int(team.dig("win")), \
+									   dragon_kills: APIFetcher.is_nil_ret_bool(team.dig("dragonKills")), \
 									   match_id: @match.id)
 					@team_stats_dto.save!
 					k = 0
@@ -198,8 +199,8 @@ class APILogic
 					#team bans
 					k = 0
 					team["bans"].each do |ban|
-						@team_bans_dto = TeamBansDto.new(pick_turn: is_nil_ret_int(ban.dig("pickTurn")), \
-										 champion_id: is_nil_ret_int(ban.dig("championId")), \
+						@team_bans_dto = TeamBansDto.new(pick_turn: APIFetcher.is_nil_ret_int(ban.dig("pickTurn")), \
+										 champion_id: APIFetcher.is_nil_ret_int(ban.dig("championId")), \
 										 team_stats_dto_id: @team_stats_dto.id)
 						@team_bans_dto.save
 						#get the banned champs
@@ -212,19 +213,19 @@ class APILogic
 				k = 0
 			#	Save player dto which is inside participant identities	
 				jm["participantIdentities"].each do |pi|
-						@player_dto = PlayerDto.new(platform_id: is_nil_ret_char(pi.dig("player", "platformId")), \
-									    current_account_id: is_nil_ret_char(pi.dig("player", "currentAccountId")), \
-									    summoner_name: is_nil_ret_char(pi.dig("player", "summonerName")), \
-									    summoner_id: is_nil_ret_int(pi.dig("player", "summonerId")), \
-									    current_platform_id: is_nil_ret_char(pi.dig("player", "currentPlatformId")), \
-									    account_id: is_nil_ret_int(pi.dig("player", "accountId")), \
-									    match_history_uri: is_nil_ret_char(pi.dig("player", "matchHistoryUri")), \
-									    profile_icon: is_nil_ret_int(pi.dig("player", "profileIcon")), \
+						@player_dto = PlayerDto.new(platform_id: APIFetcher.is_nil_ret_int(pi.dig("player", "platformId")), \
+									    current_account_id: APIFetcher.is_nil_ret_int(pi.dig("player", "currentAccountId")), \
+									    summoner_name: APIFetcher.is_nil_ret_int(pi.dig("player", "summonerName")), \
+									    summoner_id: APIFetcher.is_nil_ret_int(pi.dig("player", "summonerId")), \
+									    current_platform_id: APIFetcher.is_nil_ret_int(pi.dig("player", "currentPlatformId")), \
+									    account_id: APIFetcher.is_nil_ret_int(pi.dig("player", "accountId")), \
+									    match_history_uri: APIFetcher.is_nil_ret_int(pi.dig("player", "matchHistoryUri")), \
+									    profile_icon: APIFetcher.is_nil_ret_int(pi.dig("player", "profileIcon")), \
 									    match_id: @match.id, \
-									    participant_dto_id: is_nil_ret_int(pi.dig("participantId")))    
+									    participant_dto_id: APIFetcher.is_nil_ret_int(pi.dig("participantId")))    
 						@player_dto.save
 						#get the summoners in the match so we can get the rank of the match later, without looping again
-						summoners_in_match[k] =  is_nil_ret_char(pi.dig("player", "summonerName"))
+						summoners_in_match[k] =  APIFetcher.is_nil_ret_int(pi.dig("player", "summonerName"))
 						k = k + 1
 				end
 				k = 0
@@ -234,156 +235,156 @@ class APILogic
 				#participant dto array
 				pd_array = Array.new
 				jm["participants"].each do |parti|
-					@participant_dto = ParticipantDto.new(participant_id: is_nil_ret_int(parti.dig("participantId")), \
-									      team_id: is_nil_ret_int(parti.dig("teamId")), \
+					@participant_dto = ParticipantDto.new(participant_id: APIFetcher.is_nil_ret_int(parti.dig("participantId")), \
+									      team_id: APIFetcher.is_nil_ret_int(parti.dig("teamId")), \
 									      match_id: @match.id, \
-									      champion_id: is_nil_ret_int(parti.dig("championId")), \
-	 								      spell_1_id: is_nil_ret_int(parti.dig("spell1Id")), \
-	 								      spell_2_id: is_nil_ret_int(parti.dig("spell2Id")), \
-									      highest_achieved_season_tier: is_nil_ret_char(parti.dig("highestAchievedSeasonTier")))										
+									      champion_id: APIFetcher.is_nil_ret_int(parti.dig("championId")), \
+	 								      spell_1_id: APIFetcher.is_nil_ret_int(parti.dig("spell1Id")), \
+	 								      spell_2_id: APIFetcher.is_nil_ret_int(parti.dig("spell2Id")), \
+									      highest_achieved_season_tier: APIFetcher.is_nil_ret_int(parti.dig("highestAchievedSeasonTier")))										
 					@participant_dto.save
 					pd_array[k] = @participant_dto
 
-					@participant_stats_dto = ParticipantStatsDto.new(first_blood_assist: is_nil_ret_bool(parti.dig("stats", "firstBloodAssist")), \
-											vision_score: is_nil_ret_int(parti.dig("stats", "visionScore")), \
-										 	magic_damage_dealt_to_champions: is_nil_ret_int(parti.dig("stats", "magicDamageDealtToChampions")), \
-									       		damage_dealt_to_objectives: is_nil_ret_int(parti.dig("stats", "damageDealtToObjectives")), \
-											total_time_crowd_control_dealt: is_nil_ret_int(parti.dig("stats", "totalTimeCrowdControlDealt")), \
-											longest_time_spent_living: is_nil_ret_int(parti.dig("stats", "longestTimeSpentLiving")), \
-											triple_kills: is_nil_ret_int(parti.dig("stats", "tripleKills")), \
-											node_neutralize_assist: is_nil_ret_int(parti.dig("stats", "nodeNeutralizeAssist")), \
-											perk_1_var_1: is_nil_ret_int(parti.dig("stats", "perk1Var1")), \
-											perk_1_var_3: is_nil_ret_int(parti.dig("stats", "perk1Var3")), \
-											perk_1_var_2: is_nil_ret_int(parti.dig("stats", "perk1Var2")), \
-											perk_3_var_3: is_nil_ret_int(parti.dig("stats", "perk3Var3")), \
-											perk_3_var_2: is_nil_ret_int(parti.dig("stats", "perk3Var2")), \
-											player_score_9: is_nil_ret_int(parti.dig("stats", "playerScore9")), \
-											player_score_8: is_nil_ret_int(parti.dig("stats", "playerScore8")), \
-											kills: is_nil_ret_int(parti.dig("stats", "kills")), \
-											player_score_1: is_nil_ret_int(parti.dig("stats", "playerScore1")), \
-											player_score_0: is_nil_ret_int(parti.dig("stats", "playerScore0")), \
-											player_score_3: is_nil_ret_int(parti.dig("stats", "playerScore3")), \
-											player_score_2: is_nil_ret_int(parti.dig("stats", "playerScore2")), \
-											player_score_5: is_nil_ret_int(parti.dig("stats", "playerScore5")), \
-											player_score_4: is_nil_ret_int(parti.dig("stats", "playerScore4")), \
-											player_score_6: is_nil_ret_int(parti.dig("stats", "playerScore7")), \
-											player_score_7: is_nil_ret_int(parti.dig("stats", "playerScore7")), \
-											perk_5_var_1: is_nil_ret_int(parti.dig("stats", "perk5Var1")), \
-											perk_5_var_3: is_nil_ret_int(parti.dig("stats", "perk5Var3")), \
-											perk_5_var_2: is_nil_ret_int(parti.dig("stats", "perk5Var2")), \
-											total_score_rank: is_nil_ret_int(parti.dig("stats", "totalScoreRank")), \
-											neutral_minions_killed: is_nil_ret_int(parti.dig("stats", "neutralMinionsKilled")), \
-											damage_dealt_to_turrets: is_nil_ret_int(parti.dig("stats", "damageDealtToTurrets")), \
-											physical_damage_dealt_to_champions: is_nil_ret_int(parti.dig("stats", "physicalDamageDealtToChampions")), \
-											node_capture: is_nil_ret_int(parti.dig("stats", "nodeCapture")), \
-										        largest_multikill: is_nil_ret_int(parti.dig("stats", "largestMultiKill")), \
-											perk_2_var_2: is_nil_ret_int(parti.dig("stats", "perk2Var2")), \
-											perk_2_var_3: is_nil_ret_int(parti.dig("stats", "perk2Var3")), \
-											total_units_healed: is_nil_ret_int(parti.dig("stats", "totalUnitsHealed")), \
-										        perk_2_var_1: is_nil_ret_int(parti.dig("stats", "perk2Var1")), \
-											perk_4_var_1: is_nil_ret_int(parti.dig("stats", "perk4Var1")), \
-											perk_4_var_2: is_nil_ret_int(parti.dig("stats", "perk4Var2")), \
-											perk_4_var_3: is_nil_ret_int(parti.dig("stats", "perk4Var3")), \
-											wards_killed: is_nil_ret_int(parti.dig("stats", "wardsKilled")), \
-											largest_critical_strike: is_nil_ret_int(parti.dig("stats", "largestCriticalStrike")), \
-											largest_killing_spree: is_nil_ret_int(parti.dig("stats", "largestKillingSpree")), \
-											quadra_kills: is_nil_ret_int(parti.dig("stats", "quadraKills")), \
-											team_objective: is_nil_ret_int(parti.dig("stats", "teamObjective")), \
-											magic_damage_dealt: is_nil_ret_int(parti.dig("stats", "magicDamageDealt")), \
-											item_2: is_nil_ret_int(parti.dig("stats", "item2")), \
-											item_3: is_nil_ret_int(parti.dig("stats", "item3")), \
-											item_0: is_nil_ret_int(parti.dig("stats", "item0")), \
-											item_6: is_nil_ret_int(parti.dig("stats", "item6")), \
-											item_5: is_nil_ret_int(parti.dig("stats", "item5")), \
-											item_1: is_nil_ret_int(parti.dig("stats", "item1")), \
-											item_4: is_nil_ret_int(parti.dig("stats", "item4")), \
-											neutral_minions_killed_team_jungle: is_nil_ret_int(parti.dig("stats", "neutralMinionsKilledTeamJungle")), \
-											perk_0: is_nil_ret_int(parti.dig("stats", "perk0")), \
-											perk_1: is_nil_ret_int(parti.dig("stats", "perk1")), \
-											perk_2: is_nil_ret_int(parti.dig("stats", "perk2")), \
-											perk_3: is_nil_ret_int(parti.dig("stats", "perk3")), \
-											perk_4: is_nil_ret_int(parti.dig("stats", "perk4")), \
-											perk_5: is_nil_ret_int(parti.dig("stats", "perk5")), \
-											perk_3_var_1: is_nil_ret_int(parti.dig("stats", "perk3Var1")), \
-											damage_self_mitigated: is_nil_ret_int(parti.dig("stats", "damageSelfMitigated")), \
-											magical_damage_taken: is_nil_ret_int(parti.dig("stats", "magicalDamageTaken")), \
-											first_inhibitor_kill: is_nil_ret_bool(parti.dig("stats", "firstInhibitorKill")), \
-											true_damage_taken: is_nil_ret_int(parti.dig("stats", "trueDamageTaken")), \
-											node_neutralize: is_nil_ret_int(parti.dig("stats", "nodeNeutralize")), \
-											assists: is_nil_ret_int(parti.dig("stats", "assists")), \
-											combat_player_score: is_nil_ret_int(parti.dig("stats", "combatPlayerScore")), \
-											perk_primary_style: is_nil_ret_int(parti.dig("stats", "perkPrimaryStyle")), \
-											gold_spent: is_nil_ret_int(parti.dig("stats", "goldSpent")), \
-											true_damage_dealt: is_nil_ret_int(parti.dig("stats", "trueDamageDealt")), \
-											participant_id: is_nil_ret_int(parti.dig("stats", "participantId")), \
-											total_damage_taken: is_nil_ret_int(parti.dig("stats", "totalDamageTaken")), \
-											physical_damage_dealt: is_nil_ret_int(parti.dig("stats", "physicalDamageDealt")), \
-											sight_wards_bought_in_game: is_nil_ret_int(parti.dig("stats", "sightWardsBoughtInGame")), \
-											total_damage_dealt_to_champions: is_nil_ret_int(parti.dig("stats", "totalDamageDealtToChampions")), \
-											physical_damage_taken: is_nil_ret_int(parti.dig("stats", "physicalDamageTaken")), \
-											total_player_score: is_nil_ret_int(parti.dig("stats", "totalPlayerScore")), \
-											win: is_nil_ret_bool(parti.dig("stats", "win")), \
-											objective_player_score: is_nil_ret_int(parti.dig("stats", "objectivePlayerScore")), \
-											total_damage_dealt: is_nil_ret_int(parti.dig("stats", "totalDamageDealt")), \
-											neutral_minions_killed_enemy_jungle: is_nil_ret_int(parti.dig("stats", "neutralMinionsKilledEnemyJungle")), \
-											deaths: is_nil_ret_int(parti.dig("stats", "deaths")), \
-											wards_placed: is_nil_ret_int(parti.dig("stats", "wardsPlaced")), \
-											perk_sub_style: is_nil_ret_int(parti.dig("stats", "perkSubStyle")), \
-											turret_kills: is_nil_ret_int(parti.dig("stats", "turretKills")), \
-											first_blood_kill: is_nil_ret_bool(parti.dig("stats", "firstBloodKill")), \
-											true_damage_dealt_to_champions: is_nil_ret_int(parti.dig("stats", "trueDamageDealtToChampions")), \
-											gold_earned: is_nil_ret_int(parti.dig("stats", "goldEarned")), \
-											killing_sprees: is_nil_ret_int(parti.dig("stats", "killingSprees")), \
-											unreal_kills: is_nil_ret_int(parti.dig("stats", "unrealKills")), \
-											altars_captured: is_nil_ret_int(parti.dig("stats", "altarsCaptured")), \
-											first_tower_assist: is_nil_ret_bool(parti.dig("stats", "firstTowerAssist")), \
-											champ_level: is_nil_ret_int(parti.dig("stats", "champLevel")), \
-											first_tower_kill: is_nil_ret_bool(parti.dig("stats", "firstTowerKill")), \
-											double_kills: is_nil_ret_int(parti.dig("stats", "doubleKills")), \
-											node_capture_assist: is_nil_ret_int(parti.dig("stats", "nodeCaptureAssist")), \
-											inhibitor_kills: is_nil_ret_int(parti.dig("stats", "inhibitorKills")), \
-											perk_0_var_1: is_nil_ret_int(parti.dig("stats", "perk0Var1")), \
-											perk_0_var_2: is_nil_ret_int(parti.dig("stats", "perk0Var2")), \
-											perk_0_var_3: is_nil_ret_int(parti.dig("stats", "perk0Var3")), \
-											vision_wards_bought_in_game: is_nil_ret_int(parti.dig("stats", "visionWardsBoughtInGame")), \
-											altars_neutralized: is_nil_ret_int(parti.dig("stats", "altarsNeutralized")), \
-											penta_kills: is_nil_ret_int(parti.dig("stats", "pentaKills")), \
-										        total_heal: is_nil_ret_int(parti.dig("stats", "totalHeal")), \
-											time_ccing_others: is_nil_ret_int(parti.dig("stats", "timeCCingOthers")))
+					@participant_stats_dto = ParticipantStatsDto.new(first_blood_assist: APIFetcher.is_nil_ret_bool(parti.dig("stats", "firstBloodAssist")), \
+											vision_score: APIFetcher.is_nil_ret_int(parti.dig("stats", "visionScore")), \
+										 	magic_damage_dealt_to_champions: APIFetcher.is_nil_ret_int(parti.dig("stats", "magicDamageDealtToChampions")), \
+									       		damage_dealt_to_objectives: APIFetcher.is_nil_ret_int(parti.dig("stats", "damageDealtToObjectives")), \
+											total_time_crowd_control_dealt: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalTimeCrowdControlDealt")), \
+											longest_time_spent_living: APIFetcher.is_nil_ret_int(parti.dig("stats", "longestTimeSpentLiving")), \
+											triple_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "tripleKills")), \
+											node_neutralize_assist: APIFetcher.is_nil_ret_int(parti.dig("stats", "nodeNeutralizeAssist")), \
+											perk_1_var_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk1Var1")), \
+											perk_1_var_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk1Var3")), \
+											perk_1_var_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk1Var2")), \
+											perk_3_var_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk3Var3")), \
+											perk_3_var_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk3Var2")), \
+											player_score_9: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore9")), \
+											player_score_8: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore8")), \
+											kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "kills")), \
+											player_score_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore1")), \
+											player_score_0: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore0")), \
+											player_score_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore3")), \
+											player_score_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore2")), \
+											player_score_5: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore5")), \
+											player_score_4: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore4")), \
+											player_score_6: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore7")), \
+											player_score_7: APIFetcher.is_nil_ret_int(parti.dig("stats", "playerScore7")), \
+											perk_5_var_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk5Var1")), \
+											perk_5_var_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk5Var3")), \
+											perk_5_var_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk5Var2")), \
+											total_score_rank: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalScoreRank")), \
+											neutral_minions_killed: APIFetcher.is_nil_ret_int(parti.dig("stats", "neutralMinionsKilled")), \
+											damage_dealt_to_turrets: APIFetcher.is_nil_ret_int(parti.dig("stats", "damageDealtToTurrets")), \
+											physical_damage_dealt_to_champions: APIFetcher.is_nil_ret_int(parti.dig("stats", "physicalDamageDealtToChampions")), \
+											node_capture: APIFetcher.is_nil_ret_int(parti.dig("stats", "nodeCapture")), \
+										        largest_multikill: APIFetcher.is_nil_ret_int(parti.dig("stats", "largestMultiKill")), \
+											perk_2_var_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk2Var2")), \
+											perk_2_var_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk2Var3")), \
+											total_units_healed: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalUnitsHealed")), \
+										        perk_2_var_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk2Var1")), \
+											perk_4_var_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk4Var1")), \
+											perk_4_var_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk4Var2")), \
+											perk_4_var_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk4Var3")), \
+											wards_killed: APIFetcher.is_nil_ret_int(parti.dig("stats", "wardsKilled")), \
+											largest_critical_strike: APIFetcher.is_nil_ret_int(parti.dig("stats", "largestCriticalStrike")), \
+											largest_killing_spree: APIFetcher.is_nil_ret_int(parti.dig("stats", "largestKillingSpree")), \
+											quadra_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "quadraKills")), \
+											team_objective: APIFetcher.is_nil_ret_int(parti.dig("stats", "teamObjective")), \
+											magic_damage_dealt: APIFetcher.is_nil_ret_int(parti.dig("stats", "magicDamageDealt")), \
+											item_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "item2")), \
+											item_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "item3")), \
+											item_0: APIFetcher.is_nil_ret_int(parti.dig("stats", "item0")), \
+											item_6: APIFetcher.is_nil_ret_int(parti.dig("stats", "item6")), \
+											item_5: APIFetcher.is_nil_ret_int(parti.dig("stats", "item5")), \
+											item_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "item1")), \
+											item_4: APIFetcher.is_nil_ret_int(parti.dig("stats", "item4")), \
+											neutral_minions_killed_team_jungle: APIFetcher.is_nil_ret_int(parti.dig("stats", "neutralMinionsKilledTeamJungle")), \
+											perk_0: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk0")), \
+											perk_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk1")), \
+											perk_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk2")), \
+											perk_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk3")), \
+											perk_4: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk4")), \
+											perk_5: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk5")), \
+											perk_3_var_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk3Var1")), \
+											damage_self_mitigated: APIFetcher.is_nil_ret_int(parti.dig("stats", "damageSelfMitigated")), \
+											magical_damage_taken: APIFetcher.is_nil_ret_int(parti.dig("stats", "magicalDamageTaken")), \
+											first_inhibitor_kill: APIFetcher.is_nil_ret_bool(parti.dig("stats", "firstInhibitorKill")), \
+											true_damage_taken: APIFetcher.is_nil_ret_int(parti.dig("stats", "trueDamageTaken")), \
+											node_neutralize: APIFetcher.is_nil_ret_int(parti.dig("stats", "nodeNeutralize")), \
+											assists: APIFetcher.is_nil_ret_int(parti.dig("stats", "assists")), \
+											combat_player_score: APIFetcher.is_nil_ret_int(parti.dig("stats", "combatPlayerScore")), \
+											perk_primary_style: APIFetcher.is_nil_ret_int(parti.dig("stats", "perkPrimaryStyle")), \
+											gold_spent: APIFetcher.is_nil_ret_int(parti.dig("stats", "goldSpent")), \
+											true_damage_dealt: APIFetcher.is_nil_ret_int(parti.dig("stats", "trueDamageDealt")), \
+											participant_id: APIFetcher.is_nil_ret_int(parti.dig("stats", "participantId")), \
+											total_damage_taken: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalDamageTaken")), \
+											physical_damage_dealt: APIFetcher.is_nil_ret_int(parti.dig("stats", "physicalDamageDealt")), \
+											sight_wards_bought_in_game: APIFetcher.is_nil_ret_int(parti.dig("stats", "sightWardsBoughtInGame")), \
+											total_damage_dealt_to_champions: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalDamageDealtToChampions")), \
+											physical_damage_taken: APIFetcher.is_nil_ret_int(parti.dig("stats", "physicalDamageTaken")), \
+											total_player_score: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalPlayerScore")), \
+											win: APIFetcher.is_nil_ret_bool(parti.dig("stats", "win")), \
+											objective_player_score: APIFetcher.is_nil_ret_int(parti.dig("stats", "objectivePlayerScore")), \
+											total_damage_dealt: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalDamageDealt")), \
+											neutral_minions_killed_enemy_jungle: APIFetcher.is_nil_ret_int(parti.dig("stats", "neutralMinionsKilledEnemyJungle")), \
+											deaths: APIFetcher.is_nil_ret_int(parti.dig("stats", "deaths")), \
+											wards_placed: APIFetcher.is_nil_ret_int(parti.dig("stats", "wardsPlaced")), \
+											perk_sub_style: APIFetcher.is_nil_ret_int(parti.dig("stats", "perkSubStyle")), \
+											turret_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "turretKills")), \
+											first_blood_kill: APIFetcher.is_nil_ret_bool(parti.dig("stats", "firstBloodKill")), \
+											true_damage_dealt_to_champions: APIFetcher.is_nil_ret_int(parti.dig("stats", "trueDamageDealtToChampions")), \
+											gold_earned: APIFetcher.is_nil_ret_int(parti.dig("stats", "goldEarned")), \
+											killing_sprees: APIFetcher.is_nil_ret_int(parti.dig("stats", "killingSprees")), \
+											unreal_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "unrealKills")), \
+											altars_captured: APIFetcher.is_nil_ret_int(parti.dig("stats", "altarsCaptured")), \
+											first_tower_assist: APIFetcher.is_nil_ret_bool(parti.dig("stats", "firstTowerAssist")), \
+											champ_level: APIFetcher.is_nil_ret_int(parti.dig("stats", "champLevel")), \
+											first_tower_kill: APIFetcher.is_nil_ret_bool(parti.dig("stats", "firstTowerKill")), \
+											double_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "doubleKills")), \
+											node_capture_assist: APIFetcher.is_nil_ret_int(parti.dig("stats", "nodeCaptureAssist")), \
+											inhibitor_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "inhibitorKills")), \
+											perk_0_var_1: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk0Var1")), \
+											perk_0_var_2: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk0Var2")), \
+											perk_0_var_3: APIFetcher.is_nil_ret_int(parti.dig("stats", "perk0Var3")), \
+											vision_wards_bought_in_game: APIFetcher.is_nil_ret_int(parti.dig("stats", "visionWardsBoughtInGame")), \
+											altars_neutralized: APIFetcher.is_nil_ret_int(parti.dig("stats", "altarsNeutralized")), \
+											penta_kills: APIFetcher.is_nil_ret_int(parti.dig("stats", "pentaKills")), \
+										        total_heal: APIFetcher.is_nil_ret_int(parti.dig("stats", "totalHeal")), \
+											time_ccing_others: APIFetcher.is_nil_ret_int(parti.dig("stats", "timeCCingOthers")))
 					@participant_stats_dto.save
 
 
-					@participant_timeline_dto = ParticipantTimelineDto.new(lane: is_nil_ret_char(parti.dig("timeline", "lane")), \
-											       participant_dto_id: is_nil_ret_int(parti.dig("timeline", "participantId")), \
-												role: is_nil_ret_char(parti["timeline"]["role"]), \
-												creeps_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "0-10")), \
-												creeps_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "10-20")), \
-												creeps_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "20-30")), \
-											       creeps_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "30-end")), \
-											       xp_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "0-10")), \
-											       xp_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "10-20")), \
-											       xp_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "20-30")), \
-											       xp_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "30-end")), \
-											       gold_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "0-10")), \
-											       gold_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "10-20")), \
-											       gold_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "20-30")), \
-											       gold_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "30-end")), \
-											       damage_taken_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "0-10")), \
-											       damage_taken_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "10-20")), \
-											       damage_taken_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "20-30")), \
-											       damage_taken_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "30-end")), \
-											       damage_taken_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "0-10")), \
-											       damage_taken_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "10-20")), \
-											       damage_taken_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "20-30")), \
-											       damage_taken_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "30-end")), \
-											       cs_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "0-10")), \
-											       cs_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "10-20")), \
-											       cs_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "20-30")), \
-											       cs_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "30-end")), \
-											       xp_diff_pmd_0_10: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "0-10")), \
-											       xp_diff_pmd_10_20: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "10-20")), \
-											       xp_diff_pmd_20_30: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "20-30")), \
-											       xp_diff_pmd_30_end: is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "30-end"))
+					@participant_timeline_dto = ParticipantTimelineDto.new(lane: APIFetcher.is_nil_ret_int(parti.dig("timeline", "lane")), \
+											       participant_dto_id: APIFetcher.is_nil_ret_int(parti.dig("timeline", "participantId")), \
+												role: APIFetcher.is_nil_ret_int(parti["timeline"]["role"]), \
+												creeps_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "0-10")), \
+												creeps_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "10-20")), \
+												creeps_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "20-30")), \
+											       creeps_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "creepsPerMinDeltas", "30-end")), \
+											       xp_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "0-10")), \
+											       xp_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "10-20")), \
+											       xp_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "20-30")), \
+											       xp_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpPerMinDeltas", "30-end")), \
+											       gold_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "0-10")), \
+											       gold_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "10-20")), \
+											       gold_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "20-30")), \
+											       gold_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "goldPerMinDeltas", "30-end")), \
+											       damage_taken_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "0-10")), \
+											       damage_taken_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "10-20")), \
+											       damage_taken_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "20-30")), \
+											       damage_taken_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenPerMinDeltas", "30-end")), \
+											       damage_taken_diff_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "0-10")), \
+											       damage_taken_diff_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "10-20")), \
+											       damage_taken_diff_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "20-30")), \
+											       damage_taken_diff_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "damageTakenDiffPerMinDeltas", "30-end")), \
+											       cs_diff_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "0-10")), \
+											       cs_diff_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "10-20")), \
+											       cs_diff_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "20-30")), \
+											       cs_diff_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "csDiffPerMinDeltas", "30-end")), \
+											       xp_diff_pmd_0_10: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "0-10")), \
+											       xp_diff_pmd_10_20: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "10-20")), \
+											       xp_diff_pmd_20_30: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "20-30")), \
+											       xp_diff_pmd_30_end: APIFetcher.is_nil_ret_int(parti.dig("timeline", "xpDiffPerMinDeltas", "30-end"))
 											      )
 
 					

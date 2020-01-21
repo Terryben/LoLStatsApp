@@ -6,7 +6,6 @@ class APIFetcher
 	require 'ostruct'
 
 
-
 	#pull API request from Riot Games. Parse the body of the request as JSON and return it
 	def get_api_request_as_json(request_uri2)
 		request_uri = request_uri2.gsub /\s+/, '%20'
