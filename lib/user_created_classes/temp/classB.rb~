@@ -1,0 +1,7 @@
+class ClassB
+	private @@b = 6
+
+	def print_b
+		puts @@b
+	end
+end

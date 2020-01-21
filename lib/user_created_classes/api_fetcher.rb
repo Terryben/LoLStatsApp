@@ -102,5 +102,5 @@ class APIFetcher
 		else
 			return input
 		end
-end
+	end
 end

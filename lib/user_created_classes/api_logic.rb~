@@ -2,18 +2,18 @@ class APILogic
 	require "rubygems"
 	require "pp"
 	require "json"
-	require "E:/Ruby/Ruby25-x64/LoL_Stats_App/lib/user_created_classes/api_fetcher"
+	load "E:/Ruby/Ruby25-x64/LoL_Stats_App/lib/user_created_classes/api_fetcher.rb"
 	
+	#genertic api fetcher for all methods to use
+	@@api_fetch = APIFetcher.new
+
 	def running_thread_count #borrowed from used Kashyap on Stack Overflow
 		Thread.list.select {|thread| thread.status == "run"}.count
 	end
-	def get_matchlist_from_api #load matchlist from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
+	def matchlist_from_api(match_id, api_key) #load matchlist from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
 		#spawn a concurrent tast that loads the matches while the user can still move about the site
 		i = 0
 		j = 0
-		#f = File.open('logfile.txt', 'w')
-		#f.write("The running thread count is #{get_running_thread_count}")
-		#f.close
 		isMatchListRunning = false
 		Thread.list.select {|thread|
 			if thread[:name] == "TheGetMatchListThread" && thread.alive? then
@@ -25,17 +25,15 @@ class APILogic
 			puts "Beginning new thread."
 			child_pid = Thread.new{
 				Thread.current[:name] = "TheGetMatchListThread"
-				get_matchlist_from_api_params(params[:match_id], params[:api_key])
+				matchlist_from_api_params(params[:match_id], params[:api_key])
 			}
-			redirect_to action: "index"
-				
+			return true	
 		else
-			flash[:error] = "Matchlist thread already running."
-			redirect_to action: "index"
+			return false
 		end
 	end	
 
-	def get_rank_of_match(sum_instance, match_id, api_key, summoners_in_match)
+	def rank_of_match(sum_instance, match_id, api_key, summoners_in_match)
 		#array for player ranks in match to find match average
 		rankHash = Hash.new
 		#analyzing a match means you have pulled the match list for the ten players in that match.
@@ -64,43 +62,10 @@ class APILogic
 		end
 		puts "The highest rank is: #{highestRank}"
 		puts "RankCount is: #{rankCount}"
-		Match.where(:riot_game_id => match_id).update_all(:ladder_rank_of_match => highestRank)
-		
+		return [highestRank, rankCount]
 	end
 
-	def return_rank_of_match(sum_instance, api_key, summoners_in_match)
-		#array for player ranks in match to find match average
-		rankHash = Hash.new
-		#analyzing a match means you have pulled the match list for the ten players in that match.
-		#array for the summoners in a specific match. Load all summoners in the database
-		summoners_in_match.each do |sum|
-			sum_rank = sum_instance.load_summoner_from_api(sum, api_key)
-			#load the rank value into the hash set, or increment the count value if it already exists. 
-			if rankHash.key?(sum_rank)
-				rankHash[sum_rank] += 1
-			else
-				rankHash[sum_rank] = 1
-			end
-			sleep(2)
-		end
-
-		#loop through and find highest count and use that value as the rank of the match
-		highestRank = ""
-		rankCount = 0
-		rankHash.each do |rank, count|
-			puts "The rank is: #{rank}"
-			puts count
-			if count > rankCount
-				highestRank = rank
-				rankCount = count
-			end
-		end
-		puts "The highest rank is: #{highestRank}"
-		puts "RankCount is: #{rankCount}"
-		return highestRank	
-	end
-
-	def get_matchlist_from_api_params(match_id, api_key)
+	def matchlist_from_api_params(match_id, api_key)
 		main_match = Match.find_by(riot_game_id: match_id)
 		#puts "Main match is #{main_match}"
 		#puts "Analyzed is #{main_match.analyzed.nil?}"
@@ -120,7 +85,7 @@ class APILogic
 					accId = sum_instance.get_account_id(sum.summoner_name)
 					puts accId
 					uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/#{accId}?api_key=#{api_key}"
-					jsonMatchListArray[i] = get_api_request_as_json(uri)
+					jsonMatchListArray[i] = APIFetcher.get_api_request_as_json(uri)
 					i = i + 1
 					sleep(2)
 				end
@@ -148,37 +113,24 @@ class APILogic
 			end
 			main_match.analyzed = true
 			main_match.save
-			flash[:success] = "Matchlist loaded into database."
+			return true
 		else
-			flash[:error] = "Match not loaded in database."
+			return false
 		end
 	end
 
-	def read_json_file #load match from api but with params from a post. Could probably do dynamic method parameters and combine with load match from api 
-		
-		if params[:match_id] == ""
-			flash[:error] = "Invalid input."
-			redirect_to action: "index"	
-		elsif Match.find_by(riot_game_id: params[:match_id]).nil?
-			load_match_from_api(params[:match_id], params[:api_key])
-			redirect_to action: "index"	
-		else
-			flash[:error] = "Match already loaded in database."
-			redirect_to action: "index"	
-		end
-	end
-
-	def load_match_from_api(match_id, api_key) #Read and save the data from a match by match ID
-		
+	def api_load_match_from_api(match_id, api_key) #Read and save the data from a match by match ID
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
 		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
-		parsed_match_input = get_api_request_as_json(uri)
+		puts "Can I read this?"
+		puts @@api_fetch.nil?
+		puts "What about this?"
+		parsed_match_input = APIFetcher.get_api_request_as_json(uri)
 		if parsed_match_input.head == "429" then
-			flash[:error] = "API Timeout. Stop making calls for a while."
-			return redirect_to 'http://localhost:3000'
+			return [429, "API Timeout. Stop making calls for a while."]
 		end
 		if parsed_match_input.head == "200" && !parsed_match_input.tail.nil? && !Match.exists?(riot_game_id: match_id) then
-			
+	
 			#jm = json_match
 			jm = parsed_match_input.tail
                         #parsed_input["matches"].each do |jm| #jm = json match
@@ -399,7 +351,7 @@ class APILogic
 										        total_heal: is_nil_ret_int(parti.dig("stats", "totalHeal")), \
 											time_ccing_others: is_nil_ret_int(parti.dig("stats", "timeCCingOthers")))
 					@participant_stats_dto.save
-#=begin
+
 
 					@participant_timeline_dto = ParticipantTimelineDto.new(lane: is_nil_ret_char(parti.dig("timeline", "lane")), \
 											       participant_dto_id: is_nil_ret_int(parti.dig("timeline", "participantId")), \
@@ -519,8 +471,8 @@ class APILogic
 				end				
 			end
 					
-		flash[:success] = "Match successfully loaded into database."
-                end
+		return[200, "Match successfully loaded into database."]
+    end
 
 
 end
