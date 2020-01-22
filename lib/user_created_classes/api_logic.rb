@@ -122,7 +122,7 @@ class APILogic
 	def api_load_match_from_api(match_id, api_key) #Read and save the data from a match by match ID
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
 		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
-		puts "Can I read this2?"
+		puts "Can I read this2345?"
 		api_fetch = APIFetcher.new
 		#puts @api_fetch.nil?
 		puts "What about this?"
