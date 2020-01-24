@@ -2,7 +2,8 @@ class MatchesController < ApplicationController
 	require "json"
 	require "rubygems"
 	require "pp"
-	load "E:/Ruby/Ruby25-x64/LoL_Stats_App/lib/user_created_classes/api_logic.rb"
+	load 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\api_fetcher.rb'
+	load 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\api_logic.rb'
 	
 	
 	@@api_logic = APILogic.new
@@ -40,7 +41,7 @@ class MatchesController < ApplicationController
 	end	
 	def get_rank_of_match(sum_instance, match_id, api_key, summoners_in_match)
 		#api logic finds us the average rank of a match, then we update the match with that rank
-		highestRank, rankCount = @@api_logic.rank_of_match(sum_instance, match_id, summoners_in_match)
+		highestRank, rankCount = @@api_logic.rank_of_match(sum_instance, match_id, api_key, summoners_in_match)
 		Match.where(:riot_game_id => match_id).update_all(:ladder_rank_of_match => highestRank)
 	end
 	

@@ -122,7 +122,7 @@ class APILogic
 	def api_load_match_from_api(match_id, api_key) #Read and save the data from a match by match ID
 		#uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{matchId}?api_key=#{params[:api_key]}"
 		uri = "https://na1.api.riotgames.com/lol/match/v4/matches/#{match_id}?api_key=#{api_key}"
-		puts "Can I read this2345?"
+		puts "Can I read this234567?"
 		api_fetch = APIFetcher.new
 		#puts @api_fetch.nil?
 		puts "What about this?"
@@ -428,7 +428,7 @@ class APILogic
 					end
 				end
 				#after this, create the champ pos stats object.
-				rank_of_match = return_rank_of_match(SummonersController.new, api_key, summoners_in_match)
+				rank_of_match = rank_of_match(SummonersController.new, api_key, summoners_in_match)
 				@match.ladder_rank_of_match = rank_of_match
 				matches_won = 0
 				matches_lost = 0
