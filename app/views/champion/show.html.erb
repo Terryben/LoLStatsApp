@@ -20,11 +20,19 @@
 		<% @champion.each do |champ| %>
 		<tr>
 			<td><%= champ.name %> </td>
-			<td><%= '%.2f' % (champ.num_of_matches_won / (champ.num_of_matches_won + champ.num_of_matches_lost)) %> </td>
-			<td><%= champ.cps_ladder_rank %> </td>
-			<td><%= champ.cps_position %> </td>
-			<td><%= champ.banrate %> </td>
-			<td><%= champ.pickrate %> </td>
+			<% if !champ.num_of_matches_won.nil? then %>
+				<td><%= '%.2f' % (champ.num_of_matches_won / (champ.num_of_matches_won + champ.num_of_matches_lost)) %> </td>
+				<td><%= champ.cps_ladder_rank %> </td>
+				<td><%= champ.cps_position %> </td>
+				<td><%= champ.banrate %> </td>
+				<td><%= champ.pickrate %> </td>
+			<% else %>
+				<td> No Data </td>
+				<td> No Data </td>
+				<td> No Data </td>
+				<td> No Data </td>
+				<td> No Data </td>
+			<% end %>
 		</tr>
 		<% end %>
 	</tbody>

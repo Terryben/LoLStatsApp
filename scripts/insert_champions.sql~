@@ -101,6 +101,7 @@ insert into champions (id, created_at, updated_at, name, title) values (35, now(
 insert into champions (id, created_at, updated_at, name, title) values (98, now(), now(), 'Shen', 'The Eye of Twilight');
 insert into champions (id, created_at, updated_at, name, title) values (235, now(), now(), 'Senna', 'The Redeemer');
 insert into champions (id, created_at, updated_at, name, title) values (350, now(), now(), 'Yuumi', 'The Magical Cat');
+insert into champions (id, created_at, updated_at, name, title) values (523, now(), now(), 'Aphelios', 'The Weapon of the Faithful');
 insert into champions (id, created_at, updated_at, name, title) values (102, now(), now(), 'Shyvana', 'The Half-Dragon');
 insert into champions (id, created_at, updated_at, name, title) values (27, now(), now(), 'Singed', 'The Mad Chemist');
 insert into champions (id, created_at, updated_at, name, title) values (14, now(), now(), 'Sion', 'The Undead Juggernaut');

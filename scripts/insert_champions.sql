@@ -108,6 +108,7 @@ insert into champions (id, created_at, updated_at, name, title) values (14, now(
 insert into champions (id, created_at, updated_at, name, title) values (15, now(), now(), 'Sivir', 'The Battle Mistress');
 insert into champions (id, created_at, updated_at, name, title) values (72, now(), now(), 'Skarner', 'The Crystal Vanguard');
 insert into champions (id, created_at, updated_at, name, title) values (37, now(), now(), 'Sona', 'Maven of the Strings');
+insert into champions (id, created_at, updated_at, name, title) values (875, now(), now(), 'Sett', 'The Boss');
 insert into champions (id, created_at, updated_at, name, title) values (16, now(), now(), 'Soraka', 'The Starchild');
 insert into champions (id, created_at, updated_at, name, title) values (50, now(), now(), 'Swain', 'The Noxian Grand General');
 insert into champions (id, created_at, updated_at, name, title) values (517, now(), now(), 'Sylas', 'The Unshackled');

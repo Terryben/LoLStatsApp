@@ -6,6 +6,9 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  #Ran into issue where server needed to be restarted to see code changes. Above code was not working.
+  #config.file_watcher = ActiveSupport::FileUpdateChecker
+
   # Do not eager load code on boot.
   config.eager_load = false
 
