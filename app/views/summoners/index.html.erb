@@ -16,23 +16,25 @@
 	<tr>
 		<td> ID </td>
 		<td> Name </td>
+    <td> Queue Type </td>
+    <td> Rank </td>
+    <td> Tier </td>
 		<td> Summoner_id </td>
 		<td> PUUID </td>
 		<td> Account Id </td>
-		<td> Queue Type </td>
-		<td> Rank </td>
-		<td> Tier </td>
+		
 	</tr>
 		<% @summoners.find_each do |sum| %>
 	<tr>
 			<td> <%= sum.id %> </td>
 			<td> <%= sum.name %> </td>
+      <td> <%= sum.queue_type %></td>
+      <td> <%= sum.rank %></td>
+      <td> <%= sum.tier %></td>
 			<td> <%= sum.league_id %> </td>
 			<td> <%= sum.puuid %> </td>
 			<td> <%= sum.account_id %> </td>
-			<td> <%= sum.queue_type %> </td>
-			<td> <%= sum.rank %> </td>
-			<td> <%= sum.tier %> </td>
+			
 		<% end %>
 	</tr>
 </table>

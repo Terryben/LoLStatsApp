@@ -6,3 +6,9 @@ foreign key constraints.
 #this will delete all the champions then reinsert them. It will NOT update the
 ID counter
 \i E:/Ruby/Ruby25-x64/LoL_Stats_App/scripts/insert_champions.sql
+
+#Start the server on a forwarded port so that outside users can see it
+rails server -b 192.168.1.120 -p 8000
+
+#people need to go to this website to see your website
+http://24.54.128.50:8000

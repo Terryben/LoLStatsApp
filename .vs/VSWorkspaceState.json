@@ -2,9 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\app",
-    "\\app\\controllers",
-    "\\app\\user_created_classes"
+    "\\app\\assets",
+    "\\app\\views",
+    "\\app\\views\\layouts",
+    "\\app\\views\\matches"
   ],
-  "SelectedNode": "\\app\\controllers\\matches_controller.rb",
+  "SelectedNode": "\\app\\views\\matches\\show.html.erb",
   "PreviewInSolutionExplorer": false
 }

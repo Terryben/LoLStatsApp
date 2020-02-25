@@ -1,9 +1,15 @@
-<h1>Listing Matches</h1>
+
+<div class="entirePage">
+<div class ="head">
+  <div class ="h1">LoL Matches</div>
+</div>
 <br>
 
-
-<%= form_tag(controller: :matches, action: :get_running_thread_count) do %>                                                      <%= label_tag(:api_key, "Summoner API Key: ") %>                                                                        <%= submit_tag("Pull Match from Riot API") %>
-<% end %>
+<div class="submissionForm">
+<!--<%= form_tag(controller: :matches, action: :get_running_thread_count) do %>                                                      
+  <%= label_tag(:api_key, "Summoner API Key: ") %>                                                                        
+    <%= submit_tag("Pull Match from Riot API") %>
+<% end %> -->
 
 <%= form_tag(controller: :matches, action: :read_json_file) do %>                                                                                                                   	
 	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
@@ -20,43 +26,43 @@
 	<%= text_field_tag(:match_id) %>
 	<%= submit_tag("Pull matchlist from Riot API") %>
 <% end %>                                                                                                                                                                              
-<br>       
-<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 <br>
+<br>
+</div>
 
-
-<table>
-	<tr>
-		<th>Game Id</th>
-		<th>Season Id</th>
-		<th>Queue Id</th>
-		<th>Game Version</th>
-		<th>Platform Id</th>
-		<th>Game Mode</th>
-		<th>Map Id</th>
-		<th>Game Type</th>
-		<th>Game Duration</th>
-		<th>Game Creation</th>
-		<th>Rank of Game</th>
-		<th></th>
-	</tr>
-
-	<% @matches.find_each do |match| %>
-		<tr>
-			<td><%= match.riot_game_id %></td>
-			<td><%= match.season_id %></td>
-			<td><%= match.queue_id %></td>
-			<td><%= match.game_version %></td>
-			<td><%= match.platform_id %></td>
-			<td><%= match.game_mode %></td>
-			<td><%= match.map_id %></td>
-			<td><%= match.game_type %></td>
-			<td><%= match.game_duration %></td>
-			<td><%= match.game_creation %></td>
-			<td><%= match.ladder_rank_of_match %></td>
-			<td><%= link_to 'Show', match_path(match) %></td>
-		</tr>
-	<% end %>
-</table>
-
-
+ 
+    <div class="table">
+     <div class="tableHead">
+      <div class="tableRow">
+          <div class="tableCell"><strong>Game Id</strong></div>
+          <div class="tableCell"><strong>Season ID</strong></div>
+          <div class="tableCell"><strong>Queue ID</strong></div>
+          <div class="tableCell"><strong>Game Version</strong></div>
+          <div class="tableCell"><strong>Platform Id</strong></div>
+          <div class="tableCell"><strong>Game Mode</strong></div>
+          <div class="tableCell"><strong>Map Id</strong></div>
+          <div class="tableCell"><strong>Game Type</strong></div>
+          <div class="tableCell"><strong>Game Duration</strong></div>
+          <div class="tableCell"><strong>Game Creation</strong></div>
+          <div class="tableCell"><strong>Rank of Game</strong></div>
+          <div class="tableCell"><strong>Link</strong></div>
+        </div>
+      </div>
+    
+    <% @matches.find_each do |match| %>
+      <div class="tableRow">
+        <div class="tableCell"><%= match.riot_game_id %></div>
+        <div class="tableCell"><%= match.season_id %></div>
+        <div class="tableCell"><%= match.queue_id %></div>
+        <div class="tableCell"><%= match.game_version %></div>
+        <div class="tableCell"><%= match.platform_id %></div>
+        <div class="tableCell"><%= match.game_mode %></div>
+        <div class="tableCell"><%= match.map_id %></div>
+        <div class="tableCell"><%= match.game_type %></div>
+        <div class="tableCell"><%= match.game_duration %></div>
+        <div class="tableCell"><%= match.game_creation %></div>
+        <div class="tableCell"><%= match.ladder_rank_of_match %></div>
+        <div class="tableCell"><%= link_to 'Show', match_path(match) %></div>
+      </div>
+    <% end %>
+  </div>

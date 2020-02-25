@@ -24,8 +24,8 @@
 				<td><%= '%.2f' % (champ.num_of_matches_won / (champ.num_of_matches_won + champ.num_of_matches_lost)) %> </td>
 				<td><%= champ.cps_ladder_rank %> </td>
 				<td><%= champ.cps_position %> </td>
-				<td><%= champ.banrate %> </td>
-				<td><%= champ.pickrate %> </td>
+				<td><%= champ.banrate  / (@total_matches[0] * 10) %> </td>
+				<td><%= champ.pickrate  / @total_matches[0] %> </td>
 			<% else %>
 				<td> No Data </td>
 				<td> No Data </td>
