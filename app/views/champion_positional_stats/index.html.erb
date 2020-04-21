@@ -1,40 +1,51 @@
 <p id="notice"><%= notice %></p>
+<div class="head">
+  <div class="h1">Champion Positional Stats</div>
+</div>
 
-<h1>Champion Positional Stats</h1>
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="7"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-	  <tr>
-		  <th>Champion</th>
-		  <th>Winrate</th>
-		  <th>Pickrate(WIP)</th>
-		  <th>Banrate(WIP)</th>
-		  <th>Game Version</th>
-		  <th>Ladder Rank</th>
-		  <th>Position</th>
-	  </tr>
-
+<div class="table">
+  <div class="tableHead">
+	  <div class="tableRow">
+		  <div class="tableCell"><stong>Champion</stong></div>
+      <div class="tableCell">
+        <stong>Winrate</stong>
+      </div>
+      <div class="tableCell">
+        <stong>Pickrate(WIP)</stong>
+      </div>
+      <div class="tableCell">
+        <stong>Banrate(WIP)</stong>
+      </div>
+      <div class="tableCell">
+        <stong>Game Version</stong>
+      </div>
+      <div class="tableCell">
+        <stong>Ladder Rank</stong>
+      </div>
+      <div class="tableCell">
+        <stong>Position</stong>
+      </div>
+      <div class="tableCell">
+        <stong>Link</stong>
+      </div>
+	  </div>
+  </div>
     <% @champion_positional_stats.each do |cps| %>
-      <tr>
-        <td><%= cps.name %></td>
-        <td><%= number_to_percentage(((cps.num_of_matches_won / (cps.num_of_matches_lost + cps.num_of_matches_won)) * 100))  %></td>
-        <td><%= cps.pickrate  %></td>
-        <td><%= cps.banrate %></td>
-	<td><%= truncate(cps.game_version, :length => 7) %></td>
-        <td><%= cps.cps_ladder_rank %></td>
-        <td><%= cps.cps_position %></td>
-        <td><%= link_to 'Show', champion_path(cps.champion_id) %></td>
-      </tr>
+      <div class="tableRow">
+        <div class="tableCell"><%= cps.name %></div>
+        <div class="tableCell"><%= number_to_percentage(((cps.num_of_matches_won / (cps.num_of_matches_lost + cps.num_of_matches_won)) * 100))  %></div>
+        <div class="tableCell"><%= cps.pickrate  %></div>
+        <div class="tableCell"><%= cps.banrate %></div>
+        <div class="tableCell"><%= truncate(cps.game_version, :length => 7) %></div>
+        <div class="tableCell"><%= cps.cps_ladder_rank %></div>
+        <div class="tableCell"><%= cps.cps_position %></div>
+        <div class="tableCell"><%= link_to 'Show', champion_path(cps.champion_id, ret: :true)%></div>
+      </div>
     <% end %>
-  </tbody>
-</table>
+</div>
 
-<br>
+
 
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

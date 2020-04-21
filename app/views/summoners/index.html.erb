@@ -1,5 +1,7 @@
-<h1> Summoners </h1>
-<br>
+<div class ="head">
+  <div class ="h1">Summoners</div>
+</div>
+
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 
 <br>
@@ -12,29 +14,44 @@
 <% end %>
 <br>
 
-<table>
-	<tr>
-		<td> ID </td>
-		<td> Name </td>
-    <td> Queue Type </td>
-    <td> Rank </td>
-    <td> Tier </td>
-		<td> Summoner_id </td>
-		<td> PUUID </td>
-		<td> Account Id </td>
-		
-	</tr>
-		<% @summoners.find_each do |sum| %>
-	<tr>
-			<td> <%= sum.id %> </td>
-			<td> <%= sum.name %> </td>
-      <td> <%= sum.queue_type %></td>
-      <td> <%= sum.rank %></td>
-      <td> <%= sum.tier %></td>
-			<td> <%= sum.league_id %> </td>
-			<td> <%= sum.puuid %> </td>
-			<td> <%= sum.account_id %> </td>
-			
-		<% end %>
-	</tr>
-</table>
+<div class="table">
+  <div class="tableHead">
+	  <div class="tableRow">
+		  <div class="tableCell"><strong> ID </strong></div>
+      <div class="tableCell"><strong> Name </strong></div>
+      <div class="tableCell"><strong> Queue Type </strong></div>
+      <div class="tableCell"><strong> Rank </strong></div>
+      <div class="tableCell"><strong> Tier </strong></div>
+      <div class="tableCell"><strong> Summoner_id </strong></div>
+      <div class="tableCell"><strong> PUUID </strong></div>
+      <div class="tableCell"><strong> Account Id </strong></div>
+		</div>
+	</div>
+	<% @summoners.find_each do |sum| %>
+	<div class="tableRow">
+    <div class="tableCell"> <%= sum.id %> </div>
+    <div class="tableCell"> <%= sum.name %> </div>
+    <div class="tableCell"> <%= sum.queue_type %> </div>
+    <div class="tableCell"> <%= sum.rank %> </div>
+    <div class="tableCell"> <%= sum.tier %> </div>
+    <div class="tableCell"> <%= sum.league_id %> </div>
+    <div class="tableCell"> <%= sum.puuid %> </div>
+    <div class="tableCell"> <%= sum.account_id %> </div>	
+	</div>
+  <% end %>
+</div>
+
+<!--If you are on page one, don't let the user go back another page. Page zero doesn't exist.-->  
+  
+<% if @page_num != 1 then %>  
+  <div class="page_button">
+    <%= button_to "Back Page", action: "back_index_page", params: {:page_num => @page_num} %>
+  </div>    
+<% end %>
+
+<!--Have a count of records in this table. Don't let user try to go past that count-->
+<% if @sum_count - (@page_num * 100) >= 1 then %> 
+  <div class="page_button">
+   <%= button_to "Next Page", action: "next_index_page", params: {:page_num => @page_num} %>
+  </div>
+<% end %>

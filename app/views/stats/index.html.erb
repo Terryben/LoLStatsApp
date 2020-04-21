@@ -1,21 +1,28 @@
-<h1> Listing Stats </h1>
-<%= link_to 'New Stats', new_stat_path %>
-<table>
-	<tr>
-		<th>Name</th>
-		<th>Percentage</th>
-		<th></th>
-	</tr>
 
-	<% @stats.each do |stat| %>
-		<tr>
-			<td><%= stat.name %></td>
-			<td><%= stat.percentage %></td>
-			<td><%= link_to 'Show', stat_path(stat) %></td>
-			<td><%= link_to 'Edit', edit_stat_path(stat) %></td>
-			<td><%= link_to 'Destroy', stat_path(stat),
-				method: :delete,
-				data: { confirm: 'Are you sure?' } %></td>
-		</tr>
-	<% end %>
-</table>
+  <div class ="head">
+    <div class ="h1">Listing Editable Stats</div>
+  </div>
+  <%= tag.button(link_to 'Create a New Stat', new_stat_path) %>
+
+  <div class='table'>
+    <div class='tableHead'>
+      <div class ='tableRow'>
+        <div class='tableCell'>Name</div>
+        <div class='tableCell'>Percentage</div>
+        <div class='tableCell'>Link Show</div>
+        <div class='tableCell'>Link Edit</div>
+        <div class='tableCell'>Link Destroy</div>
+      </div>
+    </div>
+    <% @stats.each do |stat| %>
+    <div class='tableRow'>
+      <div class='tableCell'><%= stat.name %></div>
+      <div class='tableCell'><%= stat.percentage %></div>
+      <div class='tableCell'><%= link_to 'Show', stat_path(stat) %></div>
+      <div class='tableCell'><%= link_to 'Edit', edit_stat_path(stat) %></div>
+      <div class='tableCell'><%= link_to 'Destroy', stat_path(stat), method: :delete, data: { confirm: 'Are you sure?' } %></div>
+    </div>
+    <% end %>
+  </div>
+    
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

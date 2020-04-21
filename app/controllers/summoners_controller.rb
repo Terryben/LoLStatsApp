@@ -10,7 +10,27 @@ class SummonersController < ApplicationController
 	
 
 	def index
-		@summoners = Summoner.all
+		@summoners = Summoner.select("*").where("id < 100")
+		@page_num = 1
+		@sum_count = Summoner.count
+	end
+
+	def next_index_page
+		@page_num = params[:page_num].to_i + 1
+		@sum_count = Summoner.count
+		@summoners = Summoner.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+		render 'index'
+
+	end
+
+	def back_index_page
+		@page_num = params[:page_num].to_i - 1
+		@sum_count = Summoner.count
+		if @page_num < 1 then
+			@page_num = 1
+		end
+		@summoners = Summoner.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+		render 'index'
 	end
 
 	def show

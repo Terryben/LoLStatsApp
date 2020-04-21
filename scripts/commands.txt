@@ -12,3 +12,12 @@ rails server -b 192.168.1.120 -p 8000
 
 #people need to go to this website to see your website
 http://24.54.128.50:8000
+
+#see the sequences created
+\ds
+
+#reset your sequence, must start at 1, not 0
+alter sequence champion_positional_stats_id_seq restart with 1;
+
+#read UTF8 characters in the CMD window
+set client_encoding = 'UTF8';

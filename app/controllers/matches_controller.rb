@@ -9,13 +9,32 @@ class MatchesController < ApplicationController
 	@@api_logic = APILogic.new
 
 	def index
-		@matches = Match.all
+		@matches = Match.select("*").where("id < 100")
+		@page_num = 1
+		@record_count = Match.count
 	end
 	
 	def show
 		@match = Match.select("*").joins([participant_dtos: :champion], :player_dtos).where("matches.id = ?", params[:id]).where("participant_dtos.participant_id = player_dtos.participant_dto_id").sort #[participant_dtos: :champion]
 	end
-	
+
+	def next_index_page
+		@page_num = params[:page_num].to_i + 1
+		@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+		@record_count = Match.count
+		render 'index'
+		
+	end
+
+	def back_index_page
+		@page_num = params[:page_num].to_i - 1
+		if @page_num < 1 then
+			@page_num = 1
+		end
+		@record_count = Match.count
+		@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+		render 'index'
+	end	
 	
 	def new
 	end

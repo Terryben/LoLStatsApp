@@ -1,13 +1,23 @@
-<p>
-	<strong>Name</p>
-	<%= @stat.name %>
-	</p>
+<div class="head">
+  <div class ="h1">Listing Stat</div>
+</div>
+ 
+    
+<div class="table">
+    <div class='tableHead'>
+      <div class='tableRow'>
+        <div class='tableCell'><strong>Name</strong></div>
+        <div class='tableCell'><strong>Percentage</strong></div>
+        <div class='tableCell'><strong>Edit Link</strong></div>
+        <div class='tableCell'><strong>Back Link</strong></div>
+      </div>
+    </div>
+    <div class='tableRow'>
+      <div class='tableCell'><%= @stat.name %></div>
+      <div class='tableCell'><%= @stat.percentage %></div>
+      <div class='tableCell'><%= link_to 'Edit', edit_stat_path(@stat) %></div>
+      <div class='tableCell'><%= link_to 'Back', stats_path %></div>
+    </div>
+</div>
 
-
-<p>
-	<strong>Percentage</p>
-	<%= @stat.percentage %>
-	</p>
-
-	<%= link_to 'Edit', edit_stat_path(@stat) %> |
-	<%= link_to 'Back', stats_path %>
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

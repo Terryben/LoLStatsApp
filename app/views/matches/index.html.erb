@@ -66,3 +66,17 @@
       </div>
     <% end %>
   </div>
+
+  <% if @page_num != 1 then %>
+    <div class="page_button">
+      <%= button_to "Back Page", action: "back_index_page", params: {:page_num => @page_num} %>
+    </div>
+  <% end %>
+<!--Have a count of records in this table. Don't let user try to go past that count-->
+<% if @record_count - (@page_num * 100) >= 1 then %> 
+  <div class="page_button">
+    <%= button_to "Next Page", action: "next_index_page", params: {:page_num => @page_num} %>
+  </div>
+<% end %>
+
+  <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

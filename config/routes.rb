@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   post 'matches/get_running_thread_count'
   post 'matches/get_matchlist_from_api'
   post 'summoners/read_summoner_json'
+  post 'summoners/next_index_page'
+  post 'summoners/back_index_page'
+  post 'matches/next_index_page'
+  post 'matches/back_index_page'
   root 'welcome_page#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

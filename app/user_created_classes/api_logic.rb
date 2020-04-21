@@ -19,12 +19,12 @@ class APILogic
 				isMatchListRunning = true
 			end
 		}
-		puts "The running thread count is #{get_running_thread_count}"
+		puts "The running thread count is #{running_thread_count}"
 		if !isMatchListRunning then
 			puts "Beginning new thread."
 			child_pid = Thread.new{
 				Thread.current[:name] = "TheGetMatchListThread"
-				matchlist_from_api_params(params[:match_id], params[:api_key])
+				matchlist_from_api_params(match_id, api_key)
 			}
 			return true	
 		else
@@ -38,7 +38,12 @@ class APILogic
 		#analyzing a match means you have pulled the match list for the ten players in that match.
 		#array for the summoners in a specific match. Load all summoners in the database
 		summoners_in_match.each do |sum|
-			sum_rank = sum_instance.load_summoner_from_api(sum, api_key)
+			#two functions call this method but one passes a player_dtos while the other passes strings
+			if sum.respond_to?(:summoner_name) then 
+				sum_rank = sum_instance.load_summoner_from_api(sum.summoner_name, api_key)
+			else
+				sum_rank = sum_instance.load_summoner_from_api(sum, api_key)
+			end
 			#load the rank value into the hash set, or increment the count value if it already exists. 
 			if rankHash.key?(sum_rank)
 				rankHash[sum_rank] += 1
@@ -66,6 +71,7 @@ class APILogic
 
 	def matchlist_from_api_params(match_id, api_key)
 		main_match = Match.find_by(riot_game_id: match_id)
+		api_fetch = APIFetcher.new
 		#puts "Main match is #{main_match}"
 		#puts "Analyzed is #{main_match.analyzed.nil?}"
 		puts main_match.nil?
@@ -84,7 +90,12 @@ class APILogic
 					accId = sum_instance.get_account_id(sum.summoner_name)
 					puts accId
 					uri = "https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/#{accId}?api_key=#{api_key}"
-					jsonMatchListArray[i] = APIFetcher.get_api_request_as_json(uri)
+					jsonMatchListArray[i] = api_fetch.get_api_request_as_json(uri)
+					if jsonMatchListArray[i].head == "429" then
+						return [429, "API Timeout. Stop making calls for a while."]
+					elsif jsonMatchListArray[i].head == "403" then
+						return [403, "API Forbidden. Stop making calls for a while."]
+					end
 					i = i + 1
 					sleep(2)
 				end
@@ -102,7 +113,7 @@ class APILogic
 					ml["matches"].each do |match|
 						id = api_fetch.is_nil_ret_int(match.dig("gameId"))
 						if !(id	== "-1")
-							load_match_from_api(id, api_key)
+							api_load_match_from_api(id, api_key)
 							sleep(2)
 							summoners_in_match = PlayerDto.select("summoner_name").joins(:match).where("matches.riot_game_id = #{id}")
 							rank_of_match(sum_instance, id, api_key, summoners_in_match)
@@ -130,6 +141,8 @@ class APILogic
 		parsed_match_input = api_fetch.get_api_request_as_json(uri)
 		if parsed_match_input.head == "429" then
 			return [429, "API Timeout. Stop making calls for a while."]
+		elsif parsed_match_input.head == "403" then
+			return [403, "API Forbidden. Stop making calls for a while."]
 		end
 		if parsed_match_input.head == "200" && !parsed_match_input.tail.nil? && !Match.exists?(riot_game_id: match_id) then
 	

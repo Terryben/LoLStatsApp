@@ -1,19 +1,30 @@
-<h1> Listing Champions </h1>
-<br>                                                                                                                                                                                                         <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
-<br> 
-<table>
-	<tr>
-		<td> Id </td>
-		<td> Name </td>
-		<td> Title </td>
-	</tr>
+<div class="head">
+  <div class="h1"> Listing Champions </div>
+</div>                                                                                                                                                                                                         <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
+
+<div class='table'>
+	<div class='tableHead'>
+    <div class='tableRow'>
+		  <div class ='tableCell'> Id </div>
+      <div class ='tableCell'> Name </div>
+      <div class ='tableCell'> Title </div>
+    </div>
+	</div>
 
 	<% @champions.each do |champ| %>
-		<tr>
-			<td><%= champ.id %></td>
-			<td><%= champ.name %></td>
-			<td><%= champ.title %></td>
-			<td><%= link_to 'Show', champion_path(champ) %></td>
-		</tr>
+    <div class='tableRow'>
+      <div class ='tableCell'>
+        <%= champ.id %>
+      </div>
+      <div class ='tableCell'>
+        <%= champ.name %>
+      </div>
+      <div class ='tableCell'>
+        <%= champ.title %>
+      </div>
+      <div class ='tableCell'>
+        <%= link_to 'Show', champion_path(champ) %>
+      </div>
+		</div>
 	<% end %>
-</table>
+</div>
