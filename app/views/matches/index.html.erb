@@ -3,8 +3,9 @@
 <div class ="head">
   <div class ="h1">LoL Matches</div>
 </div>
-<br>
-
+  <br>
+<%= render partial: "next_back_return", locals: {page_params: @page_params} %>  
+  </br>    
 <div class="submissionForm">
 <!--<%= form_tag(controller: :matches, action: :get_running_thread_count) do %>                                                      
   <%= label_tag(:api_key, "Summoner API Key: ") %>                                                                        
@@ -33,6 +34,7 @@
 	<%= submit_tag("Search For Match") %>
 <% end %> 
 <br>
+<%= tag.button(link_to 'Clear Filter', controller: 'matches') %>
 </div>
 
   <!-- Need a variable to store if table is in desc or asc order--> 
@@ -95,16 +97,21 @@
     <% end %>
   </div>
 
+<%= render partial: "next_back_return", locals: {page_params: @page_params} %>
+
+<!--
   <% if @page_params.page_num != 1 then %>
     <div class="page_button">
       <%= button_to "Back Page", action: "ascend_descend_next_back", params: {:page_num => (@page_params.page_num - 1), :col_name => @page_params.col_name, :asc => @page_params.asc } %>
     </div>
   <% end %>
 <!--Have a count of records in this table. Don't let user try to go past that count-->
-<% if @page_params.record_count - (@page_params.page_num * 100) >= 1 then %> 
+<!--<% if @page_params.record_count - (@page_params.page_num * 100) >= 1 then %> 
   <div class="page_button">
     <%= button_to "Next Page", action: "ascend_descend_next_back", params: {:page_num => (@page_params.page_num + 1), :col_name => @page_params.col_name, :asc => @page_params.asc } %>
   </div>
 <% end %>
 
   <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
+  
+ -->

@@ -1,11 +1,57 @@
 class ChampionPositionalStatsController < ApplicationController
   before_action :set_champion_positional_stat, only: [:show, :edit, :update, :destroy]
 
+
+  Pp = Struct.new(:page_num, :record_count, :asc, :col_name, :num_matches, :position, :rank)
   # GET /champion_positional_stats
   # GET /champion_positional_stats.json
   def index
-	  @champion_positional_stats = ChampionPositionalStat.select("*").joins(:champion).where("cps_position != 'NONE'").where("cps_position != '0'").where("cps_ladder_rank != ''")
+	  @champion_positional_stats = ChampionPositionalStat.select("*").joins(:champion).where("cps_position != 'NONE'").where("cps_position != '0'").where("cps_ladder_rank = 'PLATINUM'")
+	  @page_params = Pp.new(1, ChampionPositionalStat.count, "asc", "id", Match.count, "", "PLATINUM")	
   end
+
+  #filter sort
+  def filter_sort
+
+		#Create a set with all the match columns in it. Then compare the user variables to the set. If we get a match then you can do the query on the returned set values
+		#to prevent any malicious code from getting in
+		pos_set = Set["TOP", "JUNGLE", "MID", "BOTTOM", "SUPPORT"]
+		rank_set = Set["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLENGER"]
+		
+		puts "The col name is #{params[:col_name]}"
+
+		@page_params = Pp.new(params[:page_num].to_i, ChampionPositionalStat.count, params[:asc], params[:col_name])
+
+
+		if !match_col_set.include?(@page_params.col_name) then 
+			#puts "NOT EQUALS #{params[:col_name]}"
+			flash[:error] = "Invalid column parameter chosen."
+			redirect_to action: "index"	
+		else
+			#if the column name is the same as last time, swap the order of the table
+			
+			if @page_params.asc == "asc" then
+				@asc = "asc"
+			else
+				@asc = "desc"
+			end
+			#set col name to the new column
+			@temp_page_num = @page_params[:page_num].to_i
+			@page_params[:record_count] = Match.count
+			puts @asc.nil?
+			puts "#{@asc}"
+			puts "WHAT DOES THIS RETURN?"
+			puts Arel.sql("#{params[:col_name]} #{@asc}")
+			@matches = Match.select("*").order(Arel.sql("#{params[:col_name]} #{@asc}")).limit(100).offset((@temp_page_num * 100)-100)
+			#USE RAW SQL
+
+			render 'index'
+		end
+	end
+
+
+
+
 
   # GET /champion_positional_stats/1
   # GET /champion_positional_stats/1.json

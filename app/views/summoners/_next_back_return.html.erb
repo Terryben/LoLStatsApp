@@ -1,0 +1,16 @@
+<!-- This is a partial for the next, back, and welcome page link, as they are used several times per page -->
+
+
+<% if page_params.page_num != 1 then %>
+  <div class="page_button">
+    <%= button_to "Back Page", action: "ascend_descend_next_back", params: {:page_num => (page_params.page_num - 1), :col_name => page_params.col_name, :asc => page_params.asc } %>
+  </div>
+<% end %>
+<!--Have a count of records in this table. Don't let user try to go past that count-->
+<% if page_params.record_count - (page_params.page_num * 100) >= 1 then %> 
+  <div class="page_button">
+    <%= button_to "Next Page", action: "ascend_descend_next_back", params: {:page_num => (page_params.page_num + 1), :col_name => page_params.col_name, :asc => page_params.asc } %>
+  </div>
+<% end %>
+
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>

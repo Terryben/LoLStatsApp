@@ -7,31 +7,66 @@ class SummonersController < ApplicationController
 	#load 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\api_fetcher.rb'
 	#load 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\api_logic.rb'
 
-	
+	Pp = Struct.new(:page_num, :record_count, :asc, :col_name)
 
 	def index
 		@summoners = Summoner.select("*").where("id < 100")
-		@page_num = 1
-		@sum_count = Summoner.count
+		@page_params = Pp.new(1, Summoner.count, "asc", "id")
 	end
 
-	def next_index_page
-		@page_num = params[:page_num].to_i + 1
-		@sum_count = Summoner.count
-		@summoners = Summoner.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
-		render 'index'
+	def ascend_descend_next_back
 
-	end
+		#Create a set with all the summoner columns in it. Then compare the user variables to the set. If we get a match then you can do the query on the returned set values
+		#to prevent any malicious code from getting in
+		sum_col_set = Set["id", "name", "queue_type", "rank", "tier", "level", "game_duration", "game_creation"]
+		puts "The col name is #{params[:col_name]}"
 
-	def back_index_page
-		@page_num = params[:page_num].to_i - 1
-		@sum_count = Summoner.count
-		if @page_num < 1 then
-			@page_num = 1
+		@page_params = Pp.new(params[:page_num].to_i, Summoner.count, params[:asc], params[:col_name])
+
+
+		if !sum_col_set.include?(@page_params.col_name) then 
+			#puts "NOT EQUALS #{params[:col_name]}"
+			flash[:error] = "Invalid column parameter chosen."
+			redirect_to action: "index"	
+		else
+			#if the column name is the same as last time, swap the order of the table
+			
+			if @page_params.asc == "asc" then
+				@asc = "asc"
+			else
+				@asc = "desc"
+			end
+			#set col name to the new column
+			@temp_page_num = @page_params[:page_num].to_i
+			@page_params[:record_count] = Summoner.count
+			puts @asc.nil?
+			puts "#{@asc}"
+			puts "WHAT DOES THIS RETURN?"
+			puts Arel.sql("#{params[:col_name]} #{@asc}")
+			@summoners = Summoner.select("*").order(Arel.sql("#{params[:col_name]} #{@asc}")).limit(100).offset((@temp_page_num * 100)-100)
+			#USE RAW SQL
+
+			render 'index'
 		end
-		@summoners = Summoner.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
-		render 'index'
 	end
+
+	#def next_index_page
+	#	@page_num = params[:page_num].to_i + 1
+	#	@sum_count = Summoner.count
+	#	@summoners = Summoner.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+	#	render 'index'
+
+	#end
+
+	#def back_index_page
+	#	@page_num = params[:page_num].to_i - 1
+	#	@sum_count = Summoner.count
+	#	if @page_num < 1 then
+	#		@page_num = 1
+	#	end
+	#	@summoners = Summoner.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+	#	render 'index'
+	#end
 
 	def show
 		@summoner = Summoner.select("*")
@@ -49,9 +84,10 @@ class SummonersController < ApplicationController
 	
 	#user passed the Riot game ID of the match, return it and only it to the user
 	def search_for_summoner
-		@summoners = Summoner.select("*").where("name = #{params[:summoner_name]}")
-		@page_num = 1
-		@sum_count = Summoner.count
+		#remove punctuation to sanitize string
+		sum_name = params[:summoner_name].gsub(/[!@#$%^&*()-=_+|;':",.<>?']/, '')
+		@summoners = Summoner.select("*").where("name = '#{sum_name}'")
+		@page_params = Pp.new(1, Summoner.count, "asc", "id")
 		render 'index'
 	end
 	

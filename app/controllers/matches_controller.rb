@@ -12,7 +12,7 @@ class MatchesController < ApplicationController
 
 	def index
 		@matches = Match.select("*").where("id < 100")
-		@page_params = Pp.new(1, Match.count, "", "")
+		@page_params = Pp.new(1, Match.count, "asc", "id")
 	end
 	
 	def show
@@ -20,43 +20,36 @@ class MatchesController < ApplicationController
 	end
 
 	#Move to the next page on the index view. 100 records at a time
-	def next_index_page
+	#def next_index_page
 		#TO DO: ADD in parameters that you are sorted on. Ascending, decening, or rank of game/game mode
-		@page_num = params[:page_num].to_i + 1
-		@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
-		@record_count = Match.count
-		render 'index'
+		#@page_num = params[:page_num].to_i + 1
+		#@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+		#@record_count = Match.count
+		#render 'index'
 		
-	end
+	#end
 
-	def back_index_page
+	#def back_index_page
 		#TO DO: ADD in parameters that you are sorted on. Ascending, decening, or rank of game/game mode
-		@page_num = params[:page_num].to_i - 1
-		if @page_num < 1 then
-			@page_num = 1
-		end
-		@record_count = Match.count
-		@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
-		render 'index'
-	end
+		#@page_num = params[:page_num].to_i - 1
+		#if @page_num < 1 then
+			#@page_num = 1
+		#end
+		#@record_count = Match.count
+		#@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
+		#render 'index'
+	#end
 	
 	#user passed the Riot game ID of the match, return it and only it to the user
 	def search_for_match
 		@matches = Match.select("*").where("riot_game_id = #{params[:match_id]}")
-		@page_num = 1
-		@record_count = Match.count
+		@page_params = Pp.new(1, Match.count, "asc", "id")
 		render 'index'
 	end
 	
 	#only do ascending and decending queries, and only on one field. Will not be able to sort by selected values on tables, and will not be able to do more than one ascending or decending query
 	#if people want these I will have to pull custom reports for them
 	def ascend_descend_next_back
-		#params in order are :col_name, :page_num
-		#have dictionary that matches param to column name
-		#have param that is acending or decending
-		#have param that is page number
-		#build query that uses to variables, and returns first 100 values
-		#@champion = Champion.select("*").left_outer_joins(:champion_positional_stats).where("champions.id = ?", params[:id])
 
 		#Create a set with all the match columns in it. Then compare the user variables to the set. If we get a match then you can do the query on the returned set values
 		#to prevent any malicious code from getting in
