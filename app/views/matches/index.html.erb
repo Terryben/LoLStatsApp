@@ -1,4 +1,4 @@
-
+<!-- This is the index view for matches -->
 <div class="entirePage">
 <div class ="head">
   <div class ="h1">LoL Matches</div>
@@ -27,29 +27,57 @@
 	<%= submit_tag("Pull matchlist from Riot API") %>
 <% end %>                                                                                                                                                                              
 <br>
+<%= form_tag(controller: :matches, action: :search_for_match) do %>                                                                                                                   	
+	<%= label_tag(:match_id, "Match Id: ") %>
+	<%= text_field_tag(:match_id) %>
+	<%= submit_tag("Search For Match") %>
+<% end %> 
 <br>
 </div>
 
- 
+  <!-- Need a variable to store if table is in desc or asc order--> 
+  
     <div class="table">
      <div class="tableHead">
       <div class="tableRow">
-          <div class="tableCell"><strong>Game Id</strong></div>
-          <div class="tableCell"><strong>Season ID</strong></div>
-          <div class="tableCell"><strong>Queue ID</strong></div>
-          <div class="tableCell"><strong>Game Version</strong></div>
-          <div class="tableCell"><strong>Platform Id</strong></div>
-          <div class="tableCell"><strong>Game Mode</strong></div>
-          <div class="tableCell"><strong>Map Id</strong></div>
-          <div class="tableCell"><strong>Game Type</strong></div>
-          <div class="tableCell"><strong>Game Duration</strong></div>
-          <div class="tableCell"><strong>Game Creation</strong></div>
-          <div class="tableCell"><strong>Rank of Game</strong></div>
+          <div class="tableCell"><strong>Game Id <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "riot_game_id", asc: "asc", page_num: 1} %>
+                                                 <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "riot_game_id", asc: "desc", page_num: 1} %>
+                                                 </strong></div>
+          <div class="tableCell"><strong>Season ID <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "season_id", asc: "asc", page_num: 1} %>
+                                                   <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "season_id", asc: "desc", page_num: 1} %>
+                                                   </strong></div>
+          <div class="tableCell"><strong>Queue ID <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "queue_id", asc: "asc", page_num: 1} %>
+                                                  <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "queue_id", asc: "desc", page_num: 1} %>
+                                                  </strong></div>
+          <div class="tableCell"><strong>Game Version <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "game_version", asc: "asc", page_num: 1} %>
+                                                      <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "game_version", asc: "desc", page_num: 1} %>
+                                                      </strong></div>
+          <div class="tableCell"><strong>Platform Id <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "platform_id", asc: "asc", page_num: 1} %>
+                                                     <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "platform_id", asc: "desc", page_num: 1} %>
+                                                     </strong></div>
+          <div class="tableCell"><strong>Game Mode <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "game_mode", asc: "asc", page_num: 1} %>
+                                                   <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "game_mode", asc: "desc", page_num: 1} %>
+                                                   </strong></div>
+          <div class="tableCell"><strong>Map Id <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "map_id", asc: "asc", page_num: 1} %>
+                                                <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "map_id", asc: "desc", page_num: 1} %>
+                                                </strong></div>
+          <div class="tableCell"><strong>Game Type <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "game_type", asc: "asc", page_num: 1} %>
+                                                   <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "game_type", asc: "desc", page_num: 1} %>
+                                                   </strong></div>
+          <div class="tableCell"><strong>Game Duration <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "game_duration", asc: "asc", page_num: 1} %>
+                                                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "game_duration", asc: "desc", page_num: 1} %>
+                                                       </strong></div>
+          <div class="tableCell"><strong>Game Creation<%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "game_creation", asc: "asc", page_num: 1} %>
+                                                      <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "game_creation", asc: "desc", page_num: 1} %>
+                                                      </strong></div>
+          <div class="tableCell"><strong>Rank<%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "ladder_rank_of_match", asc: "asc", page_num: 1} %>
+                                             <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "ladder_rank_of_match", asc: "desc", page_num: 1} %>
+                                             </strong></div>
           <div class="tableCell"><strong>Link</strong></div>
         </div>
       </div>
     
-    <% @matches.find_each do |match| %>
+    <% @matches.each do |match| %>
       <div class="tableRow">
         <div class="tableCell"><%= match.riot_game_id %></div>
         <div class="tableCell"><%= match.season_id %></div>
@@ -67,15 +95,15 @@
     <% end %>
   </div>
 
-  <% if @page_num != 1 then %>
+  <% if @page_params.page_num != 1 then %>
     <div class="page_button">
-      <%= button_to "Back Page", action: "back_index_page", params: {:page_num => @page_num} %>
+      <%= button_to "Back Page", action: "ascend_descend_next_back", params: {:page_num => (@page_params.page_num - 1), :col_name => @page_params.col_name, :asc => @page_params.asc } %>
     </div>
   <% end %>
 <!--Have a count of records in this table. Don't let user try to go past that count-->
-<% if @record_count - (@page_num * 100) >= 1 then %> 
+<% if @page_params.record_count - (@page_params.page_num * 100) >= 1 then %> 
   <div class="page_button">
-    <%= button_to "Next Page", action: "next_index_page", params: {:page_num => @page_num} %>
+    <%= button_to "Next Page", action: "ascend_descend_next_back", params: {:page_num => (@page_params.page_num + 1), :col_name => @page_params.col_name, :asc => @page_params.asc } %>
   </div>
 <% end %>
 

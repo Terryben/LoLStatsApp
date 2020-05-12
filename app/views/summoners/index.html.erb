@@ -1,3 +1,5 @@
+
+<!-- This is the Summoners Index View-->
 <div class ="head">
   <div class ="h1">Summoners</div>
 </div>
@@ -5,13 +7,25 @@
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
 
 <br>
-<%= form_tag(controller: :summoners, action: :read_summoner_json) do %>
-	<%= label_tag(:api_key, "Summoner API Key: ") %>
-	<%= text_field_tag(:api_key) %>
-	<%= label_tag(:summoner_name, "Summoner_name: ") %>
-	<%= text_field_tag(:summoner_name) %>
-	<%= submit_tag("Pull from Riot API") %>
-<% end %>
+<div class="horizontal_display">
+  <div class="hd1">
+    <%= form_tag(controller: :summoners, action: :read_summoner_json) do %>
+      <%= label_tag(:api_key, "Summoner API Key: ") %>
+      <%= text_field_tag(:api_key) %>
+      <%= label_tag(:summoner_name, "Summoner_name: ") %>
+      <%= text_field_tag(:summoner_name) %>
+      <%= submit_tag("Pull from Riot API") %>
+    <% end %>
+  </div>
+
+  <div class="hd2">
+    <%= form_tag(controller: :summoners, action: :search_for_summoner) do %>
+      <%= label_tag(:summoner_name, "Summoner_name: ") %>
+      <%= text_field_tag(:summoner_name) %>
+      <%= submit_tag("Search for Summoner") %>
+    <% end %>
+  </div>
+</div>
 <br>
 
 <div class="table">

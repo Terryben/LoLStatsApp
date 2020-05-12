@@ -102,3 +102,15 @@ button:hover {
     margin-right: 5px;
     padding-top: 5px;
 }
+.horizontal_display {
+    width: 600px;
+    overflow: hidden;
+}
+
+.hd1 {
+    display: inline-block;
+}
+
+.hd2 {
+    display: inline-block;
+}

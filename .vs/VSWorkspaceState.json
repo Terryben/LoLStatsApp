@@ -3,13 +3,10 @@
     "",
     "\\app",
     "\\app\\assets",
-    "\\app\\controllers",
-    "\\app\\user_created_classes",
+    "\\app\\views",
     "\\app\\views\\matches",
-    "\\app\\views\\summoners",
-    "\\app\\views\\welcome_page",
-    "\\config"
+    "\\db"
   ],
-  "SelectedNode": "\\app\\controllers\\summoners_controller.rb",
+  "SelectedNode": "\\app\\views\\matches\\index.html.erb",
   "PreviewInSolutionExplorer": false
 }

@@ -10,8 +10,9 @@ ID counter
 #Start the server on a forwarded port so that outside users can see it
 rails server -b 192.168.1.120 -p 8000
 
-#people need to go to this website to see your website
+#people need to go to this website to see your website (My IP Address can change)
 http://24.54.128.50:8000
+http://67.217.14.154:8000
 
 #see the sequences created
 \ds
@@ -21,3 +22,16 @@ alter sequence champion_positional_stats_id_seq restart with 1;
 
 #read UTF8 characters in the CMD window
 set client_encoding = 'UTF8';
+
+
+-Full Presentation
+-Show 1 specific match
+-Sort (JS)
+-Buy a trusted domain for website, google gives https for free
+-Put back buttons on top of page
+-Distinguish buttons
+-Move buttons and add details, add buttons to all other pages
+-DB search bar for real time import display
+-Sorts are DB queries
+-Know basic git commands and update every day you work
+-know basic SQL commands

@@ -46,6 +46,15 @@ class SummonersController < ApplicationController
 		acc_id = Summoner.select("account_id").where("summoners.name = '#{sum}'")
 		return acc_id.first.account_id
 	end
+	
+	#user passed the Riot game ID of the match, return it and only it to the user
+	def search_for_summoner
+		@summoners = Summoner.select("*").where("name = #{params[:summoner_name]}")
+		@page_num = 1
+		@sum_count = Summoner.count
+		render 'index'
+	end
+	
 
 	#uses api_fetcher in services to pull needed info from Riot's api to create a summoner in the database. Parses data from two separate API calls then queries to see if the summoner already
 	# exists in the database. If not, it creates it. If it does exist, it updates the summoner with the new up to date data.
