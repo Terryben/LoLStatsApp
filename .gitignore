@@ -27,4 +27,5 @@
 /config/master.key
 
 #Ignore Visual Studio machine specific files
-#/.vs
+.vs
+/.vs
