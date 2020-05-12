@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Champion Positional Stats</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+	  <tr>
+		  <th>Champion</th>
+		  <th>Winrate</th>
+		  <th>Pickrate(WIP)</th>
+		  <th>Banrate(WIP)</th>
+		  <th>Game Version</th>
+		  <th>Ladder Rank</th>
+		  <th>Position</th>
+	  </tr>
+
+    <% @champion_positional_stats.each do |cps| %>
+      <tr>
+        <td><%= cps.name %></td>
+        <td><%= number_to_percentage(((cps.num_of_matches_won / (cps.num_of_matches_lost + cps.num_of_matches_won)) * 100))  %></td>
+        <td><%= cps.pickrate  %></td>
+        <td><%= cps.banrate %></td>
+	<td><%= truncate(cps.game_version, :length => 7) %></td>
+        <td><%= cps.cps_ladder_rank %></td>
+        <td><%= cps.cps_position %></td>
+        <td><%= link_to 'Show', champion_path(cps.champion_id) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Champion Positional Stat', new_champion_positional_stat_path %>

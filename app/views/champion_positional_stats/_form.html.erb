@@ -1,0 +1,17 @@
+<%= form_with(model: champion_positional_stat, local: true) do |form| %>
+  <% if champion_positional_stat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(champion_positional_stat.errors.count, "error") %> prohibited this champion_positional_stat from being saved:</h2>
+
+      <ul>
+      <% champion_positional_stat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

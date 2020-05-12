@@ -1,20 +1,21 @@
-<h1>Welcome To The Stats Page</h1>
-<p>Gaze upon the field of stats before you.</p>
-<%= link_to 'The Stats', controller: 'stats' %>
-<br>
-<%= link_to 'Participant Timeline Dtos', controller: 'participant_timeline_dto' %>
-<br>
-<%= link_to 'Matches', controller: 'matches' %>
-<br>
-<%= link_to 'Team Stats Dtos', controller: 'team_stats_dto' %>
-<br>
-<%= link_to 'Champions', controller: 'champion' %>
-<br>
-<%= link_to 'Participant Stats Dtos', controller: 'participant_stats_dto' %>
-<br>
-<%= link_to 'Participant Dtos', controller: 'participant_dto' %>
-<br>
-<%= link_to 'Player Dtos', controller: 'player_dto' %>
+<div class="head">
+<div class ="h1">Welcome To The LoL Stats App Home Page</div>
+</div>
+
+<div class ="p">Click one of the links below to see statistics regarding League of Legends champions, or summoner information.</div>
+
+<%= tag.button(link_to 'Editable Stats', controller: 'stats')%>  
+<%# tag.button(link_to 'Participant Timeline Dtos', controller: 'participant_timeline_dto') %>
+<%= tag.button(link_to 'Matches', controller: 'matches') %>
+<%# tag.button(link_to 'Team Stats Dtos', controller: 'team_stats_dto') %>
+<%= tag.button(link_to 'Champions', controller: 'champion') %>
+<%# tag.button(link_to 'Participant Stats Dtos', controller: 'participant_stats_dto') %>
+<%# tag.button(link_to 'Participant Dtos', controller: 'participant_dto') %>
+<%# tag.button(link_to 'Player Dtos', controller: 'player_dto') %>
+<%= tag.button(link_to 'Summoners', controller: 'summoners') %>
+<%= tag.button(link_to 'Champion Positional Stats', controller: 'champion_positional_stats') %>
 <br>
 
-<p>This is my welcome page</p>
+
+
+  

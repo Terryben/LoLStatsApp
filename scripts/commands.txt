@@ -1,0 +1,37 @@
+#this will delete all the data in the database. Need to run twice due to
+foreign key constraints.
+\i E:/Ruby/Ruby25-x64/LoL_Stats_App/scripts/delete_readable_data.sql
+
+
+#this will delete all the champions then reinsert them. It will NOT update the
+ID counter
+\i E:/Ruby/Ruby25-x64/LoL_Stats_App/scripts/insert_champions.sql
+
+#Start the server on a forwarded port so that outside users can see it
+rails server -b 192.168.1.120 -p 8000
+
+#people need to go to this website to see your website (My IP Address can change)
+http://24.54.128.50:8000
+http://67.217.14.154:8000
+
+#see the sequences created
+\ds
+
+#reset your sequence, must start at 1, not 0
+alter sequence champion_positional_stats_id_seq restart with 1;
+
+#read UTF8 characters in the CMD window
+set client_encoding = 'UTF8';
+
+
+-Full Presentation
+-Show 1 specific match
+-Sort (JS)
+-Buy a trusted domain for website, google gives https for free
+-Put back buttons on top of page
+-Distinguish buttons
+-Move buttons and add details, add buttons to all other pages
+-DB search bar for real time import display
+-Sorts are DB queries
+-Know basic git commands and update every day you work
+-know basic SQL commands

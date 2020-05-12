@@ -1,0 +1,2 @@
+class ChampionPositionalStat < ApplicationRecord
+end

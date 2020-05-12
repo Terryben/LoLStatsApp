@@ -1,0 +1,19 @@
+
+x = Thread.new {
+	sleep 1
+	puts "Hello"
+	sleep 1
+	puts "Father"
+}
+y = Thread.new {
+	puts "My"
+	sleep 1
+	puts "good"
+	sleep 1
+}
+
+x.join
+y.join
+
+
+

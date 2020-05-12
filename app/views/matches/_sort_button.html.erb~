@@ -1,0 +1,12 @@
+﻿<!-- This is a partial for the ascend and descend sort buttons, as they are using many times per page -->
+
+
+
+
+<%= form_tag(controller: :matches, action: :ascend_descend_next_back) do %>                                                                                                                   	
+	<%= label_tag(:asc_desc, "") %>
+	<%= submit_tag(sub_tag) %>
+	<%= hidden_field_tag(:col_name, col_name) %>
+	<%= hidden_field_tag(:asc, asc) %>
+	<%= hidden_field_tag(:page_num, page_num) %>
+<% end %>

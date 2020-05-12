@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Individual Champion Stats</h1>
+<table>
+	<thead>
+		<tr>
+			<th colspan="6"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr>
+			<th>Name</th>
+			<th>Winrate</th>
+			<th>Ladder Rank</th>
+			<th>Position</th>
+			<th>Banrate</th>
+			<th>Pickrate</th>
+		</tr>
+		<% @champion.each do |champ| %>
+		<tr>
+			<td><%= champ.name %> </td>
+			<td><%= champ.num_of_matches_won / (champ.num_of_matches_won + champ.num_of_matches_lost) %> </td>
+			<td><%= champ.cps_ladder_rank %> </td>
+			<td><%= champ.cps_position %> </td>
+			<td><%= champ.banrate %> </td>
+			<td><%= champ.pickrate %> </td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<br>
+
+
+<%= link_to 'Back', champion_positional_stats_path %>

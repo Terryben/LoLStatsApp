@@ -1,0 +1,36 @@
+<h1> Summoners </h1>
+
+<br>
+<%= form_tag(controller: :summoners, action: :read_summoner_json) do %>
+	<%= label_tag(:api_key, "Summoner API Key: ") %>
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:summoner_name, "Summoner_name: ") %>
+	<%= text_field_tag(:summoner_name) %>
+	<%= submit_tag("Pull from Riot API") %>
+<% end %>
+<br>
+
+<table>
+	<tr>
+		<td> ID </td>
+		<td> Name </td>
+		<td> Summoner_id </td>
+		<td> PUUID </td>
+		<td> Account Id </td>
+		<td> Queue Type </td>
+		<td> Rank </td>
+		<td> Tier </td>
+	</tr>
+		<% @summoners.find_each do |sum| %>
+	<tr>
+			<td> <%= sum.id %> </td>
+			<td> <%= sum.name %> </td>
+			<td> <%= sum.league_id %> </td>
+			<td> <%= sum.puuid %> </td>
+			<td> <%= sum.account_id %> </td>
+			<td> <%= sum.queue_type %> </td>
+			<td> <%= sum.rank %> </td>
+			<td> <%= sum.tier %> </td>
+		<% end %>
+	</tr>
+</table>

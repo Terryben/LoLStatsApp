@@ -1,0 +1,71 @@
+
+<!-- This is the Summoners Index View-->
+<div class ="head">
+  <div class ="h1">Summoners</div>
+</div>
+
+<%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
+
+<br>
+<div class="horizontal_display">
+  <div class="hd1">
+    <%= form_tag(controller: :summoners, action: :read_summoner_json) do %>
+      <%= label_tag(:api_key, "Summoner API Key: ") %>
+      <%= text_field_tag(:api_key) %>
+      <%= label_tag(:summoner_name, "Summoner_name: ") %>
+      <%= text_field_tag(:summoner_name) %>
+      <%= submit_tag("Pull from Riot API") %>
+    <% end %>
+  </div>
+
+  <div class="hd2">
+    <%= form_tag(controller: :summoners, action: :search_for_summoner) do %>
+      <%= label_tag(:summoner_name, "Summoner_name: ") %>
+      <%= text_field_tag(:summoner_name) %>
+      <%= submit_tag("Search for Summoner") %>
+    <% end %>
+  </div>
+</div>
+<br>
+
+<div class="table">
+  <div class="tableHead">
+	  <div class="tableRow">
+		  <div class="tableCell"><strong> ID </strong></div>
+      <div class="tableCell"><strong> Name </strong></div>
+      <div class="tableCell"><strong> Queue Type </strong></div>
+      <div class="tableCell"><strong> Rank </strong></div>
+      <div class="tableCell"><strong> Tier </strong></div>
+      <div class="tableCell"><strong> Summoner_id </strong></div>
+      <div class="tableCell"><strong> PUUID </strong></div>
+      <div class="tableCell"><strong> Account Id </strong></div>
+		</div>
+	</div>
+	<% @summoners.find_each do |sum| %>
+	<div class="tableRow">
+    <div class="tableCell"> <%= sum.id %> </div>
+    <div class="tableCell"> <%= sum.name %> </div>
+    <div class="tableCell"> <%= sum.queue_type %> </div>
+    <div class="tableCell"> <%= sum.rank %> </div>
+    <div class="tableCell"> <%= sum.tier %> </div>
+    <div class="tableCell"> <%= sum.league_id %> </div>
+    <div class="tableCell"> <%= sum.puuid %> </div>
+    <div class="tableCell"> <%= sum.account_id %> </div>	
+	</div>
+  <% end %>
+</div>
+
+<!--If you are on page one, don't let the user go back another page. Page zero doesn't exist.-->  
+  
+<% if @page_num != 1 then %>  
+  <div class="page_button">
+    <%= button_to "Back Page", action: "back_index_page", params: {:page_num => @page_num} %>
+  </div>    
+<% end %>
+
+<!--Have a count of records in this table. Don't let user try to go past that count-->
+<% if @sum_count - (@page_num * 100) >= 1 then %> 
+  <div class="page_button">
+   <%= button_to "Next Page", action: "next_index_page", params: {:page_num => @page_num} %>
+  </div>
+<% end %>

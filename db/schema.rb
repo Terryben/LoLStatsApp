@@ -10,23 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_20_195336) do
+ActiveRecord::Schema.define(version: 2020_01_05_171122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
 
   create_table "champion_positional_stats", force: :cascade do |t|
-    t.decimal "winrate"
     t.decimal "pickrate"
     t.decimal "banrate"
     t.decimal "num_of_matches_won"
     t.decimal "num_of_matches_lost"
     t.string "game_version"
-    t.integer "cps_ladder_rank"
-    t.integer "cps_position"
-    t.bigint "champions_id"
-    t.index ["champions_id"], name: "index_champion_positional_stats_on_champions_id"
+    t.string "cps_ladder_rank"
+    t.string "cps_position"
+    t.bigint "champion_id"
+    t.index ["champion_id"], name: "index_champion_positional_stats_on_champion_id"
   end
 
   create_table "champions", force: :cascade do |t|
@@ -34,6 +33,24 @@ ActiveRecord::Schema.define(version: 2019_06_20_195336) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.string "title", limit: 50
+    t.integer "num_bronze_games"
+    t.integer "num_iron_games"
+    t.integer "num_silver_games"
+    t.integer "num_gold_games"
+    t.integer "num_platinum_games"
+    t.integer "num_diamond_games"
+    t.integer "num_master_games"
+    t.integer "num_grandmaster_games"
+    t.integer "num_challenger_games"
+    t.decimal "iron_winrate"
+    t.decimal "bronze_winrate"
+    t.decimal "silver_winrate"
+    t.decimal "gold_winrate"
+    t.decimal "platinum_winrate"
+    t.decimal "diamond_winrate"
+    t.decimal "master_winrate"
+    t.decimal "grandmaster_winrate"
+    t.decimal "challenger_winrate"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -48,8 +65,9 @@ ActiveRecord::Schema.define(version: 2019_06_20_195336) do
     t.string "game_type"
     t.decimal "game_duration"
     t.decimal "game_creation"
-    t.integer "ladder_rank_of_match"
+    t.string "ladder_rank_of_match"
     t.decimal "riot_game_id"
+    t.boolean "analyzed"
   end
 
   create_table "participant_dtos", force: :cascade do |t|
@@ -245,11 +263,14 @@ ActiveRecord::Schema.define(version: 2019_06_20_195336) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.string "summoner_id"
-    t.decimal "summoner_level"
+    t.decimal "level"
     t.string "puuid"
     t.integer "profile_icon_id"
-    t.string "account_id", limit: 50
+    t.string "account_id"
+    t.string "queue_type"
+    t.string "rank"
+    t.string "tier"
+    t.string "league_id"
   end
 
   create_table "team_bans_dtos", force: :cascade do |t|
@@ -269,7 +290,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_195336) do
     t.boolean "first_baron"
     t.integer "rift_herald_kills"
     t.boolean "first_blood"
-    t.boolean "team_id"
+    t.integer "team_id"
     t.boolean "first_tower"
     t.integer "vilemaw_kills"
     t.integer "inhibitor_kills"
@@ -283,7 +304,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_195336) do
     t.index ["match_id"], name: "index_team_stats_dtos_on_match_id"
   end
 
-  add_foreign_key "champion_positional_stats", "champions", column: "champions_id"
+  add_foreign_key "champion_positional_stats", "champions"
   add_foreign_key "participant_dtos", "matches"
   add_foreign_key "participant_stats_dtos", "participant_dtos"
   add_foreign_key "player_dtos", "matches"

@@ -13,3 +13,104 @@
  *= require_tree .
  *= require_self
  */
+
+
+button {
+    background-color: #d7cfcf;
+    border: 1px solid #660000;
+    border-radius: 5px;
+    color: white;
+    margin-right: 10px;
+    padding: 5px 5px 5px 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+button:hover {
+        background-color: #000000;
+        color: white;
+}
+/*a {
+    font: bold 15px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+}*/
+.h1 {color: white;
+    text-align: center;
+    font-size: 50px;
+}
+
+.head {background-color: #4071a1;
+       height: 70px;
+       vertical-align: middle;
+       padding-top: 30px;
+}
+
+.entirePage {
+
+}
+
+.table {
+    display: table;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    border-collapse: collapse;
+    width: auto;
+    table-layout: fixed;
+
+}
+
+.tableRow {
+    display: table-row;
+    padding: 8px;
+}
+.tableRow:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tableRow:hover {
+    background-color: #ddd;
+}
+
+.tableCell {
+    display: table-cell;
+    border: 1px solid #ddd;
+    padding: 8px;
+    /*width: 50px;*/
+}
+
+.tableHead {
+    display: table-header-group;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4a5576;
+    color: white;
+}
+
+.submissionForm {
+    float: right;
+    padding-right: 60px;
+}
+
+.page_button {
+    display: inline-block;
+    margin-right: 5px;
+    padding-top: 5px;
+}
+.horizontal_display {
+    width: 600px;
+    overflow: hidden;
+}
+
+.hd1 {
+    display: inline-block;
+}
+
+.hd2 {
+    display: inline-block;
+}

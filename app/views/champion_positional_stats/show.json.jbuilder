@@ -1,0 +1,1 @@
+json.partial! "champion_positional_stats/champion_positional_stat", champion_positional_stat: @champion_positional_stat

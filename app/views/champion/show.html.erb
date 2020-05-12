@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<div class="head">
+  <div class="h1">Individual Champion Stats</div>
+</div>
+<div class="table">
+	<div class="tableHead">
+		<div class="tableRow">
+      <div class="tableCell">Name</div>
+      <div class="tableCell">Winrate</div>
+      <div class="tableCell">Ladder Rank</div>
+      <div class="tableCell">Position</div>
+      <div class="tableCell">Banrate</div>
+      <div class="tableCell">Pickrate</div>
+		</div>
+	</div>
+		<% @champion.each do |champ| %>
+		<div class="tableRow">
+			<div class="tableCell"><%= champ.name %> </div>
+			<% if !champ.num_of_matches_won.nil? then %>
+				<div class="tableCell"><%= '%.2f' % (champ.num_of_matches_won / (champ.num_of_matches_won + champ.num_of_matches_lost)) %> </div>
+        <div class="tableCell"><%= champ.cps_ladder_rank %> </div>
+        <div class="tableCell"><%= champ.cps_position %> </div>
+        <div class="tableCell"><%= champ.banrate  / (@total_matches[0] * 10) %> </div>
+        <div class="tableCell"><%= champ.pickrate  / @total_matches[0] %> </div>
+			<% else %>
+        <div class="tableCell">No Data</div>
+        <div class="tableCell">No Data</div>
+        <div class="tableCell">No Data</div>
+        <div class="tableCell">No Data</div>
+        <div class="tableCell">No Data</div>
+			<% end %>
+		</div>
+		<% end %>
+</div>
+<br>
+
+<% if params[:ret] != "true" then %>
+  <%= link_to 'Back', '/champion' %>
+<% else %>
+  <%= link_to 'Back', '/champion_positional_stats' %>
+<% end %>

@@ -1,50 +1,50 @@
-<table>
-	<tr>
-		<td>Season Id</td>
-		<td> Queue Id </td>
-		<td> Game Version </td>
-		<td> Platform Id </td>
-		<td> Game Mode </td>
-		<td> Map Id </td>
-		<td> Game Type </td>
-		<td> Game Duration </td>
-		<td> Game Creation </td>
-		<td> ID </td>
-		<td> Riot Games Id </td>
-		<td> PD - Current Platform Id </td>
-		<td> PD - Summoner Name </td>
-		<td> PD - Match History URI </td>
-		<td> PD - Platform Id </td>
-		<td> PD - Current Account Id </td>
-		<td> PD - Participant Dto ID </td>
-		<td> PD - Profile Icon </td>
-		<td> PD - Matches Id </td>
-		<td> PD - Summoner Id </td>
-		<td> PD - Account Id </td>
-	</tr>
+<div class="head">
+  <div class="h1">Viewing Match</div>
+</div>
+<br></br>
+<div class="table">
+  <div class="tableHead">
+    <div class ="tableRow">
+      <div class ="tableCell">Season Id</div>
+      <div class ="tableCell"> Queue Id </div>
+      <div class ="tableCell"> Game Version </div>
+      <div class ="tableCell"> Platform Id </div>
+      <div class ="tableCell"> Game Mode </div>
+      <div class ="tableCell"> Map Id </div>
+      <div class ="tableCell"> Game Type </div>
+      <div class ="tableCell"> Game Duration </div>
+      <div class ="tableCell"> Game Creation </div>
+      <div class ="tableCell"> Riot Games Id </div>
+      <div class ="tableCell"> PD - Current Platform Id </div>
+      <div class ="tableCell"> PD - Summoner Name </div>
+      <div class ="tableCell"> PD - Match History URI </div>
+      <div class ="tableCell"> PD - Platform Id </div>
+      <div class ="tableCell"> PD - Current Account Id </div>
+      <div class ="tableCell"> PD - Participant Dto ID </div>
+      <div class ="tableCell"> C - Name </div>
+    </div>
+  </div>
 	<% @match.each do |match| %>
-	<tr>
-		<td><%= match.season_id %></td>
-		<td><%= match.queue_id %></td>
-		<td><%= match.game_version %></td>
-		<td><%= match.platform_id %></td>
-		<td><%= match.game_mode %></td>
-		<td><%= match.map_id %></td>
-		<td><%= match.game_type %></td>
-		<td><%= match.game_duration %></td>
-		<td><%= match.game_creation %></td>
-		<td><%= match.id %></td>
-		<td><%= match.riot_game_id %></td>
-		<td><%= match.current_platform_id %></td>
-		<td><%= match.summoner_name %></td>
-		<td><%= match.match_history_uri %></td>
-		<td><%= match.platform_id %></td>
-		<td><%= match.current_account_id %></td>
-		<td><%= match.participant_dto_id %></td>
-		<td><%= match.profile_icon %></td>
-		<td><%= match.id %></td>
-		<td><%= match.summoner_id %></td>
-		<td><%= match.account_id %></td>
-	</tr>
+	<div class ="tableRow">
+		<div class ="tableCell"><%= match.season_id %></div>
+		<div class ="tableCell"><%= match.queue_id %></div>
+		<div class ="tableCell"><%= match.game_version %></div>
+		<div class ="tableCell"><%= match.platform_id %></div>
+		<div class ="tableCell"><%= match.game_mode %></div>
+		<div class ="tableCell"><%= match.map_id %></div>
+		<div class ="tableCell"><%= match.game_type %></div>
+		<div class ="tableCell"><%= match.game_duration %></div>
+		<div class ="tableCell"><%= match.game_creation %></div>
+		<div class ="tableCell"><%= match.riot_game_id %></div>
+		<div class ="tableCell"><%= match.current_platform_id %></div> 
+		<div class ="tableCell"><%= match.summoner_name %></div> 
+		<div class ="tableCell"><%= match.match_history_uri %></div> 
+		<div class ="tableCell"><%= match.platform_id %></div> 
+		<div class ="tableCell"><%= match.current_account_id %></div> 
+		<div class ="tableCell"><%= match.participant_dto_id %></div> 
+		<div class ="tableCell"><%= match.name %></div> 
+	</div>
 	<% end %>
-</table>
+</div>
+
+<%= link_to 'Back', matches_path %>

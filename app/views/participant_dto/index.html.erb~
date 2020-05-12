@@ -17,16 +17,16 @@
 	</tr>
 	<% @participant_dtos.each do |pd| %>
 	<tr>
-		<td><% pd.id %></td>
-		<td><% pd.team_id %></td>
-		<td><% pd.spell_1_id %></td>
-		<td><% pd.spell_2_id %></td>
-		<td><% pd.highest_achieved_season_tier %></td>
-		<td><% pd.created_at %></td>
-		<td><% pd.updated_at %></td>
-		<td><% pd.matches_id %></td>
-		<td><% pd.participant_id %></td>
-		<td><% pd.champion_id %></td>
+		<td><%= pd.id %></td>
+		<td><%= pd.team_id %></td>
+		<td><%= pd.spell_1_id %></td>
+		<td><%= pd.spell_2_id %></td>
+		<td><%= pd.highest_achieved_season_tier %></td>
+		<td><%= pd.created_at %></td>
+		<td><%= pd.updated_at %></td>
+		<td><%= pd.matches_id %></td>
+		<td><%= pd.participant_id %></td>
+		<td><%= pd.champion_id %></td>
 	</tr>
 <% end %>
 </table>

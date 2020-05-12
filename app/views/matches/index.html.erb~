@@ -1,12 +1,32 @@
 <h1>Listing Matches</h1>
+<br>
 
-<%= button_to "Read JSON File", matches_read_json_file_path, method: :post %>
+
+<%= form_tag(controller: :matches, action: :get_running_thread_count) do %>                                                                                                                   	
+
+<%= form_tag(controller: :matches, action: :read_json_file) do %>                                                                                                                   	
+	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:match_id, "Match Id: ") %>
+	<%= text_field_tag(:match_id) %>
+	<%= submit_tag("Pull Match from Riot API") %>
+<% end %>
+<br>
+<%= form_tag(controller: :matches, action: :get_matchlist_from_api) do %>                                                                                                                   	
+	<%= label_tag(:api_key, "Summoner API Key: ") %>                                                                                                                                  
+	<%= text_field_tag(:api_key) %>
+	<%= label_tag(:match_id, "Match Id: ") %>
+	<%= text_field_tag(:match_id) %>
+	<%= submit_tag("Pull matchlist from Riot API") %>
+<% end %>                                                                                                                                                                              
+<br>       
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
+<br>
+
+
 <table>
 	<tr>
 		<th>Game Id</th>
-		<th>Created At</th>
-		<th>Updated At</th>
 		<th>Season Id</th>
 		<th>Queue Id</th>
 		<th>Game Version</th>
@@ -16,14 +36,13 @@
 		<th>Game Type</th>
 		<th>Game Duration</th>
 		<th>Game Creation</th>
+		<th>Rank of Game</th>
 		<th></th>
 	</tr>
 
-	<% @matches.each do |match| %>
+	<% @matches.find_each do |match| %>
 		<tr>
 			<td><%= match.riot_game_id %></td>
-			<td><%= match.created_at %></td>
-			<td><%= match.updated_at %></td>
 			<td><%= match.season_id %></td>
 			<td><%= match.queue_id %></td>
 			<td><%= match.game_version %></td>
@@ -33,6 +52,7 @@
 			<td><%= match.game_type %></td>
 			<td><%= match.game_duration %></td>
 			<td><%= match.game_creation %></td>
+			<td><%= match.ladder_rank_of_match %></td>
 			<td><%= link_to 'Show', match_path(match) %></td>
 		</tr>
 	<% end %>

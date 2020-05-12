@@ -1,0 +1,21 @@
+participant-dtos:
+	champion_id
+	match_id
+	team_id
+
+matches:
+	ladder_rank_of_match
+	game_version
+
+participant_timeline_dtos
+	role
+	participant_dto_id
+
+team_bans_dto
+	champion_id
+	team_stats_dto_id
+
+team_stats_dtos
+	win
+	match_id
+
