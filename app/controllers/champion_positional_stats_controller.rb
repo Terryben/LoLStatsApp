@@ -6,50 +6,90 @@ class ChampionPositionalStatsController < ApplicationController
   # GET /champion_positional_stats
   # GET /champion_positional_stats.json
   def index
-	  @champion_positional_stats = ChampionPositionalStat.select("*").joins(:champion).where("cps_position != 'NONE'").where("cps_position != '0'").where("cps_ladder_rank = 'PLATINUM'")
-	  @page_params = Pp.new(1, ChampionPositionalStat.count, "asc", "id", Match.count, "", "PLATINUM")	
+	  #@champion_positional_stats = ChampionPositionalStat.select("*").joins(:champion).where("cps_position != 'NONE'").where("cps_position != '0'").where("cps_ladder_rank = 'PLATINUM'")
+	  @page_params = Pp.new(1, ChampionPositionalStat.count, "asc", "id", Match.count, "ALL", "PLATINUM")
+
+	  #need a case statement to avoid dividing by zero
+	  begin
+	  @champion_positional_stats = ChampionPositionalStat.joins(:champion).select("case when (num_of_matches_lost + num_of_matches_won) <> 0 " \
+																					"then num_of_matches_won / (num_of_matches_lost + num_of_matches_won) " \
+																				  "else 0 end as winrate, " \
+																				  "pickrate / #{@page_params.num_matches} as pickrate, " \
+																				  "banrate / #{@page_params.num_matches} as banrate, " \
+																				  "game_version, cps_ladder_rank, cps_position, champions.name, champion_id") \
+																				  .where("cps_position != 'NONE'").where("cps_position != '0'").where("cps_ladder_rank = 'PLATINUM'")
+	  
+	  rescue Exception => ex
+			logger.error(ex.message)
+			flash[:notice] = "Something went wrong, returning you to the index page."
+			redirect_to(:controller => 'welcome_page', :action => 'index')
+	  end
   end
 
-  #filter sort
+
   def filter_sort
+		#params it can take: col_name, page_num, asc, ladder_rank, position
 
 		#Create a set with all the match columns in it. Then compare the user variables to the set. If we get a match then you can do the query on the returned set values
 		#to prevent any malicious code from getting in
-		pos_set = Set["TOP", "JUNGLE", "MID", "BOTTOM", "SUPPORT"]
+		pos_set = Set["ALL", "TOP", "JUNGLE", "MID", "BOTTOM", "SUPPORT"]
 		rank_set = Set["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLENGER"]
 		
 		puts "The col name is #{params[:col_name]}"
 
-		@page_params = Pp.new(params[:page_num].to_i, ChampionPositionalStat.count, params[:asc], params[:col_name])
+		#create the @page_params and filter out any unwanted characters
+		@page_params = Pp.new(params[:page_num].to_i, ChampionPositionalStat.count, params[:asc].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), \
+							  params[:col_name].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), Match.count, params[:position].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), \
+							  params[:ladder_rank].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''),)
 
+#=begin
 
-		if !match_col_set.include?(@page_params.col_name) then 
-			#puts "NOT EQUALS #{params[:col_name]}"
-			flash[:error] = "Invalid column parameter chosen."
-			redirect_to action: "index"	
-		else
 			#if the column name is the same as last time, swap the order of the table
-			
-			if @page_params.asc == "asc" then
-				@asc = "asc"
-			else
-				@asc = "desc"
-			end
-			#set col name to the new column
-			@temp_page_num = @page_params[:page_num].to_i
-			@page_params[:record_count] = Match.count
-			puts @asc.nil?
-			puts "#{@asc}"
-			puts "WHAT DOES THIS RETURN?"
-			puts Arel.sql("#{params[:col_name]} #{@asc}")
-			@matches = Match.select("*").order(Arel.sql("#{params[:col_name]} #{@asc}")).limit(100).offset((@temp_page_num * 100)-100)
-			#USE RAW SQL
-
-			render 'index'
+		if @page_params.asc == "asc" then
+			@asc = "asc"
+		else
+			@asc = "desc"
 		end
+		#id is ambiguous since we are joining tables for the query and they both us ID as a column.
+		if @page_params.col_name == "id" or @page_params.col_name == "champion_positional_statsid" then
+			@page_params.col_name = "champion_positional_stats.id"
+		end
+		#set col name to the new column
+		#puts @asc.nil?
+		#puts "#{@page_params.position}"
+		#puts "WHAT DOES THIS RETURN?"
+		#puts Arel.sql("#{@page_params.col_name} #{@asc}")
+
+		#return all positions except the empty positions for games like ARAM
+		#catch exceptions
+		begin
+		if @page_params.position == "ALL" then
+			@champion_positional_stats = ChampionPositionalStat.select("case when (num_of_matches_lost + num_of_matches_won) <> 0 " \
+																					"then num_of_matches_won / (num_of_matches_lost + num_of_matches_won) " \
+																				  "else 0 end as winrate, " \
+																				  "pickrate / #{@page_params.num_matches} as pickrate, " \
+																				  "banrate / #{@page_params.num_matches} as banrate, " \
+																				  "game_version, cps_ladder_rank, cps_position, champions.name, champion_id") \
+																				  .joins(:champion).where("cps_ladder_rank = '#{@page_params.rank}'").where("cps_position != 'NONE'").where("cps_position != '0'").order(Arel.sql("#{@page_params.col_name} #{@asc}"))
+		else
+			@champion_positional_stats = ChampionPositionalStat.select("case when (num_of_matches_lost + num_of_matches_won) <> 0 " \
+																					"then num_of_matches_won / (num_of_matches_lost + num_of_matches_won) " \
+																				  "else 0 end as winrate, " \
+																				  "pickrate / #{@page_params.num_matches} as pickrate, " \
+																				  "banrate / #{@page_params.num_matches} as banrate, " \
+																				  "game_version, cps_ladder_rank, cps_position, champions.name, champion_id") \
+																				  .joins(:champion).where("cps_ladder_rank = '#{@page_params.rank}'").where("cps_position = '#{@page_params.position}'").order(Arel.sql("#{@page_params.col_name} #{@asc}")) 
+																				  
+																				  #.limit(100).offset((@page_params.page_num * 100)-100)
+		end
+		rescue Exception => ex
+			logger.error(ex.message)
+			flash[:notice] = "Something went wrong, returning you to the index page."
+			redirect_to(:action => 'index')
+		end
+		render 'index'
+#=end
 	end
-
-
 
 
 
@@ -110,7 +150,7 @@ class ChampionPositionalStatsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_champion_positional_stat
-      @champion_positional_stat = ChampionPositionalStat.find(params[:id])
+      @champion_positional_stat = ChampionPositionalStat.find(params[:id].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''))
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

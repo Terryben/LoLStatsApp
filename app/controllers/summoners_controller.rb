@@ -18,10 +18,10 @@ class SummonersController < ApplicationController
 
 		#Create a set with all the summoner columns in it. Then compare the user variables to the set. If we get a match then you can do the query on the returned set values
 		#to prevent any malicious code from getting in
-		sum_col_set = Set["id", "name", "queue_type", "rank", "tier", "level", "game_duration", "game_creation"]
+		sum_col_set = Set["id", "name", "queue_type", "rank", "tier", "level", "account_id"]
 		puts "The col name is #{params[:col_name]}"
 
-		@page_params = Pp.new(params[:page_num].to_i, Summoner.count, params[:asc], params[:col_name])
+		@page_params = Pp.new(params[:page_num].to_i, Summoner.count, params[:asc].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), params[:col_name].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''))
 
 
 		if !sum_col_set.include?(@page_params.col_name) then 

@@ -4,36 +4,58 @@
 </div>
 
 <%= link_to 'Back To Welcome Page', controller: 'welcome_page' %>
-
-
-<%= form_tag(controller: :champion_positional_stats, action: :filter_sort) do %>
-  <%= select_tag "Ladder Rank", raw("<option>IRON</option><option>BRONZE</option><option>SILVER</option><option>GOLD</option><option>PLATINUM</option><option>DIAMOND</option><option>MASTER</option><option>GRANDMASTER</option><option>CHALLENGER</option>") %>
-  <%= select_tag "Position", raw("<option>TOP</option><option>JUNGLE</option><option>MID</option><option>BOTTOM</option><option>SUPPORT</option>") %>
-  <%= hidden_field_tag(page_params: @page_params)
-  <%= submit_tag("Apply Filter") %>
-<% end %>
-
+<br>
+<div class="submissionForm">
+  <div class="horizontal_display">
+      <div class="hd1">
+        <%= form_tag(controller: :champion_positional_stats, action: :filter_sort) do %>
+        <%= select_tag "ladder_rank", raw("<option>IRON</option><option>BRONZE</option><option>SILVER</option><option>GOLD</option><option>PLATINUM</option><option>DIAMOND</option><option>MASTER</option><option>GRANDMASTER</option><option>CHALLENGER</option>") %>
+        <%= select_tag "position", raw("<option>ALL</option><option>TOP</option><option>JUNGLE</option><option>MID</option><option>BOTTOM</option><option>SUPPORT</option>") %>
+        <%= hidden_field_tag(:col_name, @page_params.col_name) %>
+        <%= hidden_field_tag(:asc, @page_params.asc) %>
+        <%= hidden_field_tag(:page_num, @page_params.page_num) %>
+        <%= submit_tag("Apply Filter") %>
+        <% end %>
+  
+        <%= tag.button(link_to 'Clear Filter', controller: 'champion_positional_stats') %>
+      </div>
+    </div>
+</div>
 <div class="table">
   <div class="tableHead">
 	  <div class="tableRow">
-		  <div class="tableCell"><stong>Champion</stong></div>
+		  <div class="tableCell"><stong>Champion <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "name", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                                             <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "name", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%> 
+                       </stong></div>
       <div class="tableCell">
-        <stong>Winrate</stong>
+        <stong>Winrate <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "winrate", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "winrate", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+        </stong>
       </div>
       <div class="tableCell">
-        <stong>Pickrate(WIP)</stong>
+        <stong>Pickrate <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "pickrate", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "pickrate", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                         
+                       </stong>
       </div>
       <div class="tableCell">
-        <stong>Banrate(WIP)</stong>
+        <stong>Banrate <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "banrate", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "banrate", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%></stong>
       </div>
       <div class="tableCell">
-        <stong>Game Version</stong>
+        <stong>Game Version <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "game_version", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "game_version", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       </stong>
       </div>
       <div class="tableCell">
-        <stong>Ladder Rank</stong>
+        <stong>Ladder Rank <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "ladder_rank", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "ladder_rank", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       </stong>
       </div>
       <div class="tableCell">
-        <stong>Position</stong>
+        <stong>Position <%= render partial: "sort_button", locals: {sub_tag: "↑", col_name: "cps_position", asc: "asc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       <%= render partial: "sort_button", locals: {sub_tag: "↓", col_name: "cps_position", asc: "desc", page_num: 1, position: @page_params.position, ladder_rank: @page_params.rank}%>
+                       </stong>
       </div>
       <div class="tableCell">
         <stong>Link</stong>
@@ -43,9 +65,9 @@
     <% @champion_positional_stats.each do |cps| %>
       <div class="tableRow">
         <div class="tableCell"><%= cps.name %></div>
-        <div class="tableCell"><%= number_to_percentage(((cps.num_of_matches_won / (cps.num_of_matches_lost + cps.num_of_matches_won)) * 100))  %></div>
-        <div class="tableCell"><%= number_to_percentage((cps.pickrate/@page_params.num_matches) * 100)  %></div>
-        <div class="tableCell"><%= number_to_percentage((cps.banrate/@page_params.num_matches) * 100) %></div>
+        <div class="tableCell"><%= number_to_percentage(cps.winrate * 100)  %></div>
+        <div class="tableCell"><%= number_to_percentage(cps.pickrate * 100)  %></div>
+        <div class="tableCell"><%= number_to_percentage(cps.banrate * 100) %></div>
         <div class="tableCell"><%= truncate(cps.game_version, :length => 7) %></div>
         <div class="tableCell"><%= cps.cps_ladder_rank %></div>
         <div class="tableCell"><%= cps.cps_position %></div>

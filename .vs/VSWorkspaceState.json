@@ -4,9 +4,8 @@
     "\\app",
     "\\app\\assets",
     "\\app\\views",
-    "\\app\\views\\matches",
-    "\\db"
+    "\\app\\views\\summoners"
   ],
-  "SelectedNode": "\\app\\views\\matches\\index.html.erb",
+  "SelectedNode": "\\app\\views\\summoners\\_next_back_return.html.erb",
   "PreviewInSolutionExplorer": false
 }

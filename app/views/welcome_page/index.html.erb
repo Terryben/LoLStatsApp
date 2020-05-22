@@ -2,20 +2,26 @@
 <div class ="h1">Welcome To The LoL Stats App Home Page</div>
 </div>
 
-<div class ="p">Click one of the links below to see statistics regarding League of Legends champions, or summoner information.</div>
 
-<%= tag.button(link_to 'Editable Stats', controller: 'stats')%>  
-<%# tag.button(link_to 'Participant Timeline Dtos', controller: 'participant_timeline_dto') %>
-<%= tag.button(link_to 'Matches', controller: 'matches') %>
-<%# tag.button(link_to 'Team Stats Dtos', controller: 'team_stats_dto') %>
-<%= tag.button(link_to 'Champions', controller: 'champion') %>
-<%# tag.button(link_to 'Participant Stats Dtos', controller: 'participant_stats_dto') %>
-<%# tag.button(link_to 'Participant Dtos', controller: 'participant_dto') %>
-<%# tag.button(link_to 'Player Dtos', controller: 'player_dto') %>
-<%= tag.button(link_to 'Summoners', controller: 'summoners') %>
-<%= tag.button(link_to 'Champion Positional Stats', controller: 'champion_positional_stats') %>
+
+<div class ="text_box">Click one of the links below to see statistics regarding League of Legends champions, or summoner information.</div>
+
+<div class ="left_side_link"><%= tag.button(link_to 'Editable Stats', controller: 'stats')%> </div>
+<div class ="text_box">Editable Stats is a basic page that allows a user to enter, edit, or delete values stored in the database. These stats are not related to the
+League of Legends statistics, and are only here to show functionality.</div>
+<div class ="left_side_link"><%# tag.button(link_to 'Participant Timeline Dtos', controller: 'participant_timeline_dto') %></div>
+<div class ="left_side_link"><%= tag.button(link_to 'Matches', controller: 'matches') %></div>
+<div class ="text_box">The Matches page displays information regarding individual games played in League of Legends. You can see info like what players and champions were in the game, and what the game rank was.</div>
+<div class ="left_side_link"><%# tag.button(link_to 'Team Stats Dtos', controller: 'team_stats_dto') %></div>
+<div class ="left_side_link"><%= tag.button(link_to 'Champions', controller: 'champion') %></div>
+<div class ="text_box">See all the individual champions in League of Legends, and click on them to see statistics about each one.</div>
+<div class ="left_side_link"><%# tag.button(link_to 'Participant Stats Dtos', controller: 'participant_stats_dto') %></div>
+<div class ="left_side_link"><%# tag.button(link_to 'Participant Dtos', controller: 'participant_dto') %></div>
+<div class ="left_side_link"><%# tag.button(link_to 'Player Dtos', controller: 'player_dto') %></div>
+<div class ="left_side_link"><%= tag.button(link_to 'Summoners', controller: 'summoners') %></div>
+<div class ="text_box">Summoners are the players within LoL. This page will give a list of players, their rank, and level.</div>
+<div class ="left_side_link"><%= tag.button(link_to 'Champion Positional Stats', controller: 'champion_positional_stats') %></div>
+<div class ="text_box">An alternate route to reach champion statistics, see champion stats as a group.</div>
 <br>
 
-
-
-  
+ 

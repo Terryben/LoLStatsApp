@@ -114,3 +114,13 @@ button:hover {
 .hd2 {
     display: inline-block;
 }
+
+.left_side_link {
+    position: relative;
+    
+}
+.text_box {
+    position: relative;
+    font-size: medium;
+    
+}
