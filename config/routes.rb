@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+ 
+  root 'welcome_page#index'
+  
+  
   resources :champion_positional_stats
   get 'welcome_page/index'
 
@@ -16,7 +20,7 @@ Rails.application.routes.draw do
   post 'matches/next_index_page'
   post 'matches/back_index_page'
   post 'champion_positional_stats/filter_sort'
-  root 'welcome_page#index'
+  get 'champion_positional_stats/index'
 
   resources :stats
   resources :matches
@@ -27,7 +31,7 @@ Rails.application.routes.draw do
   resources :participant_dto
   resources :player_dto
   resources :summoners
-  resources :champion_positional_stats
+  resources :champion_positional_stats, only: [:index, :filter_sort]
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

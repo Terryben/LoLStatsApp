@@ -12,43 +12,35 @@ class MatchesController < ApplicationController
 
 	def index
 		@matches = Match.select("*").where("id < 100")
-		@page_params = Pp.new(1, Match.count, "asc", "id")
+		@page_params = Pp.new(1, Match.count, "asc", "riot_game_id")
 	end
 	
 	def show
+		begin
 		@match = Match.select("*").joins([participant_dtos: :champion], :player_dtos).where("matches.id = ?", params[:id]).where("participant_dtos.participant_id = player_dtos.participant_dto_id").sort #[participant_dtos: :champion]
+		rescue Exception => ex
+			logger.error(ex.message)
+			flash[:notice] = "Something went wrong, returning you to the index page."
+			redirect_to(:action => 'index')
+		end
 	end
 
-	#Move to the next page on the index view. 100 records at a time
-	#def next_index_page
-		#TO DO: ADD in parameters that you are sorted on. Ascending, decening, or rank of game/game mode
-		#@page_num = params[:page_num].to_i + 1
-		#@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
-		#@record_count = Match.count
-		#render 'index'
-		
-	#end
-
-	#def back_index_page
-		#TO DO: ADD in parameters that you are sorted on. Ascending, decening, or rank of game/game mode
-		#@page_num = params[:page_num].to_i - 1
-		#if @page_num < 1 then
-			#@page_num = 1
-		#end
-		#@record_count = Match.count
-		#@matches = Match.select("*").where("id < (#{@page_num} * 100)").where("id > ((#{@page_num} * 100)-100)")
-		#render 'index'
-	#end
 	
 	#user passed the Riot game ID of the match, return it and only it to the user
 	def search_for_match
-		@matches = Match.select("*").where("riot_game_id = #{params[:match_id]}")
+		begin
+		pmi = params[:match_id].to_s.to_i
+		@matches = Match.select("*").where("riot_game_id = #{pmi}")
 		@page_params = Pp.new(1, Match.count, "asc", "id")
 		render 'index'
+		rescue Exception => ex
+			logger.error(ex.message)
+			flash[:notice] = "Something went wrong, returning you to the index page."
+			redirect_to(:action => 'index')
+		end
 	end
 	
 	#only do ascending and decending queries, and only on one field. Will not be able to sort by selected values on tables, and will not be able to do more than one ascending or decending query
-	#if people want these I will have to pull custom reports for them
 	def ascend_descend_next_back
 
 		#Create a set with all the match columns in it. Then compare the user variables to the set. If we get a match then you can do the query on the returned set values
@@ -58,7 +50,7 @@ class MatchesController < ApplicationController
 
 		@page_params = Pp.new(params[:page_num].to_i, Match.count, params[:asc], params[:col_name])
 
-
+		begin
 		if !match_col_set.include?(@page_params.col_name) then 
 			#puts "NOT EQUALS #{params[:col_name]}"
 			flash[:error] = "Invalid column parameter chosen."
@@ -74,25 +66,20 @@ class MatchesController < ApplicationController
 			#set col name to the new column
 			@temp_page_num = @page_params[:page_num].to_i
 			@page_params[:record_count] = Match.count
-			puts @asc.nil?
-			puts "#{@asc}"
-			puts "WHAT DOES THIS RETURN?"
-			puts Arel.sql("#{params[:col_name]} #{@asc}")
 			@matches = Match.select("*").order(Arel.sql("#{params[:col_name]} #{@asc}")).limit(100).offset((@temp_page_num * 100)-100)
 			#USE RAW SQL
 
 			render 'index'
 		end
+		#generic exception 
+		rescue Exception => ex
+			logger.error(ex.message)
+			flash[:notice] = "Something went wrong, returning you to the index page."
+			redirect_to(:action => 'index')
+		end
 	end
 
-	#button to select rank of game
 
-
-	#button to sort by game mode
-	def sort_by_game_rank
-	end
-	
-	
 	
 	def new
 	end
@@ -102,6 +89,7 @@ class MatchesController < ApplicationController
 		@match.save
 		redirect_to @match
 	end
+	#only use threads to run the large matchlist pull in the background so the user can do other things at the same time
 	def get_running_thread_count
 		#@@api_logic = APILogic.new
 		puts @@api_logic.running_thread_count

@@ -4,8 +4,11 @@
     "\\app",
     "\\app\\assets",
     "\\app\\views",
-    "\\app\\views\\summoners"
+    "\\app\\views\\matches",
+    "\\app\\views\\welcome_page",
+    "\\config",
+    "\\config\\environments"
   ],
-  "SelectedNode": "\\app\\views\\summoners\\_next_back_return.html.erb",
+  "SelectedNode": "\\app\\views\\matches\\index.html.erb",
   "PreviewInSolutionExplorer": false
 }

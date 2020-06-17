@@ -1,5 +1,6 @@
 class ClassC
-	load 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\temp\classB.rb'
+=begin
+	require 'E:\Ruby\Ruby25-x64\LoL_Stats_App\lib\user_created_classes\temp\classB.rb'
 
 	#private @@c = 7
 	#def initialize
@@ -21,3 +22,5 @@ end
 	bclass.print_b
 
 
+=end
+end

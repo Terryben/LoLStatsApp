@@ -23,15 +23,19 @@ alter sequence champion_positional_stats_id_seq restart with 1;
 #read UTF8 characters in the CMD window
 set client_encoding = 'UTF8';
 
+#use the correct version of rake
+bundle exec rake db:migrate
 
--Full Presentation
--Show 1 specific match
--Sort (JS)
--Buy a trusted domain for website, google gives https for free
--Put back buttons on top of page
--Distinguish buttons
--Move buttons and add details, add buttons to all other pages
--DB search bar for real time import display
--Sorts are DB queries
--Know basic git commands and update every day you work
--know basic SQL commands
+
+#start dev server
+rails server
+
+#start test server
+rails server -e test
+
+#migrations were old, moved them to an archived folder. Rebuilding DB just off of the schema
+bundle exec rake db:reset RAILS_ENV=test
+
+#put in all the champion data
+
+\du to see all users in postgres

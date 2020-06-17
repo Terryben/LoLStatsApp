@@ -41,6 +41,9 @@ class ChampionPositionalStatsController < ApplicationController
 		@page_params = Pp.new(params[:page_num].to_i, ChampionPositionalStat.count, params[:asc].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), \
 							  params[:col_name].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), Match.count, params[:position].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''), \
 							  params[:ladder_rank].gsub(/[!@#$%^&*()-=+|;':",.<>?']/, ''),)
+		
+		puts "the page params are"
+		puts @page_params
 
 #=begin
 
@@ -97,16 +100,13 @@ class ChampionPositionalStatsController < ApplicationController
   # GET /champion_positional_stats/1.json
   def show
   end
-
   # GET /champion_positional_stats/new
   def new
     @champion_positional_stat = ChampionPositionalStat.new
   end
-
   # GET /champion_positional_stats/1/edit
   def edit
   end
-
   # POST /champion_positional_stats
   # POST /champion_positional_stats.json
   def create
@@ -145,6 +145,7 @@ class ChampionPositionalStatsController < ApplicationController
       format.html { redirect_to champion_positional_stats_url, notice: 'Champion positional stat was successfully destroyed.' }
       format.json { head :no_content }
     end
+
   end
 
   private
